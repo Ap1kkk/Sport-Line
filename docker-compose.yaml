@@ -1,0 +1,89 @@
+version: "3.4"
+
+x-project-name:
+  &project-name sportline
+
+x-host:
+  &host localhost
+x-protocol:
+  &protocol http
+
+x-db-host:
+  &db-host postgres
+x-db-username:
+  &db-username postgres
+x-db-password:
+  &db-password postgres
+
+x-profiles:
+  &profiles dev, in-docker
+
+services:
+  backend_api_gateway:
+    build:
+      context: backend/api-gateway
+      dockerfile: Dockerfile
+    container_name: sportline_backend_api_gateway
+    ports:
+      - "9000:9000"
+    environment:
+      SERVER_HOST: *host
+      SERVER_PROTOCOL: *protocol
+
+      SPRING_PROFILES_ACTIVE: *profiles
+
+  backend_analytics:
+    build:
+      context: backend/analytics
+      dockerfile: Dockerfile
+    container_name: sportline_backend_analytics
+    ports:
+      - "8000:8000"
+
+  backend_business:
+    build:
+      context: backend/business
+      dockerfile: Dockerfile
+    container_name: sportline_backend_business
+    ports:
+      - "8080:8080"
+#    depends_on:
+#      - postgres
+    environment:
+      SERVER_HOST: *host
+      SERVER_PROTOCOL: *protocol
+
+      SPRING_PROFILES_ACTIVE: *profiles
+
+      #     Database
+      SPRING_DATASOURCE_USERNAME: *db-username
+      SPRING_DATASOURCE_PASSWORD: *db-password
+      SPRING_DATASOURCE_DATABASE_HOST: *db-host
+      SPRING_DATASOURCE_DATABASE_PORT: 5432
+      SPRING_DATASOURCE_DATABASE_NAME: *project-name
+
+    volumes:
+      - ./uploads:/app/uploads
+
+  postgres:
+    restart: always
+    image: postgres:14.8-alpine3.18
+    container_name: sportline_postgres
+    environment:
+      POSTGRES_PASSWORD: *db-password
+      POSTGRES_USER: *db-username
+      POSTGRES_DB: *project-name
+    ports:
+      - "5432:5432"
+#    volumes:
+#      - ./postgres-data:/var/lib/postgresql/data
+
+  frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    container_name: sportline_frontend
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
