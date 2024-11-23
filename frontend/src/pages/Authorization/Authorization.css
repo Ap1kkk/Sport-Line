@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Roboto, sans-serif;
+    background-color: #fff;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+label {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #BBBBBB;
+}
+
+.form div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.container {
+    width: 100%;
+    max-width: 320px;
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.title {
+    font-family: 'Roboto', sans-serif;
+    text-align: left;
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-bottom: 2px solid #ccc;
+}
+
+.input:focus {
+    outline: none;
+}
+
+.button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #BBBBBB;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #878787;
+}
+
+.footer {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.footer .link {
+    margin-left: 5px;
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.footer .link:hover {
+    text-decoration: underline;
+    color: #BBBBBB;
+}

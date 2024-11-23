@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Profile = () => {
+const Favorites = () => {
     return (
         <div>
-            
+            Работает
         </div>
     );
 };
 
-export default Profile;
+export default Favorites;

@@ -1,0 +1,61 @@
+{
+  "users": [
+    {
+      "id": "5d0e",
+      "username": "Andrey",
+      "email": "akimova.andr@yandex.ru",
+      "password": "123213",
+      "km": "30",
+      "achievements": "20"
+    },
+    {
+      "id": "64b7",
+      "username": "Zhenya",
+      "email": "zhenya@mail.ru",
+      "password": "123213sadsad",
+      "preferences": [
+        "Бег",
+        "Без собачки",
+        "Похоть"
+      ]
+    },
+    {
+      "id": "0f57",
+      "username": "Nikita",
+      "email": "nikita228@mail.ru",
+      "password": "123213sadsad",
+      "preferences": [
+        "Бег",
+        "Без собачки",
+        "Разврат"
+      ]
+    },
+    {
+      "id": "2196",
+      "username": "Egor",
+      "email": "egor@mail.ru",
+      "password": "31123123",
+      "preferences": [
+        "Бег",
+        "Туризм",
+        "Без собачки",
+        "Разврат"
+      ]
+    },
+    {
+      "id": "b26b",
+      "username": "Nikita",
+      "email": "n@mailr.ru",
+      "password": "123213sadsad",
+      "preferences": [
+        "Бег",
+        "С собачкой",
+        "Без собачки",
+        "Разврат",
+        "Похоть",
+        "Секс",
+        "Туризм"
+      ]
+    }
+  ]
+}
