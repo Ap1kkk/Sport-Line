@@ -2,7 +2,7 @@ import React from "react";
 import {BrowserRouter as Router, Link, Navigate, Route, Routes} from "react-router-dom";
 
 import MainPage from "./pages/main-page/main_page";
-import Profile from "./pages/profile";
+import Profile from "./pages/all-profile-pages/ProfilePage";
 import Yandex_map from "./pages/map-page/yandex_map";
 import Favorites from "./pages/favorites/favorites";
 import Authorization from "./pages/Authorization/Authorization";
@@ -20,7 +20,7 @@ function App() {
                         <Route path="/Yandex_map" element={<Yandex_map/>}/>
                         <Route path="/favourites" element={<Favorites/>}/>
                         <Route path="/main_page" element={<MainPage/>}/>
-                        <Route path="/profile" element={<Profile/>}/>
+                        <Route path="/all-profilePage-pages/profilePage" element={<Profile />}/>
                         <Route path="/login" element={<Authorization/>}/>
                         <Route path="/register" element={<Register/>}/>
                         <Route path="/register/preferences" element={<Preferences/>}/>
@@ -43,7 +43,7 @@ function App() {
                         <i className="fa fa-heart" style={styles.navIcon}></i>
                         <span>Авторизация</span>
                     </Link>
-                    <Link to="/profile" style={styles.navLink}>
+                    <Link to="/all-profilePage-pages/profilePage" style={styles.navLink}>
                         <img
                             src="https://img.icons8.com/?size=100&id=ajQoFwOLAISL&format=png&color=000000"
                             alt="Profile"

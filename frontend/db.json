@@ -4,7 +4,9 @@
       "id": "5d0e",
       "username": "Andrey",
       "email": "akimova.andr@yandex.ru",
-      "password": "123213"
+      "password": "123213",
+      "km": "30",
+      "achievements": "20"
     },
     {
       "id": "64b7",
