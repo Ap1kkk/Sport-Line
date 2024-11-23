@@ -6,7 +6,6 @@ import "slick-carousel/slick/slick-theme.css";
 const MainPage = () => {
     return (
         <div style={styles.container}>
-            {/* Заголовок */}
             <header style={styles.header}>
                 <div style={styles.square}></div>
                 <h1 style={styles.title}>SportLine</h1>
@@ -29,14 +28,14 @@ const MainPage = () => {
                     </Slider>
                 </div>
 
-                <h3 style={styles.recommendationTitleP}>Популярное</h3>
-                <div style={styles.cards}>
-                    <div style={styles.cardp}>Карточка 1</div>
-                    <div style={styles.cardp}>Карточка 2</div>
-                    <div style={styles.cardp}>Карточка 3</div>
-                    <div style={styles.cardp}>Карточка 4</div>
-                    <div style={styles.cardp}>Карточка 5</div>
-                    <div style={styles.cardp}>Карточка 6</div>
+                <h3 style={styles.popularTitle}>Популярное</h3>
+                <div style={styles.cards_container}>
+                    <div style={styles.card_popular}>Карточка 1</div>
+                    <div style={styles.card_popular}>Карточка 2</div>
+                    <div style={styles.card_popular}>Карточка 3</div>
+                    <div style={styles.card_popular}>Карточка 4</div>
+                    <div style={styles.card_popular}>Карточка 5</div>
+                    <div style={styles.card_popular}>Карточка 6</div>
                 </div>
             </main>
         </div>
@@ -92,6 +91,32 @@ const styles = {
         gap: '10px',
         flexWrap: 'wrap',
     },
+    popularTitle: {
+        marginTop: "20px",
+        fontSize: "18px",
+        fontWeight: "bold",
+        textAlign: "center",
+    },
+    cards_container: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "15px",
+        maxHeight: "400px",
+        overflowY: "auto",
+        padding: "10px",
+    },
+    card_popular: {
+        backgroundColor: "#f5f5f5",
+        width: "90%",
+        maxWidth: "400px",
+        height: "100px",
+        borderRadius: "10px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+    },
     recommendationTitle: {
         marginTop: "20px",
         fontSize: "18px",
@@ -112,39 +137,13 @@ const styles = {
         alignItems: "center",
         boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
     },
-    recommendationTitleP: {
-        marginTop: "20px",
-        fontSize: "18px",
-        fontWeight: "bold",
-        textAlign: "center",
-    },
-    cardsP: {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: "15px",
-        maxHeight: "400px",
-        overflowY: "auto",
-        padding: "10px",
-    },
-    cardp: {
-        backgroundColor: "#f5f5f5",
-        width: "90%",
-        maxWidth: "400px",
-        height: "100px",
-        borderRadius: "10px",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-    },
     arrow: {
         display: "block",
         background: "#ccc",
         borderRadius: "50%",
         width: "40px",
         height: "40px",
-        lineHeight: "60px",
+        lineHeight: "40px",
         textAlign: "center",
         position: "absolute",
         top: "50%",
@@ -153,24 +152,11 @@ const styles = {
         cursor: "pointer",
     },
     prevArrow: {
-        left: "-40px",
+        left: "-50px",
     },
     nextArrow: {
-        right: "-40px",
+        right: "-50px",
     },
-};
-
-const CustomPrevArrow = (props) => {
-    const { className, style, onClick } = props;
-    return (
-        <div
-            className={`${className}`}
-            style={{ ...styles.arrow, ...styles.prevArrow }}
-            onClick={onClick}
-        >
-            ◀
-        </div>
-    );
 };
 
 const CustomNextArrow = (props) => {
@@ -186,28 +172,43 @@ const CustomNextArrow = (props) => {
     );
 };
 
+const CustomPrevArrow = (props) => {
+    const { className, style, onClick } = props;
+    return (
+        <div
+            className={`${className}`}
+            style={{ ...styles.arrow, ...styles.prevArrow }}
+            onClick={onClick}
+        >
+            ◀
+        </div>
+    );
+};
+
 const sliderSettings = {
-    dots: true, // Показывать точки навигации
-    infinite: true, // Зацикленный слайдер
-    speed: 500, // Скорость перехода
-    slidesToShow: 3, // Количество карточек, показываемых одновременно
-    slidesToScroll: 1, // Сколько карточек прокручивать за раз
-    nextArrow: <CustomNextArrow />, // Кастомная стрелка вправо
-    prevArrow: <CustomPrevArrow />, // Кастомная стрелка влево
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    useCSS: true,
+    nextArrow: <CustomNextArrow />,
+    prevArrow: <CustomPrevArrow />,
     responsive: [
         {
             breakpoint: 768,
             settings: {
-                slidesToShow: 2, // На маленьких экранах
+                slidesToShow: 2,
             },
         },
         {
             breakpoint: 480,
             settings: {
-                slidesToShow: 1, // На очень маленьких экранах
+                slidesToShow: 1,
             },
         },
     ],
 };
+
 
 export default MainPage;
