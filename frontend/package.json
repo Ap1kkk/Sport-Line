@@ -35,7 +35,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "server": "json-server --watch db.json --port 5000"
   },
   "eslintConfig": {
     "extends": [
@@ -56,6 +57,7 @@
     ]
   },
   "devDependencies": {
-    "@yandex/ymaps3-types": "^1.0.15285770"
+    "@yandex/ymaps3-types": "^1.0.15285770",
+    "json-server": "^1.0.0-beta.3"
   }
 }

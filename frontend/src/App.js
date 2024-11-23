@@ -5,6 +5,9 @@ import MainPage from "./pages/main-page/main_page";
 import Profile from "./pages/profile";
 import Yandex_map from "./pages/map-page/yandex_map";
 import Favorites from "./pages/favorites/favorites";
+import Authorization from "./pages/Authorization/Authorization";
+import Register from "./pages/Register/Register";
+import Preferences from "./pages/Preferences/Preferences";
 
 function App() {
     return (
@@ -18,6 +21,9 @@ function App() {
                         <Route path="/favourites" element={<Favorites/>}/>
                         <Route path="/main_page" element={<MainPage/>}/>
                         <Route path="/profile" element={<Profile/>}/>
+                        <Route path="/login" element={<Authorization/>}/>
+                        <Route path="/register" element={<Register/>}/>
+                        <Route path="/register/preferences" element={<Preferences/>}/>
                     </Routes>
                 </div>
                 <nav style={styles.bottomNav}>
@@ -32,6 +38,10 @@ function App() {
                     <Link to="/" style={styles.navLink}>
                         <i className="fa fa-home" style={styles.navIcon}></i>
                         <span>Главная</span>
+                    </Link>
+                    <Link to="/login" style={styles.navLink}>
+                        <i className="fa fa-heart" style={styles.navIcon}></i>
+                        <span>Авторизация</span>
                     </Link>
                     <Link to="/profile" style={styles.navLink}>
                         <img
