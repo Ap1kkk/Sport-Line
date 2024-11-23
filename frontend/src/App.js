@@ -8,6 +8,7 @@ import Favorites from "./pages/favorites/favorites";
 import Authorization from "./pages/Authorization/Authorization";
 import Register from "./pages/Register/Register";
 import Preferences from "./pages/Preferences/Preferences";
+import Filters from "./pages/Filters/Filters";
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
                         <Route path="/login" element={<Authorization/>}/>
                         <Route path="/register" element={<Register/>}/>
                         <Route path="/register/preferences" element={<Preferences/>}/>
+                        <Route path="/filters" element={<Filters/>}/>
                     </Routes>
                 </div>
                 <nav style={styles.bottomNav}>
