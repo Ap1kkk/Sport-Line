@@ -68,6 +68,7 @@ const styles = {
     content: {
         flexGrow: 1,
         overflow: "auto",
+        paddingBottom: '60px',
     },
     bottomNav: {
         display: "flex",
@@ -81,6 +82,8 @@ const styles = {
         backgroundColor: "#bdbdbd",
         borderTop: "1px solid #ddd",
         boxSizing: "border-box",
+        padding: "0 10px",
+        zIndex: 1000,
     },
     navLink: {
         display: "flex",
@@ -95,7 +98,7 @@ const styles = {
         marginBottom: "5px",
     },
     navImage: {
-        width: '30px', // Размер изображения
+        width: '30px',
         height: '30px',
     }
 };

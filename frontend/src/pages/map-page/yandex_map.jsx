@@ -6,7 +6,9 @@ const YandexMap = () => {
     const [coords, setCoords] = useState([56.315309, 43.993506]);
     const [points, setPoints] = useState([]);
     const [route, setRoute] = useState(null);
-    const [ymaps, setYmaps] = useState(null); // Добавляем состояние для ymaps
+    const [ymaps, setYmaps] = useState(null);
+    const [routeName, setRouteName] = useState("");
+    const [routeDistance, setRouteDistance] = useState(0);
 
     const handleClick = (e) => {
         const [latitude, longitude] = e.get("coords");
@@ -31,25 +33,33 @@ const YandexMap = () => {
             Array.isArray(point) ? point : [point.latitude, point.longitude]
         );
 
-        // Удаление предыдущего маршрута, если он существует
         if (route) {
             mapInstance.geoObjects.remove(route);
         }
 
-        // Создание нового маршрута
         const multiRoute = new ymaps.multiRouter.MultiRoute(
-            { referencePoints },
+            {
+                referencePoints,
+                params: { routingMode: "pedestrian" },
+            },
             { boundsAutoApply: true }
         );
 
-        // Добавление маршрута на карту
+        multiRoute.model.events.add("update", () => {
+            const activeRoute = multiRoute.getActiveRoute();
+            if (activeRoute) {
+                const distance = activeRoute.properties.get("distance").value;
+                setRouteDistance(distance);
+            }
+        });
+
         mapInstance.geoObjects.add(multiRoute);
         setRoute(multiRoute);
     };
 
     const onYMapsLoad = (ymaps) => {
         console.log("Yandex Maps API загружен:", ymaps);
-        setYmaps(ymaps); // Сохраняем объект ymaps в состоянии
+        setYmaps(ymaps);
     };
 
     useEffect(() => {
@@ -112,8 +122,6 @@ const YandexMap = () => {
                         options={{
                             iconLayout: 'default#image',
                             iconImageHref: 'https://yastatic.net/s3/front-maps-static/maps-front-maps/static/v51/icons/core/map-placemark-dot-32.svg',
-                            iconImageSize: [30, 30],
-                            iconImageOffset: [-15, -15],
                         }}
                     />
 
@@ -124,12 +132,40 @@ const YandexMap = () => {
                             options={{
                                 iconLayout: 'default#image',
                                 iconImageHref: 'https://cdn-icons-png.flaticon.com/512/2776/2776063.png',
-                                iconImageSize: [40, 40],
-                                iconImageOffset: [-20, -20],
                             }}
                         />
                     ))}
                 </Map>
+                <div style={styles.controls}>
+                    <input
+                        type="text"
+                        placeholder="Введите название маршрута"
+                        value={routeName}
+                        onChange={(e) => setRouteName(e.target.value)}
+                        style={styles.input}
+                    />
+                    <button style={styles.button}>
+                        Сохранить маршрут
+                    </button>
+                </div>
+                <div style={styles.routeInfo}>
+                    <h3>Информация о маршруте:</h3>
+                    {routeDistance > 0 ? (
+                        <p>Общее расстояние: {(routeDistance / 1000).toFixed(2)} км</p>
+                    ) : (
+                        <p>Добавьте точки, чтобы увидеть расстояние.</p>
+                    )}
+                </div>
+                <div style={styles.coordinatesList}>
+                    <h3>Координаты точек:</h3>
+                    <ul>
+                        {points.map(([lat, lon], index) => (
+                            <li key={index}>
+                                Точка {index + 1}: {lat.toFixed(6)}, {lon.toFixed(6)}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
         </YMaps>
     );
@@ -142,6 +178,29 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         width: '800px',
+    },
+    coordinatesList: {
+        marginTop: "20px",
+        textAlign: "left",
+        width: "80%",
+    },
+    routeInfo: {
+        marginTop: "20px",
+        textAlign: "center",
+    },
+    input: {
+        marginTop: "20px",
+        padding: "10px",
+        width: "60%",
+    },
+    button: {
+        marginTop: "10px",
+        padding: "10px 20px",
+        backgroundColor: "#007BFF",
+        color: "#fff",
+        border: "none",
+        borderRadius: "5px",
+        cursor: "pointer",
     },
 };
 

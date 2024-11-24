@@ -6,36 +6,67 @@ import "slick-carousel/slick/slick-theme.css";
 const MainPage = () => {
     return (
         <div style={styles.container}>
+            {/* Header Section */}
             <header style={styles.header}>
                 <div style={styles.square}></div>
                 <h1 style={styles.title}>SportLine</h1>
                 <div style={styles.square}></div>
             </header>
 
-            {/* Основной контент */}
+            {/* Main Content */}
             <main style={styles.mainContent}>
-                <h2 style={styles.subtitle}>Маршрут дня</h2>
-                <button style={styles.button}>Поехали</button>
-
-                <h3 style={styles.recommendationTitle}>Рекомендуемые</h3>
-                <div style={styles.sliderContainer}>
-                    <Slider {...sliderSettings}>
-                        <div style={styles.card}>Карточка 1</div>
-                        <div style={styles.card}>Карточка 2</div>
-                        <div style={styles.card}>Карточка 3</div>
-                        <div style={styles.card}>Карточка 4</div>
-                        <div style={styles.card}>Карточка 5</div>
-                    </Slider>
+                <div style={styles.contentContainer}>
+                    <h2 style={styles.subtitle}>Маршрут дня</h2>
+                    <button style={styles.button}>Поехали</button>
                 </div>
 
+                {/* Recommended Slider Section */}
+                <div style={styles.sliderSection}>
+                    <h3 style={styles.recommendationTitle}>Рекомендуемые</h3>
+                    <div style={styles.sliderContainer}>
+                        <Slider {...sliderSettings}>
+                            <div style={styles.card}>
+                                <img
+                                    src="https://img.icons8.com/color-glass/96/owl.png"
+                                    alt="Example"
+                                    style={styles.cardImage}
+                                />
+                            </div>
+                            <img
+                                src="https://img.icons8.com/color-glass/96/owl.png"
+                                alt="Example"
+                                style={styles.cardImage}
+                            />
+                            <img
+                                src="https://img.icons8.com/color-glass/96/owl.png"
+                                alt="Example"
+                                style={styles.cardImage}
+                            />
+                            <img
+                                src="https://img.icons8.com/color-glass/96/owl.png"
+                                alt="Example"
+                                style={styles.cardImage}
+                            />
+                            <img
+                                src="https://img.icons8.com/color-glass/96/owl.png"
+                                alt="Example"
+                                style={styles.cardImage}
+                            />
+                        </Slider>
+                    </div>
+                </div>
+
+                {/* Popular Section */}
                 <h3 style={styles.popularTitle}>Популярное</h3>
-                <div style={styles.cards_container}>
-                    <div style={styles.card_popular}>Карточка 1</div>
-                    <div style={styles.card_popular}>Карточка 2</div>
-                    <div style={styles.card_popular}>Карточка 3</div>
-                    <div style={styles.card_popular}>Карточка 4</div>
-                    <div style={styles.card_popular}>Карточка 5</div>
-                    <div style={styles.card_popular}>Карточка 6</div>
+                <div style={styles.cardsContainer}>
+                    <div style={styles.cardPopular}>Карточка 1</div>
+                    <div style={styles.cardPopular}>Карточка 2</div>
+                    <div style={styles.cardPopular}>Карточка 3</div>
+                    <div style={styles.cardPopular}>Карточка 4</div>
+                    <div style={styles.cardPopular}>Карточка 5</div>
+                    <div style={styles.cardPopular}>Карточка 6</div>
+                    <div style={styles.cardPopular}>Карточка 7</div>
+                    <div style={styles.cardPopular}>Карточка 8</div>
                 </div>
             </main>
         </div>
@@ -44,78 +75,106 @@ const MainPage = () => {
 
 const styles = {
     container: {
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-        backgroundColor: '#f5f5f5',
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: "#efefef",
+        height: "100vh",
+        overflowY: "auto",
     },
     header: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '10px',
-        backgroundColor: '#ffffff',
-        borderBottom: '1px solid #ddd',
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "10px 20px",
+        backgroundColor: "#ffffff",
+        borderBottom: "1px solid #ddd",
     },
     square: {
-        width: '40px',
-        height: '40px',
-        backgroundColor: '#ddd',
+        width: "40px",
+        height: "40px",
+        backgroundColor: "#ddd",
     },
     title: {
-        fontSize: '24px',
-        fontWeight: 'bold',
-        color: '#333',
+        fontSize: "24px",
+        fontWeight: "bold",
+        color: "#333",
     },
     mainContent: {
         flex: 1,
-        padding: '20px',
-        textAlign: 'center',
+        padding: "20px",
+        textAlign: "center",
+        overflowY: "auto",
+    },
+    contentContainer: {
+        marginBottom: "20px",
     },
     subtitle: {
-        fontSize: '20px',
-        marginBottom: '20px',
+        fontSize: "20px",
+        marginBottom: "20px",
     },
     button: {
-        padding: '10px 20px',
-        fontSize: '16px',
-        backgroundColor: '#ddd',
-        border: 'none',
-        borderRadius: '5px',
-        cursor: 'pointer',
-        marginBottom: '30px',
+        padding: "10px 20px",
+        fontSize: "16px",
+        backgroundColor: "#ddd",
+        border: "none",
+        borderRadius: "5px",
+        cursor: "pointer",
+        marginBottom: "30px",
     },
-    cards: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        gap: '10px',
-        flexWrap: 'wrap',
+    sliderSection: {
+        marginTop: "40px",
+        padding: "0 20px",
+    },
+    sliderContainer: {
+        width: "100%",
+        maxWidth: "1000px",
+        margin: "0 auto",
+        position: "relative",
+    },
+    card: {
+        backgroundColor: "#684c4c",
+        border: "1px solid #ddd",
+        height: "200px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: "8px",
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+        fontSize: "14px",
+        fontWeight: "bold",
+        color: "#000000",
+    },
+    cardImage: {
+        width: "300px",
+        height: "300px",
     },
     popularTitle: {
-        marginTop: "20px",
+        marginTop: "30px",
         fontSize: "18px",
         fontWeight: "bold",
         textAlign: "center",
     },
-    cards_container: {
+    cardsContainer: {
         display: "flex",
         flexDirection: "column",
+        justifyContent: "center",
         alignItems: "center",
-        gap: "15px",
-        maxHeight: "400px",
-        overflowY: "auto",
-        padding: "10px",
+        gap: "20px",
+        margin: "60px",
     },
-    card_popular: {
-        backgroundColor: "#f5f5f5",
-        width: "90%",
-        maxWidth: "400px",
-        height: "100px",
-        borderRadius: "10px",
+    cardPopular: {
+        backgroundColor: "#fff",
+        border: "1px solid #ddd",
+        width: "200px",
+        height: "120px",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+        borderRadius: "8px",
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+        fontSize: "14px",
+        fontWeight: "bold",
+        color: "#333",
     },
     recommendationTitle: {
         marginTop: "20px",
@@ -123,24 +182,8 @@ const styles = {
         fontWeight: "bold",
         textAlign: "center",
     },
-    sliderContainer: {
-        width: "80%",
-        margin: "20px auto",
-    },
-    card: {
-        backgroundColor: "#f5f5f5",
-        height: "150px",
-        margin: "10px",
-        borderRadius: "10px",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-    },
     arrow: {
-        display: "block",
-        background: "#ccc",
-        borderRadius: "50%",
+        display: "flex",
         width: "40px",
         height: "40px",
         lineHeight: "40px",
@@ -152,19 +195,28 @@ const styles = {
         cursor: "pointer",
     },
     prevArrow: {
-        left: "-50px",
+        left: "-30px",
     },
     nextArrow: {
-        right: "-50px",
+        right: "-30px",
+    },
+    footer: {
+        padding: "10px 20px",
+        backgroundColor: "#fff",
+        borderTop: "1px solid #ddd",
+        display: "flex",
+        justifyContent: "space-around",
+        alignItems: "center",
+        position: "relative",
     },
 };
 
+// Custom Arrows for the Slider
 const CustomNextArrow = (props) => {
-    const { className, style, onClick } = props;
+    const { style, onClick } = props;
     return (
         <div
-            className={`${className}`}
-            style={{ ...styles.arrow, ...styles.nextArrow }}
+            style={{ ...styles.arrow, ...styles.nextArrow, ...style }}
             onClick={onClick}
         >
             ▶
@@ -173,11 +225,10 @@ const CustomNextArrow = (props) => {
 };
 
 const CustomPrevArrow = (props) => {
-    const { className, style, onClick } = props;
+    const { style, onClick } = props;
     return (
         <div
-            className={`${className}`}
-            style={{ ...styles.arrow, ...styles.prevArrow }}
+            style={{ ...styles.arrow, ...styles.prevArrow, ...style }}
             onClick={onClick}
         >
             ◀
@@ -185,30 +236,30 @@ const CustomPrevArrow = (props) => {
     );
 };
 
+// Slider settings
 const sliderSettings = {
     dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
-    useCSS: true,
     nextArrow: <CustomNextArrow />,
     prevArrow: <CustomPrevArrow />,
     responsive: [
         {
             breakpoint: 768,
             settings: {
-                slidesToShow: 2,
+                slidesToShow: 1,
+                arrows: false,
             },
         },
         {
-            breakpoint: 480,
+            breakpoint: 1200,
             settings: {
-                slidesToShow: 1,
+                slidesToShow: 3,
             },
         },
     ],
 };
-
 
 export default MainPage;
