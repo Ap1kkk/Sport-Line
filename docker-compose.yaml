@@ -1,5 +1,3 @@
-#version: "3.4"
-
 x-project-name:
   &project-name sportline
 
@@ -19,20 +17,7 @@ x-profiles:
   &profiles dev, in-docker
 
 services:
-  backend_api_gateway:
-    build:
-      context: backend/api-gateway
-      dockerfile: Dockerfile
-    container_name: sportline_backend_api_gateway
-    ports:
-      - "9000:9000"
-    environment:
-      SERVER_HOST: *host
-      SERVER_PROTOCOL: *protocol
-
-      SPRING_PROFILES_ACTIVE: *profiles
-
-  backend_analytics:
+  backend-analytics:
     build:
       context: backend/analytics
       dockerfile: Dockerfile
@@ -49,7 +34,7 @@ services:
                python manage.py runserver 0.0.0.0:8000"
 
 
-  backend_business:
+  backend-business:
     build:
       context: backend/business
       dockerfile: Dockerfile
@@ -95,4 +80,12 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./nginx:/etc/nginx/conf.d
+      - ./nginx/frontend:/etc/nginx/conf.d
+
+  api-gateway:
+    image: nginx:stable-alpine3.19
+    container_name: sportline_api_gateway
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./nginx/api-gateway:/etc/nginx/conf.d
