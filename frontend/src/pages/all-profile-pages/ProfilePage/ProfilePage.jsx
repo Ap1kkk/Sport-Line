@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import {Link} from "react-router-dom";
 import "./ProfilePage.css";
 
 const ProfilePage = () => {
@@ -32,9 +33,9 @@ const ProfilePage = () => {
             <h2>{profile.username}</h2>
             <p className="email">{profile.email}</p>
             <div className="menu">
-                <button className="menu-button">статистика</button>
-                <button className="menu-button">достижения</button>
-                <button className="menu-button">история</button>
+                <Link to="/StatisticsPage" className="menu-button">статистика</Link>
+                <Link to="/AchievementsPage" className="menu-button">достижения</Link>
+                <Link to="/RouteHistoryPage" className="menu-button">история</Link>
             </div>
         </div>
     );
