@@ -1,4 +1,10 @@
-HELP.md
+# Ignoring .env files
+.env
+
+# Ignoring virtual environment
+/backend/analytics/venv/
+
+# IDE and build tool directories
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
@@ -35,3 +41,7 @@ out/
 
 ### VS Code ###
 .vscode/
+.env
+
+# Ignoring virtual environment
+/backend/analytics/venv/

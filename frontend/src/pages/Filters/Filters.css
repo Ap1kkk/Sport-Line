@@ -1,0 +1,109 @@
+/* Основные стили */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 320px;
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.title {
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Стили фильтров */
+.filters {
+    background: #e0e0e0;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.filters-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.arrow {
+    font-size: 20px;
+}
+
+.filter-section {
+    margin-bottom: 20px;
+}
+
+.filter-section h2 {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.buttons button {
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.buttons button:hover {
+    background: #ddd;
+}
+
+.buttons button.selected {
+    background: #007BFF;
+    color: white;
+}
+
+.slider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.slider input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 5px;
+    background: #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+.slider input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: #666;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-top: 5px;
+}
