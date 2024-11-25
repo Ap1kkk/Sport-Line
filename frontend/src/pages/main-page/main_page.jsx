@@ -1,9 +1,17 @@
 import React from "react";
 import Slider from "react-slick";
+import {useNavigate} from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+
 const MainPage = () => {
+    const navigate = useNavigate()
+
+    const handleButtonClick = () => {
+        navigate("/main_page/mapOfTheDay");
+    };
+
     return (
         <div style={styles.container}>
             {/* Header Section */}
@@ -17,7 +25,7 @@ const MainPage = () => {
             <main style={styles.mainContent}>
                 <div style={styles.contentContainer}>
                     <h2 style={styles.subtitle}>Маршрут дня</h2>
-                    <button style={styles.button}>Поехали</button>
+                    <button style={styles.button} onClick={handleButtonClick}>Поехали</button>
                 </div>
 
                 {/* Recommended Slider Section */}

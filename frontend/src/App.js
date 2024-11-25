@@ -9,6 +9,8 @@ import Authorization from "./pages/Authorization/Authorization";
 import Register from "./pages/Register/Register";
 import Preferences from "./pages/Preferences/Preferences";
 import Filters from "./pages/Filters/Filters";
+import RoutesOnMap from "./pages/mapRoutes/routesOnMap";
+import MapOfTheDay from "./pages/mapRoutes/mapOfTheDay";
 
 function App() {
     return (
@@ -21,11 +23,13 @@ function App() {
                         <Route path="/Yandex_map" element={<Yandex_map/>}/>
                         <Route path="/favourites" element={<Favorites/>}/>
                         <Route path="/main_page" element={<MainPage/>}/>
-                        <Route path="/all-profilePage-pages/profilePage" element={<Profile />}/>
+                        <Route path="/all_profilePage/profilePage" element={<Profile />}/>
                         <Route path="/login" element={<Authorization/>}/>
                         <Route path="/register" element={<Register/>}/>
                         <Route path="/register/preferences" element={<Preferences/>}/>
                         <Route path="/filters" element={<Filters/>}/>
+                        <Route path="/map" element={<RoutesOnMap/>}/>
+                        <Route path="/main_page/mapOfTheDay" element={<MapOfTheDay />}/>
                     </Routes>
                 </div>
                 <nav style={styles.bottomNav}>
@@ -37,6 +41,10 @@ function App() {
                         <i className="fa fa-map-marker" style={styles.navIcon}></i>
                         <span>Карта</span>
                     </Link>
+                    <Link to="/map" style={styles.navLink}>
+                        <i className="fa fa-heart" style={styles.navIcon}></i>
+                        <span>Карта маршрута</span>
+                    </Link>
                     <Link to="/" style={styles.navLink}>
                         <i className="fa fa-home" style={styles.navIcon}></i>
                         <span>Главная</span>
@@ -45,7 +53,7 @@ function App() {
                         <i className="fa fa-heart" style={styles.navIcon}></i>
                         <span>Авторизация</span>
                     </Link>
-                    <Link to="/all-profilePage-pages/profilePage" style={styles.navLink}>
+                    <Link to="/all_profilePage/profilePage" style={styles.navLink}>
                         <img
                             src="https://img.icons8.com/?size=100&id=ajQoFwOLAISL&format=png&color=000000"
                             alt="Profile"

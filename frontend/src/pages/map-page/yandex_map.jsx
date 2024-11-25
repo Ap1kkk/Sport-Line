@@ -9,6 +9,7 @@ const YandexMap = () => {
     const [ymaps, setYmaps] = useState(null);
     const [routeName, setRouteName] = useState("");
     const [routeDistance, setRouteDistance] = useState(0);
+    const [nameError, setNameError] = useState("");
 
     const handleClick = (e) => {
         const [latitude, longitude] = e.get("coords");
@@ -97,6 +98,79 @@ const YandexMap = () => {
         };
     }, [mapInstance]);
 
+    const validateRouteName = async (name) => {
+        if (!name) {
+            setNameError("");
+            return;
+        }
+
+        try {
+            const response = await fetch("http://localhost:5000/routes");
+            const routes = await response.json();
+
+            const isDuplicateName = routes.some(route => route.nameRoute === name);
+            setNameError(isDuplicateName ? "Маршрут с таким названием уже существует." : "");
+        } catch (error) {
+            console.error("Ошибка проверки названия маршрута:", error);
+        }
+    };
+
+    const handleNameChange = (e) => {
+        const name = e.target.value;
+        setRouteName(name);
+        validateRouteName(name);
+    };
+
+    const saveRoute = async () => {
+        if (!routeName || points.length < 2) {
+            alert("Введите название маршрута и добавьте минимум две точки.");
+            return;
+        }
+
+        if (nameError) {
+            alert("Пожалуйста, исправьте ошибки перед сохранением.");
+            return;
+        }
+
+        try {
+            const response = await fetch("http://localhost:5000/routes");
+            const routes = await response.json();
+
+            const nextId = routes.length > 0 ? Math.max(...routes.map(route => route.id)) + 1 : 1;
+
+            const routeData = {
+                id: nextId,
+                nameRoute: routeName,
+                coords: points,
+                distance: routeDistance / 1000,
+            };
+
+            const saveResponse = await fetch("http://localhost:5000/routes", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(routeData),
+            });
+
+            if (saveResponse.ok) {
+                alert("Маршрут успешно сохранен!");
+                setRouteName("");
+                setPoints([]);
+                setRouteDistance(0);
+                if (route) {
+                    mapInstance.geoObjects.remove(route);
+                    setRoute(null);
+                }
+            } else {
+                alert("Ошибка при сохранении маршрута.");
+            }
+        } catch (error) {
+            console.error("Ошибка отправки данных:", error);
+            alert("Не удалось сохранить маршрут. Проверьте соединение с сервером.");
+        }
+    };
+
     return (
         <YMaps
             query={{
@@ -115,7 +189,7 @@ const YandexMap = () => {
                     width={"1000px"}
                     height={"800px"}
                     onClick={handleClick}
-                    onLoad={(ymaps) => onYMapsLoad(ymaps)} // Передаем ymaps
+                    onLoad={(ymaps) => onYMapsLoad(ymaps)}
                 >
                     <Placemark
                         geometry={coords}
@@ -141,10 +215,11 @@ const YandexMap = () => {
                         type="text"
                         placeholder="Введите название маршрута"
                         value={routeName}
-                        onChange={(e) => setRouteName(e.target.value)}
+                        onChange={handleNameChange}
                         style={styles.input}
                     />
-                    <button style={styles.button}>
+                    {nameError && <p style={styles.error}>{nameError}</p>}
+                    <button style={styles.button} onClick={saveRoute}>
                         Сохранить маршрут
                     </button>
                 </div>
