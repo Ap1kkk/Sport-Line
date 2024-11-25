@@ -2,12 +2,16 @@ import React from "react";
 import {BrowserRouter as Router, Link, Navigate, Route, Routes} from "react-router-dom";
 
 import MainPage from "./pages/main-page/main_page";
-import Profile from "./pages/all-profile-pages/ProfilePage";
+import Profile from "./pages/all-profile-pages/ProfilePage/ProfilePage";
 import Yandex_map from "./pages/map-page/yandex_map";
 import Favorites from "./pages/favorites/favorites";
 import Authorization from "./pages/Authorization/Authorization";
 import Register from "./pages/Register/Register";
 import Preferences from "./pages/Preferences/Preferences";
+import Statistics from "./pages/all-profile-pages/StatisticsPage/StatisticsPage";
+import Achievements from "./pages/all-profile-pages/AchievementsPage/AchievementsPage";
+import RouteHistory from "./pages/all-profile-pages/RouteHistoryPage/RouteHistoryPage";
+
 
 function App() {
     return (
@@ -20,10 +24,13 @@ function App() {
                         <Route path="/Yandex_map" element={<Yandex_map/>}/>
                         <Route path="/favourites" element={<Favorites/>}/>
                         <Route path="/main_page" element={<MainPage/>}/>
-                        <Route path="/all-profilePage-pages/profilePage" element={<Profile />}/>
+                        <Route path="/ProfilePage" element={<Profile />}/>
                         <Route path="/login" element={<Authorization/>}/>
                         <Route path="/register" element={<Register/>}/>
                         <Route path="/register/preferences" element={<Preferences/>}/>
+                        <Route path="/StatisticsPage" element={<Statistics />} />
+                        <Route path="/AchievementsPage" element={<Achievements />} />
+                        <Route path="/RouteHistoryPage" element={<RouteHistory />} />
                     </Routes>
                 </div>
                 <nav style={styles.bottomNav}>
@@ -43,7 +50,7 @@ function App() {
                         <i className="fa fa-heart" style={styles.navIcon}></i>
                         <span>Авторизация</span>
                     </Link>
-                    <Link to="/all-profilePage-pages/profilePage" style={styles.navLink}>
+                    <Link to="/ProfilePage" style={styles.navLink}>
                         <img
                             src="https://img.icons8.com/?size=100&id=ajQoFwOLAISL&format=png&color=000000"
                             alt="Profile"
