@@ -1,0 +1,83 @@
+.edit-profile-container {
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.avatar-section {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.avatar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.circle-edit {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden; /* Убирает всё за границей круга */
+    background-color: #d8d8d8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #ffffff; /* Рамка вокруг круга */
+}
+
+.avatar-label {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333;
+}
+
+.avatar-img {
+    width: 100%; /* Аватарка заполняет весь кружок */
+    height: 100%;
+    object-fit: cover; /* Изображение адаптируется по размеру */
+}
+
+.avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.avatar-option {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.avatar-option:hover {
+    transform: scale(1.1); /* Анимация увеличения при наведении */
+}
+
+.preference-button.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.preference-button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    background-color: white;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: background-color 0.3s;
+}
+
+.preferences-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* Чтобы кнопки не выходили за пределы контейнера */
+    margin-top: 20px;
+    gap: 10px; /* Добавим пространство между кнопками */
+}
+
+

@@ -1,0 +1,24 @@
+server:
+  port: 9000
+
+services:
+  host: "localhost"
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: business-service
+          uri: "http://${services.host}:8080"
+          predicates:
+            - Path=/business/**
+          filters:
+            - RewritePath=/business(?<segment>/?.*), $\{segment}
+#            - AuthenticationFilter
+  application:
+    name: api-gateway
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0

@@ -40,7 +40,6 @@ const StatisticsPage = () => {
                 <StatCard title="Число понравившихся маршрутов" value={statistics.numberRouteLikes || 0}/>
                 <StatCard title="Среняя длина пройденных маршрутов" value={statistics.averageLengthRoutes || 0}/>
             </div>
-            <div className="bottom-spacer"/>
         </div>
     );
 };

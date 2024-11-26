@@ -14,6 +14,7 @@ import MapOfTheDay from "./pages/mapRoutes/mapOfTheDay";
 import Statistics from "./pages/all-profile-pages/StatisticsPage/StatisticsPage";
 import Achievements from "./pages/all-profile-pages/AchievementsPage/AchievementsPage";
 import RouteHistory from "./pages/all-profile-pages/RouteHistoryPage/RouteHistoryPage";
+import EditProfile from "./pages/all-profile-pages/EditProfilePage/EditProfilePage";
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
                         <Route path="/StatisticsPage" element={<Statistics />} />
                         <Route path="/AchievementsPage" element={<Achievements />} />
                         <Route path="/RouteHistoryPage" element={<RouteHistory />} />
+                        <Route path="/EditProfilePage" element={<EditProfile />} />
                     </Routes>
                 </div>
                 <nav style={styles.bottomNav}>
