@@ -1,116 +1,124 @@
-import React, { useState } from 'react';
-import './Filters.css';
+import React, { useState, useEffect } from "react";
+import FilterPanel from "./FilterPanel/FilterPanel";
+import FilteredRoutes from "./FilteredRoutes/FilteredRoutes";
+import "./Filters.css";
 
 const Filters = () => {
-    const [timeMin, setTimeMin] = useState(20);
-    const [timeMax, setTimeMax] = useState(45);
-    const [lengthMin, setLengthMin] = useState(20);
-    const [lengthMax, setLengthMax] = useState(45);
-    const [difficulty, setDifficulty] = useState(['легкий']);
+    const [sportRoutes, setSportRoutes] = useState([]); // Все маршруты
+    const [filteredRoutes, setFilteredRoutes] = useState([]); // Отфильтрованные маршруты
+    const [filters, setFilters] = useState({
+        timeRange: [0, 100],
+        lengthRange: [0, 100],
+        difficulty: [],
+        categories: [],
+    });
+    const [searchQuery, setSearchQuery] = useState(""); // Запрос поиска
+    const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
 
-    const handleTimeMinChange = (e) => {
-        setTimeMin(e.target.value);
+    // Загрузка маршрутов при монтировании
+    useEffect(() => {
+        const fetchRoutes = async () => {
+            try {
+                const response = await fetch("http://localhost:5000/SportRoutes");
+                if (!response.ok) throw new Error("Ошибка загрузки маршрутов");
+                const data = await response.json();
+                setSportRoutes(data);
+                setFilteredRoutes(data); // Изначально показываем все маршруты
+            } catch (error) {
+                console.error("Ошибка:", error);
+            }
+        };
+
+        fetchRoutes();
+    }, []);
+
+    // Применение фильтров
+    const applyFilters = (newFilters) => {
+        const filtered = sportRoutes.filter((route) => {
+            const matchesFilters =
+                newFilters.difficulty.includes(route.difficulty) &&
+                route.time >= newFilters.timeRange[0] &&
+                route.time <= newFilters.timeRange[1] &&
+                route.length >= newFilters.lengthRange[0] &&
+                route.length <= newFilters.lengthRange[1] &&
+                (newFilters.categories.length === 0 || newFilters.categories.includes(route.category));
+
+            const matchesSearch = route.name.toLowerCase().includes(searchQuery.toLowerCase());
+            return matchesFilters && matchesSearch;
+        });
+
+        setFilteredRoutes(filtered);
+        setFilters(newFilters); // Сохранение новых фильтров
     };
 
-    const handleTimeMaxChange = (e) => {
-        setTimeMax(e.target.value);
+    // Сброс фильтров
+    const resetFilters = () => {
+        const defaultFilters = {
+            timeRange: [0, 100],
+            lengthRange: [0, 100],
+            difficulty: [],
+            categories: [],
+        };
+        setFilters(defaultFilters);
+        setSearchQuery(""); // Очистка строки поиска
+        setFilteredRoutes(sportRoutes); // Показать все маршруты
     };
 
-    const handleLengthMinChange = (e) => {
-        setLengthMin(e.target.value);
-    };
+    // Обработка поиска
+    const handleSearch = (e) => {
+        const query = e.target.value;
+        setSearchQuery(query);
 
-    const handleLengthMaxChange = (e) => {
-        setLengthMax(e.target.value);
-    };
+        const filtered = sportRoutes.filter((route) => {
+            const matchesFilters =
+                filters.difficulty.includes(route.difficulty) &&
+                route.time >= filters.timeRange[0] &&
+                route.time <= filters.timeRange[1] &&
+                route.length >= filters.lengthRange[0] &&
+                route.length <= filters.lengthRange[1] &&
+                (filters.categories.length === 0 || filters.categories.includes(route.category));
 
-    const handleDifficultyChange = (level) => {
-        if (difficulty.includes(level)) {
-            setDifficulty(difficulty.filter((item) => item !== level));
-        } else {
-            setDifficulty([...difficulty, level]);
-        }
+            const matchesSearch = route.name.toLowerCase().includes(query.toLowerCase());
+            return matchesFilters && matchesSearch;
+        });
+
+        setFilteredRoutes(filtered);
     };
 
     return (
-        <div className="container">
-            <h1 className="title">Рекомендуемые</h1>
-            <div className="filters">
-                <div className="filters-header">
-                    <span>Фильтры</span>
-                    <span className="arrow">∨</span>
-                </div>
+        <div className="app">
+            <h1 className="routes-title">Рекомендуемые</h1>
 
-                {/* По сложности */}
-                <div className="filter-section">
-                    <h2>По сложности</h2>
-                    <div className="buttons">
-                        {['легкий', 'средний', 'сложный'].map((level) => (
-                            <button
-                                key={level}
-                                className={difficulty.includes(level) ? 'selected' : ''}
-                                onClick={() => handleDifficultyChange(level)}
-                            >
-                                {level}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-
-                {/* По времени */}
-                <div className="filter-section">
-                    <h2>По времени</h2>
-                    <div className="slider">
-                        <input
-                            type="range"
-                            min="0"
-                            max="100"
-                            value={timeMin}
-                            onChange={handleTimeMinChange}
-                            className="slider-input"
-                        />
-                        <input
-                            type="range"
-                            min="0"
-                            max="100"
-                            value={timeMax}
-                            onChange={handleTimeMaxChange}
-                            className="slider-input"
-                        />
-                    </div>
-                    <div className="slider-labels">
-                        <span>от {timeMin}</span>
-                        <span>до {timeMax}</span>
-                    </div>
-                </div>
-
-                {/* По длине */}
-                <div className="filter-section">
-                    <h2>По длине</h2>
-                    <div className="slider">
-                        <input
-                            type="range"
-                            min="0"
-                            max="100"
-                            value={lengthMin}
-                            onChange={handleLengthMinChange}
-                            className="slider-input"
-                        />
-                        <input
-                            type="range"
-                            min="0"
-                            max="100"
-                            value={lengthMax}
-                            onChange={handleLengthMaxChange}
-                            className="slider-input"
-                        />
-                    </div>
-                    <div className="slider-labels">
-                        <span>от {lengthMin}</span>
-                        <span>до {lengthMax}</span>
-                    </div>
-                </div>
+            <div className="search-bar">
+                <input
+                    type="text"
+                    placeholder="Поиск маршрутов по названию..."
+                    value={searchQuery}
+                    onChange={handleSearch}
+                    className="search-input"
+                />
             </div>
+
+            {/* Панель фильтров */}
+            <FilterPanel
+                isOpen={isFilterPanelOpen}
+                filters={filters}
+                onApply={applyFilters}
+                onReset={resetFilters}
+                onClose={() => setIsFilterPanelOpen(false)}
+            />
+
+            {/* Кнопки управления */}
+            <div className="filter-controls">
+                <span onClick={() => setIsFilterPanelOpen(!isFilterPanelOpen)}>
+                    Фильтр
+                </span>
+            </div>
+
+            {/* Поле поиска */}
+
+            {/* Вывод отфильтрованных маршрутов */}
+            <FilteredRoutes routes={filteredRoutes} />
         </div>
     );
 };

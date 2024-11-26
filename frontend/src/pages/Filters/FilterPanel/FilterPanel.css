@@ -1,0 +1,86 @@
+.filter-panel {
+    position: fixed;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Центрирует блок по обеим осям */
+    width: 95%;
+    max-width: 500px; /* Ограничивает максимальную ширину */
+    min-height: 90vh;
+    background-color: #D9D9D9;
+    z-index: 10;
+    overflow-y: auto;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+}
+
+.filter-section {
+    margin-bottom: 20px;
+}
+
+.filter-section h2 {
+    font-size: 14px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.filter-header {
+    position: relative; /* Устанавливаем для родителя относительное позиционирование */
+    display: flex;
+    justify-content: center; /* Центрируем содержимое по горизонтали */
+    align-items: center; /* Центрируем содержимое по вертикали */
+    margin-bottom: 20px;
+}
+
+.filter-header h2 {
+    margin: 0; /* Убираем лишние отступы */
+}
+
+.filter-header span {
+    position: absolute; /* Абсолютное позиционирование */
+    right: 0; /* Прижимаем к правому краю */
+    top: 50%; /* Выравниваем по вертикали относительно контейнера */
+    transform: translateY(-50%); /* Центрируем вертикально относительно себя */
+}
+
+
+.filter-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.filter-actions button {
+    background-color: #EFEBEB;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    width: 20vh;
+    height: 5vh;
+    padding: 8px 12px;
+    margin: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.buttons button {
+    background-color: #EFEBEB;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 8px 12px;
+    margin: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.buttons button:hover {
+    background-color: #e9e9e9;
+}
+
+.buttons button.selected {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
