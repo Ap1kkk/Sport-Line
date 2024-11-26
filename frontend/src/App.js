@@ -34,8 +34,11 @@ function App() {
                 </div>
                 <nav style={styles.bottomNav}>
                     <Link to="/favourites" style={styles.navLink}>
-                        <i className="fa fa-heart" style={styles.navIcon}></i>
-                        <span>Избранное</span>
+                        <img
+                            src="https://img.icons8.com/ios-filled/50/like--v1.png"
+                            alt="Profile"
+                            style={styles.navImage}
+                        />
                     </Link>
                     <Link to="/yandex_map" style={styles.navLink}>
                         <i className="fa fa-map-marker" style={styles.navIcon}></i>
@@ -45,9 +48,12 @@ function App() {
                         <i className="fa fa-heart" style={styles.navIcon}></i>
                         <span>Карта маршрута</span>
                     </Link>
-                    <Link to="/" style={styles.navLink}>
-                        <i className="fa fa-home" style={styles.navIcon}></i>
-                        <span>Главная</span>
+                    <Link to="/main_page" style={styles.navLink}>
+                        <img
+                            src="https://img.icons8.com/ios/50/region-code.png"
+                            alt="Profile"
+                            style={styles.navImage}
+                        />
                     </Link>
                     <Link to="/login" style={styles.navLink}>
                         <i className="fa fa-heart" style={styles.navIcon}></i>
@@ -55,7 +61,7 @@ function App() {
                     </Link>
                     <Link to="/all_profilePage/profilePage" style={styles.navLink}>
                         <img
-                            src="https://img.icons8.com/?size=100&id=ajQoFwOLAISL&format=png&color=000000"
+                            src="https://img.icons8.com/pastel-glyph/64/user-male-circle.png"
                             alt="Profile"
                             style={styles.navImage}
                         />
