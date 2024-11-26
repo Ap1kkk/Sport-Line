@@ -12,10 +12,30 @@ spring:
       port: 5432
       name: sportline
 
+  jackson:
+    default-property-inclusion: non_null
+
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
+
+  flyway:
+    enabled: true
+    validate-migration-naming: false
+    out-of-order: true
+
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 20MB
+      max-request-size: 20MB
 
 security:
   jwt:
     secret: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
+
+logging:
+  level:
+    root: INFO
+    ru.gorkycode.ngtu.sportline: DEBUG

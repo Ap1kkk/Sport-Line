@@ -46,3 +46,4 @@ out/
 
 # Ignoring virtual environment
 /backend/analytics/venv/
+/uploads/
