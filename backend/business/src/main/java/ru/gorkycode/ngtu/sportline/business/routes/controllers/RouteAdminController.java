@@ -2,8 +2,8 @@ package ru.gorkycode.ngtu.sportline.business.routes.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.gorkycode.ngtu.sportline.business.routes.Route;
-import ru.gorkycode.ngtu.sportline.business.routes.RouteDto;
+import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
+import ru.gorkycode.ngtu.sportline.business.routes.dto.RouteDto;
 import ru.gorkycode.ngtu.sportline.business.routes.RouteService;
 
 import java.util.List;

@@ -3,7 +3,7 @@ package ru.gorkycode.ngtu.sportline.business.routes.jpa;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.gorkycode.ngtu.sportline.business.routes.RouteDifficulty;
+import ru.gorkycode.ngtu.sportline.business.routes.model.RouteDifficulty;
 
 import java.util.List;
 

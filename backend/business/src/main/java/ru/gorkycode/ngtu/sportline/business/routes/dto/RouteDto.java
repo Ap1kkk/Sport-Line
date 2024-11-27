@@ -1,9 +1,11 @@
-package ru.gorkycode.ngtu.sportline.business.routes;
+package ru.gorkycode.ngtu.sportline.business.routes.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.gorkycode.ngtu.sportline.business.checkpoint.Checkpoint;
+import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
+import ru.gorkycode.ngtu.sportline.business.routes.model.RouteDifficulty;
 
 import java.util.List;
 

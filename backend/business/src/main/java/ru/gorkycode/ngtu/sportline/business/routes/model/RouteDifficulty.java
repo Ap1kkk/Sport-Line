@@ -1,4 +1,4 @@
-package ru.gorkycode.ngtu.sportline.business.routes;
+package ru.gorkycode.ngtu.sportline.business.routes.model;
 
 /**
  * @author Egor Bokov

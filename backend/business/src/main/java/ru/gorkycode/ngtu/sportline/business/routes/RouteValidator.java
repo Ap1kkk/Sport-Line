@@ -3,6 +3,7 @@ package ru.gorkycode.ngtu.sportline.business.routes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.gorkycode.ngtu.sportline.business.routes.jpa.RouteRepository;
+import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
 import ru.gorkycode.ngtu.sportline.business.system.exceptions.classes.data.EntityNotFoundException;
 
 /**

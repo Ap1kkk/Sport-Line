@@ -9,7 +9,7 @@ import ru.gorkycode.ngtu.sportline.business.auth.AuthService;
 import ru.gorkycode.ngtu.sportline.business.category.Category;
 import ru.gorkycode.ngtu.sportline.business.category.CategoryService;
 import ru.gorkycode.ngtu.sportline.business.common.BaseEntity;
-import ru.gorkycode.ngtu.sportline.business.routes.Route;
+import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
 import ru.gorkycode.ngtu.sportline.business.user.dto.ProfileDto;
 import ru.gorkycode.ngtu.sportline.business.routes.RouteService;
 import ru.gorkycode.ngtu.sportline.business.user.dto.CreateCredentialsDto;

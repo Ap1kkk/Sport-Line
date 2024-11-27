@@ -6,7 +6,7 @@ import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;
 import org.springframework.data.jpa.domain.Specification;
 import ru.gorkycode.ngtu.sportline.business.category.Category;
-import ru.gorkycode.ngtu.sportline.business.routes.Route;
+import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
 
 /**
  * @author Egor Bokov
