@@ -85,7 +85,7 @@ public class SecurityConfig {
                                 .permitAll()
 
                                 .anyRequest()
-                                .permitAll()
+                                .authenticated()
                 )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
