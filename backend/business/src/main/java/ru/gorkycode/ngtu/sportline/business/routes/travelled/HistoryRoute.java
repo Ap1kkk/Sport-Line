@@ -3,7 +3,7 @@ package ru.gorkycode.ngtu.sportline.business.routes.travelled;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
-import ru.gorkycode.ngtu.sportline.business.routes.Route;
+import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
 import ru.gorkycode.ngtu.sportline.business.user.model.User;
 
 import java.time.ZonedDateTime;

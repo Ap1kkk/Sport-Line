@@ -2,13 +2,18 @@ package ru.gorkycode.ngtu.sportline.business.routes;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gorkycode.ngtu.sportline.business.category.Category;
 import ru.gorkycode.ngtu.sportline.business.category.CategoryService;
+import ru.gorkycode.ngtu.sportline.business.routes.dto.RouteDto;
 import ru.gorkycode.ngtu.sportline.business.routes.jpa.RouteFilter;
 import ru.gorkycode.ngtu.sportline.business.routes.jpa.RouteRepository;
 import ru.gorkycode.ngtu.sportline.business.routes.jpa.RouteSpecification;
+import ru.gorkycode.ngtu.sportline.business.routes.mappers.RouteMapper;
+import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
 import ru.gorkycode.ngtu.sportline.business.system.exceptions.classes.data.EntityNotFoundException;
 
 import java.util.List;
@@ -69,5 +74,13 @@ public class RouteService {
     public Route getDaily() {
         Long minimumId = repository.findMinimumId();
         return repository.findById(minimumId).orElseThrow(() -> new EntityNotFoundException(Route.class, minimumId));
+    }
+
+    public List<Route> getPopular(int limit) {
+        return repository.findPopular(limit);
+    }
+
+    public List<Route> getPopularFiltered(RouteFilter filter, int limit) {
+        return repository.findAll(RouteSpecification.withFilters(filter), Pageable.ofSize(limit)).stream().toList();
     }
 }
