@@ -2,8 +2,9 @@ import { YMaps, Map, Placemark } from '@pbe/react-yandex-maps';
 import React, { useEffect, useState } from "react";
 
 const API_ROUTE_URL = "http://localhost:8080/api/v1/admin/route/create";
+const API_ROUTE_URL_CATEGORIES = "http://localhost:8080/api/v1/category/all";
 
-const YandexMap = () => {
+const Admin_workbench = () => {
     const [mapInstance, setMapInstance] = useState(null);
     const [coords, setCoords] = useState([56.315309, 43.993506]);
     const [points, setPoints] = useState([]);
@@ -14,6 +15,25 @@ const YandexMap = () => {
     const [nameError, setNameError] = useState("");
     const [description, setDescription] = useState("");
     const [difficulty, setDifficulty] = useState("EASY");
+    const [categories, setCategories] = useState([]);
+    const [selectedCategories, setSelectedCategories] = useState([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await fetch(API_ROUTE_URL_CATEGORIES);
+                if (response.ok) {
+                    const data = await response.json();
+                    setCategories(data);
+                } else {
+                    console.error("Ошибка загрузки категорий");
+                }
+            } catch (error) {
+                console.error("Ошибка при загрузке категорий:", error);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     const handleClick = (e) => {
         const [latitude, longitude] = e.get("coords");
@@ -114,6 +134,11 @@ const YandexMap = () => {
         setDifficulty(e.target.value);
     };
 
+    const handleCategoryChange = (e) => {
+        const value = Array.from(e.target.selectedOptions, (option) => option.value);
+        setSelectedCategories(value);
+    };
+
     const saveRoute = async () => {
         if (!routeName || points.length < 2) {
             alert("Введите название маршрута и добавьте минимум две точки.");
@@ -192,8 +217,8 @@ const YandexMap = () => {
                         zoom: 12,
                         controls: [],
                     }}
-                    width={"1000px"}
-                    height={"800px"}
+                    width={"600px"}
+                    height={"600px"}
                     onClick={handleClick}
                     onLoad={(ymaps) => onYMapsLoad(ymaps)}
                 >
@@ -230,7 +255,23 @@ const YandexMap = () => {
                         onChange={handleDescriptionChange}
                         style={styles.textarea}
                     />
-                    <select value={difficulty} onChange={handleDifficultyChange} style={styles.select}>
+                    <select
+                        multiple
+                        value={selectedCategories}
+                        onChange={handleCategoryChange}
+                        style={styles.multiselect}
+                    >
+                        {categories.map((category) => (
+                            <option key={category.id} value={category.id}>
+                                {category.name}
+                            </option>
+                        ))}
+                    </select>
+                    <select
+                        value={difficulty}
+                        onChange={handleDifficultyChange}
+                        style={styles.select}
+                    >
                         <option value="EASY">Легкий</option>
                         <option value="MEDIUM">Средний</option>
                         <option value="HARD">Сложный</option>
@@ -239,24 +280,24 @@ const YandexMap = () => {
                     <button style={styles.button} onClick={saveRoute}>
                         Сохранить маршрут
                     </button>
-                </div>
-                <div style={styles.routeInfo}>
-                    <h3>Информация о маршруте:</h3>
-                    {routeDistance > 0 ? (
-                        <p>Общее расстояние: {(routeDistance / 1000).toFixed(2)} км</p>
-                    ) : (
-                        <p>Добавьте точки, чтобы увидеть расстояние.</p>
-                    )}
-                </div>
-                <div style={styles.coordinatesList}>
-                    <h3>Координаты точек:</h3>
-                    <ul>
-                        {points.map(([lat, lon], index) => (
-                            <li key={index}>
-                                Точка {index + 1}: {lat.toFixed(6)}, {lon.toFixed(6)}
-                            </li>
-                        ))}
-                    </ul>
+                    <div style={styles.routeInfo}>
+                        <h3>Информация о маршруте:</h3>
+                        {routeDistance > 0 ? (
+                            <p>Общее расстояние: {(routeDistance / 1000).toFixed(2)} км</p>
+                        ) : (
+                            <p>Добавьте точки, чтобы увидеть расстояние.</p>
+                        )}
+                    </div>
+                    <div style={styles.coordinatesList}>
+                        <h3>Координаты точек:</h3>
+                        <ul>
+                            {points.map(([lat, lon], index) => (
+                                <li key={index}>
+                                    Точка {index + 1}: {lat.toFixed(6)}, {lon.toFixed(6)}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </YMaps>
@@ -269,17 +310,19 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '800px',
+        marginTop: '200px',
     },
     controls: {
         marginTop: "20px",
+        marginLeft: "120px",
         textAlign: "center",
-        width: "80%",
+        width: "75%",
     },
     coordinatesList: {
         marginTop: "20px",
         textAlign: "left",
         width: "80%",
+        marginBottom: "100px",
     },
     routeInfo: {
         marginTop: "20px",
@@ -295,6 +338,12 @@ const styles = {
         padding: "10px",
         width: "60%",
         height: "80px",
+    },
+    multiselect: {
+        marginTop: "10px",
+        padding: "10px",
+        width: "60%",
+        height: "120px",
     },
     select: {
         marginTop: "10px",
@@ -316,4 +365,4 @@ const styles = {
     },
 };
 
-export default YandexMap;
+export default Admin_workbench;
