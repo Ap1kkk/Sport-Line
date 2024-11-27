@@ -105,7 +105,7 @@ CREATE TABLE user_favourite_routes (
     FOREIGN KEY (route_id) REFERENCES routes(id)
 );
 
-CREATE TABLE user_travelled_routes (
+CREATE TABLE user_routes_history (
     user_id     BIGSERIAL,
     route_id    BIGSERIAL,
     done_at     TIMESTAMP WITH TIME ZONE,

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Embeddable
 @Data
 @NoArgsConstructor
-public class TravelledRouteId {
+public class HistoryRouteId {
     private Long userId;
     private Long routeId;
 }

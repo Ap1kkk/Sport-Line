@@ -38,7 +38,7 @@ public class CategoryService {
         return allByIds;
     }
 
-    public List<Category> findAll() {
+    public List<Category> getAll() {
         return repository.findAll();
     }
 

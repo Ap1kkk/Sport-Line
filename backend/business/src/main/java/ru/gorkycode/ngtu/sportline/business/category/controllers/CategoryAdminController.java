@@ -1,7 +1,10 @@
-package ru.gorkycode.ngtu.sportline.business.category;
+package ru.gorkycode.ngtu.sportline.business.category.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.gorkycode.ngtu.sportline.business.category.Category;
+import ru.gorkycode.ngtu.sportline.business.category.CategoryDto;
+import ru.gorkycode.ngtu.sportline.business.category.CategoryService;
 
 /**
  * @author Egor Bokov

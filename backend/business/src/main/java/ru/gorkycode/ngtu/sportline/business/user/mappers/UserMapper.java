@@ -1,4 +1,4 @@
-package ru.gorkycode.ngtu.sportline.business.user;
+package ru.gorkycode.ngtu.sportline.business.user.mappers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

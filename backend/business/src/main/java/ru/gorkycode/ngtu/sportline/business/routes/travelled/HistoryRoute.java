@@ -13,17 +13,17 @@ import java.util.Objects;
  * @author Egor Bokov
  */
 @Entity
-@Table(name = "user_travelled_routes")
+@Table(name = "user_routes_history")
 @Getter
 @Setter
 @ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TravelledRoute {
+public class HistoryRoute {
 
     @EmbeddedId
-    private TravelledRouteId id;
+    private HistoryRouteId id;
 
     @Column(name = "done_at")
     @Builder.Default
@@ -48,7 +48,7 @@ public class TravelledRoute {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        TravelledRoute that = (TravelledRoute) o;
+        HistoryRoute that = (HistoryRoute) o;
         return getId() != null && Objects.equals(getId(), that.getId());
     }
 

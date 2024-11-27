@@ -100,4 +100,11 @@ public class User extends BaseEntity {
 
         favouriteRoutes.add(route);
     }
+
+    public void removeRoute(Route route) {
+        if(favouriteRoutes == null)
+            return;
+
+        favouriteRoutes.remove(route);
+    }
 }

@@ -2,16 +2,21 @@ package ru.gorkycode.ngtu.sportline.business.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datafaker.Faker;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.gorkycode.ngtu.sportline.business.auth.AuthService;
 import ru.gorkycode.ngtu.sportline.business.category.Category;
 import ru.gorkycode.ngtu.sportline.business.category.CategoryService;
 import ru.gorkycode.ngtu.sportline.business.common.BaseEntity;
+import ru.gorkycode.ngtu.sportline.business.user.dto.ProfileDto;
 import ru.gorkycode.ngtu.sportline.business.routes.RouteService;
 import ru.gorkycode.ngtu.sportline.business.user.dto.CreateCredentialsDto;
 import ru.gorkycode.ngtu.sportline.business.user.dto.EditProfileDto;
+import ru.gorkycode.ngtu.sportline.business.user.dto.UserProjectionDto;
+import ru.gorkycode.ngtu.sportline.business.user.mappers.UserMapper;
+import ru.gorkycode.ngtu.sportline.business.user.mappers.UserProjectionMapper;
 import ru.gorkycode.ngtu.sportline.business.user.model.User;
-import ru.gorkycode.ngtu.sportline.business.auth.AuthService;
 
 import java.util.List;
 
@@ -26,27 +31,30 @@ public class UserService {
     private final UserRepository repository;
     private final UserValidator validator;
     private final UserMapper mapper;
+    private final UserProjectionMapper projectionMapper;
 
     private final AuthService authService;
     private final CategoryService categoryService;
     private final RouteService routeService;
+
+    private final Faker faker = new Faker();
 
     public User getById(Long id) {
         return validator.throwIfNotExists(id);
     }
 
     @Transactional
-    public User create(CreateCredentialsDto dto) {
+    public UserProjectionDto create(CreateCredentialsDto dto) {
         log.debug("[User]: Create user for email: {}", dto.getEmail());
 
         validator.validateToCreate(dto);
         User user = mapper.map(dto);
 
-        return repository.saveAndFlush(user);
+        return projectionMapper.toDto(repository.saveAndFlush(user));
     }
 
     @Transactional
-    public User choosePreferences(List<Long> preferencesIds) {
+    public UserProjectionDto choosePreferences(List<Long> preferencesIds) {
         User currentUser = authService.getCurrentUser();
         log.debug("[User]: user [{}] choosing preferences by ids: {}", currentUser.getId(), preferencesIds);
 
@@ -55,11 +63,11 @@ public class UserService {
         List<Category> preferences = categoryService.getByIds(preferencesIds);
         currentUser.setPreferences(preferences);
 
-        return repository.save(currentUser);
+        return projectionMapper.toDto(repository.saveAndFlush(currentUser));
     }
 
     @Transactional
-    public User editProfile(EditProfileDto dto) {
+    public UserProjectionDto editProfile(EditProfileDto dto) {
         User currentUser = authService.getCurrentUser();
         log.debug("[User]: user [{}] editing profile: {}", currentUser.getId(), dto);
 
@@ -69,7 +77,7 @@ public class UserService {
         List<Category> preferences = categoryService.getByIds(dto.getPreferencesIds());
         currentUser.setPreferences(preferences);
 
-        return repository.save(currentUser);
+        return projectionMapper.toDto(repository.save(currentUser));
     }
 
     @Transactional
@@ -84,5 +92,31 @@ public class UserService {
 
         currentUser.addRoute(routeService.getById(routeId));
         repository.save(currentUser);
+    }
+
+    @Transactional
+    public void unlikeRoute(Long routeId) {
+        User currentUser = authService.getCurrentUser();
+        log.debug("[User] : user [{}] unlike route [{}]", currentUser.getId(), routeId);
+
+        repository.loadWithFavouriteRoutes(currentUser.getId());
+
+        if(currentUser.getFavouriteRoutes().stream().map(BaseEntity::getId).noneMatch(routeId::equals))
+            return;
+
+        currentUser.removeRoute(routeService.getById(routeId));
+        repository.save(currentUser);
+    }
+
+    @Transactional
+    public ProfileDto getProfile() {
+        User currentUser = authService.getCurrentUser();
+
+        return ProfileDto
+                .builder()
+                .totalDistance(faker.random().nextLong(1_000_000L))
+                .totalAchievements(faker.random().nextLong(1000L))
+                .user(projectionMapper.toDto(currentUser))
+                .build();
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.gorkycode.ngtu.sportline.business.routes.Route;
 import ru.gorkycode.ngtu.sportline.business.routes.RouteFaker;
 import ru.gorkycode.ngtu.sportline.business.routes.RouteService;
+import ru.gorkycode.ngtu.sportline.business.routes.jpa.RouteFilter;
 
 import java.util.List;
 
@@ -24,6 +25,11 @@ public class RouteController {
         return routeService.getById(id);
     }
 
+    @GetMapping("/filter")
+    public List<Route> getAll(@RequestBody RouteFilter filter) {
+        return routeService.getFilteredRoutes(filter);
+    }
+
     @GetMapping("/popular")
     public List<Route> getPopular() {
         return routeFaker.get(5, 10);
@@ -35,12 +41,17 @@ public class RouteController {
     }
 
     @PostMapping("/start")
-    public Route start() {
+    public Route start(@RequestParam Long routeId) {
+        return routeFaker.get();
+    }
+
+    @PostMapping("/leave")
+    public Route leave(@RequestParam Long routeId) {
         return routeFaker.get();
     }
 
     @PostMapping("/finish")
-    public Route finish() {
+    public Route finish(@RequestParam Long routeId) {
         return routeFaker.get();
     }
 }
