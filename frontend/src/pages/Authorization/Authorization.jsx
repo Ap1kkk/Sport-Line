@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from "react-router-dom";
-import "./Authorization.css"
+import {Link, useNavigate} from "react-router-dom";
+import "./Authorization.css";
 
 const Authorization = () => {
     const [email, setEmail] = useState('');
@@ -12,6 +12,7 @@ const Authorization = () => {
     const [passwordError, setPasswordError] = useState('Password не может быть пустым!');
 
     const [message, setMessage] = useState('');
+    const navigate = useNavigate()
 
     // Проверка валидности email
     const validateEmail = (value) => {
@@ -55,19 +56,32 @@ const Authorization = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:5000/users');
-            if (!response.ok) throw new Error('Ошибка при запросе данных с сервера');
+            const body = { email, password };
 
-            const users = await response.json();
+            const response = await fetch('http://localhost:8080/api/v1/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
 
-            const user = users.find(
-                (user) => user.email === email && user.password === password
-            );
+            if (response.ok) {
+                const data = await response.json();
 
-            if (user) {
+                localStorage.setItem('user', JSON.stringify(data));
+
                 setMessage('Авторизация успешна!');
+                setEmail('');
+                setPassword('');
+                if (data.role === "USER")
+                {
+                    navigate("/main_page")
+                } else if (data.role === "ADMIN") {
+                    navigate("/admin")
+                }
+
             } else {
-                setMessage('Неправильный email или пароль.');
+                const errorData = await response.json();
+                setMessage(errorData.message || 'Неправильный email или пароль.');
             }
         } catch (error) {
             console.error('Ошибка авторизации:', error);
