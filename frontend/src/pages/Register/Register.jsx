@@ -71,7 +71,7 @@ const Register = () => {
                 username,
                 email,
                 password,
-                role: "USER", // Указываем роль
+                role: "ADMIN", // Указываем роль
             };
 
             const response = await fetch('http://localhost:8080/api/v1/auth/register', {

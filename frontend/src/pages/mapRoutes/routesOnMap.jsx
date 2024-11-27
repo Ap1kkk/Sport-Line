@@ -257,8 +257,8 @@ const RoutesOnMap = () => {
                                 zoom: 12,
                                 controls: [],
                             }}
-                            width={"1000px"}
-                            height={"800px"}
+                            width={"400px"}
+                            height={"600px"}
                             onLoad={(ymaps) => onYMapsLoad(ymaps)}
                         >
                             <Placemark
@@ -326,7 +326,7 @@ const RoutesOnMap = () => {
                     </div>
                 </>
             ) : (
-                <p>Введите название маршрута и нажмите кнопку "Показать маршрут".</p>
+                <p style={styles.textRoute}>Введите название маршрута и нажмите кнопку "Показать маршрут".</p>
             )}
         </div>
     );
@@ -338,7 +338,7 @@ const progressBarStyles = {
         width: "100%",
         backgroundColor: "#e0e0df",
         borderRadius: "5px",
-        margin: "20px 0",
+        margin: "10px 0",
     },
     filler: {
         height: "100%",
@@ -363,20 +363,22 @@ const styles = {
         width: "100%",
     },
     inputContainer: {
-        marginBottom: "20px",
+        marginBottom: "10px",
+        textAlign: "center",
+    },
+    textRoute: {
+        fontSize: "15px",
         textAlign: "center",
     },
     input: {
         padding: "10px",
-        width: "300px",
+        width: "200px",
         marginRight: "10px",
         border: "1px solid #ccc",
         borderRadius: "4px",
     },
-    map: {
-        zIndex: 1,
-    },
     button: {
+        marginTop: "10px",
         padding: "10px 20px",
         backgroundColor: "#007BFF",
         color: "#fff",
@@ -385,13 +387,16 @@ const styles = {
         cursor: "pointer",
     },
     startButton: {
-        padding: "10px 20px",
+        padding: "10px 10px",
         backgroundColor: "#28a745",
         color: "#fff",
         border: "none",
         borderRadius: "4px",
         cursor: "pointer",
-        marginTop: "20px",
+        marginTop: "10px",
+        position: "relative",
+        left: "50%",
+        transform: "translateX(-50%)",
     },
     error: {
         color: "red",
@@ -401,15 +406,14 @@ const styles = {
         fontSize: "16px",
         fontWeight: "bold",
     },
-
     routeName: {
         fontSize: "24px",
         fontWeight: "bold",
-        marginBottom: "20px",
+        marginBottom: "10px",
     },
     errorMessageOverlay: {
         position: "fixed",
-        bottom: "300px",
+        bottom: "200px",
         left: "50%",
         transform: "translateX(-50%)",
         backgroundColor: "rgba(255, 0, 0, 0.8)",
@@ -421,6 +425,7 @@ const styles = {
     infoPanel: {
         position: "fixed",
         bottom: "100px",
+        width: "80%",
         left: "50%",
         transform: "translateX(-50%)",
         backgroundColor: "rgba(0, 0, 0, 0.7)",
@@ -452,7 +457,6 @@ const styles = {
         fontSize: "14px",
         fontWeight: "bold",
     },
-
 };
 
 export default RoutesOnMap;

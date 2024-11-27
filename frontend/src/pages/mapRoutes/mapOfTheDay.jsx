@@ -238,8 +238,8 @@ const MapOfTheDay = () => {
                                 zoom: 12,
                                 controls: [],
                             }}
-                            width={"1000px"}
-                            height={"800px"}
+                            width={"400px"}
+                            height={"700px"}
                             onLoad={(ymaps) => onYMapsLoad(ymaps)}
                         >
                             <Placemark
@@ -318,7 +318,7 @@ const progressBarStyles = {
         width: "100%",
         backgroundColor: "#e0e0df",
         borderRadius: "5px",
-        margin: "20px 0",
+        margin: "10px 0",
     },
     filler: {
         height: "100%",
@@ -342,20 +342,6 @@ const styles = {
         alignItems: "center",
         width: "100%",
     },
-    inputContainer: {
-        marginBottom: "20px",
-        textAlign: "center",
-    },
-    input: {
-        padding: "10px",
-        width: "300px",
-        marginRight: "10px",
-        border: "1px solid #ccc",
-        borderRadius: "4px",
-    },
-    map: {
-        zIndex: 1,
-    },
     button: {
         padding: "10px 20px",
         backgroundColor: "#007BFF",
@@ -365,27 +351,29 @@ const styles = {
         cursor: "pointer",
     },
     startButton: {
-        padding: "10px 20px",
+        padding: "10px 10px",
         backgroundColor: "#28a745",
         color: "#fff",
         border: "none",
         borderRadius: "4px",
         cursor: "pointer",
-        marginTop: "20px",
+        marginTop: "10px",
+        position: "relative",
+        left: "50%",
+        transform: "translateX(-50%)",
     },
     error: {
         color: "red",
     },
     errorText: {
-        margin: 0,
         fontSize: "16px",
         fontWeight: "bold",
     },
-
     routeName: {
-        fontSize: "24px",
+        fontSize: "20px",
         fontWeight: "bold",
-        marginBottom: "20px",
+        marginBottom: "10px",
+        marginTop: "10px",
     },
     errorMessageOverlay: {
         position: "fixed",
@@ -401,6 +389,7 @@ const styles = {
     infoPanel: {
         position: "fixed",
         bottom: "100px",
+        width: "80%",
         left: "50%",
         transform: "translateX(-50%)",
         backgroundColor: "rgba(0, 0, 0, 0.7)",
