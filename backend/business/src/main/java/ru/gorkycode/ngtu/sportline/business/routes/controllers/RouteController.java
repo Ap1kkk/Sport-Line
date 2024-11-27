@@ -30,6 +30,11 @@ public class RouteController {
         return routeService.getFilteredRoutes(filter);
     }
 
+    @GetMapping("/daily")
+    public Route getDaily() {
+        return routeService.getDaily();
+    }
+
     @GetMapping("/popular")
     public List<Route> getPopular() {
         return routeFaker.get(5, 10);

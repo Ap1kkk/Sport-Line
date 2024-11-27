@@ -27,6 +27,7 @@ CREATE TABLE routes (
     difficulty  VARCHAR,
     distance    BIGINT,
     duration    BIGINT,
+    likes       BIGINT,
     created_at  TIMESTAMP WITH TIME ZONE
 );
 

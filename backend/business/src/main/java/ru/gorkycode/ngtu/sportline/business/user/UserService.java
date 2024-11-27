@@ -9,6 +9,7 @@ import ru.gorkycode.ngtu.sportline.business.auth.AuthService;
 import ru.gorkycode.ngtu.sportline.business.category.Category;
 import ru.gorkycode.ngtu.sportline.business.category.CategoryService;
 import ru.gorkycode.ngtu.sportline.business.common.BaseEntity;
+import ru.gorkycode.ngtu.sportline.business.routes.Route;
 import ru.gorkycode.ngtu.sportline.business.user.dto.ProfileDto;
 import ru.gorkycode.ngtu.sportline.business.routes.RouteService;
 import ru.gorkycode.ngtu.sportline.business.user.dto.CreateCredentialsDto;
@@ -90,7 +91,10 @@ public class UserService {
         if(currentUser.getFavouriteRoutes().stream().map(BaseEntity::getId).anyMatch(routeId::equals))
             return;
 
-        currentUser.addRoute(routeService.getById(routeId));
+        Route route = routeService.getById(routeId);
+        currentUser.addRoute(route);
+        route.setLikes(route.getLikes() + 1);
+
         repository.save(currentUser);
     }
 
@@ -104,8 +108,13 @@ public class UserService {
         if(currentUser.getFavouriteRoutes().stream().map(BaseEntity::getId).noneMatch(routeId::equals))
             return;
 
-        currentUser.removeRoute(routeService.getById(routeId));
+        Route route = routeService.getById(routeId);
+        currentUser.removeRoute(route);
+        long updatedLikes = route.getLikes() - 1;
+        route.setLikes(updatedLikes > 0 ? updatedLikes : 0);
+
         repository.save(currentUser);
+        routeService.save(route);
     }
 
     @Transactional

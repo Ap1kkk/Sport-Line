@@ -61,4 +61,13 @@ public class RouteService {
         Route route = validator.throwIfNotExist(id);
         repository.delete(route);
     }
+
+    public Route save(Route entity) {
+        return repository.save(entity);
+    }
+
+    public Route getDaily() {
+        Long minimumId = repository.findMinimumId();
+        return repository.findById(minimumId).orElseThrow(() -> new EntityNotFoundException(Route.class, minimumId));
+    }
 }
