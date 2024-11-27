@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
+import "./Authorization.css"
 
 const Authorization = () => {
     const [email, setEmail] = useState('');
@@ -75,7 +76,7 @@ const Authorization = () => {
     };
 
     return (
-        <div className="container">
+        <div className="__container">
             <h1 className="title">Авторизация</h1>
             {message && <p>{message}</p>}
             <form className="form" onSubmit={handleSubmit}>
