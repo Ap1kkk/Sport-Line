@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Link, Navigate, Route, Routes} from "react-rout
 
 import MainPage from "./pages/main-page/main_page";
 import Profile from "./pages/all-profile-pages/ProfilePage/ProfilePage";
-import Yandex_map from "./pages/map-page/yandex_map";
+import Yandex_map from "./pages/admin-page/admin_workbench";
 import Favorites from "./pages/favorites/favorites";
 import Authorization from "./pages/Authorization/Authorization";
 import Register from "./pages/Register/Register";
@@ -15,6 +15,7 @@ import Statistics from "./pages/all-profile-pages/StatisticsPage/StatisticsPage"
 import Achievements from "./pages/all-profile-pages/AchievementsPage/AchievementsPage";
 import RouteHistory from "./pages/all-profile-pages/RouteHistoryPage/RouteHistoryPage";
 import EditProfile from "./pages/all-profile-pages/EditProfilePage/EditProfilePage";
+import Admin_workbench from "./pages/admin-page/admin_workbench";
 
 
 function App() {
@@ -23,7 +24,7 @@ function App() {
                     <Routes>
                         <Route path="/" element={<Navigate to="/main_page" replace/>}/>
 
-                        <Route path="/Yandex_map" element={<Yandex_map/>}/>
+                        <Route path="/admin" element={<Admin_workbench/>}/>
                         <Route path="/favourites" element={<Favorites/>}/>
                         <Route path="/main_page" element={<MainPage/>}/>
                         <Route path="/login" element={<Authorization/>}/>
@@ -46,7 +47,7 @@ function App() {
                             style={styles.navImage}
                         />
                     </Link>
-                    <Link to="/yandex_map" style={styles.navLink}>
+                    <Link to="/admin" style={styles.navLink}>
                         <i className="fa fa-map-marker" style={styles.navIcon}></i>
                         <span>Карта</span>
                     </Link>
