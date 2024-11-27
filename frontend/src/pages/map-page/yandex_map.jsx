@@ -1,6 +1,8 @@
 import { YMaps, Map, Placemark } from '@pbe/react-yandex-maps';
 import React, { useEffect, useState } from "react";
 
+const API_ROUTE_URL = "http://localhost:8080/api/v1/admin/route/create";
+
 const YandexMap = () => {
     const [mapInstance, setMapInstance] = useState(null);
     const [coords, setCoords] = useState([56.315309, 43.993506]);
@@ -10,6 +12,8 @@ const YandexMap = () => {
     const [routeName, setRouteName] = useState("");
     const [routeDistance, setRouteDistance] = useState(0);
     const [nameError, setNameError] = useState("");
+    const [description, setDescription] = useState("");
+    const [difficulty, setDifficulty] = useState("EASY");
 
     const handleClick = (e) => {
         const [latitude, longitude] = e.get("coords");
@@ -98,27 +102,16 @@ const YandexMap = () => {
         };
     }, [mapInstance]);
 
-    const validateRouteName = async (name) => {
-        if (!name) {
-            setNameError("");
-            return;
-        }
-
-        try {
-            const response = await fetch("http://localhost:5000/routes");
-            const routes = await response.json();
-
-            const isDuplicateName = routes.some(route => route.nameRoute === name);
-            setNameError(isDuplicateName ? "Маршрут с таким названием уже существует." : "");
-        } catch (error) {
-            console.error("Ошибка проверки названия маршрута:", error);
-        }
+    const handleNameChange = (e) => {
+        setRouteName(e.target.value);
     };
 
-    const handleNameChange = (e) => {
-        const name = e.target.value;
-        setRouteName(name);
-        validateRouteName(name);
+    const handleDescriptionChange = (e) => {
+        setDescription(e.target.value);
+    };
+
+    const handleDifficultyChange = (e) => {
+        setDifficulty(e.target.value);
     };
 
     const saveRoute = async () => {
@@ -133,19 +126,30 @@ const YandexMap = () => {
         }
 
         try {
-            const response = await fetch("http://localhost:5000/routes");
-            const routes = await response.json();
-
-            const nextId = routes.length > 0 ? Math.max(...routes.map(route => route.id)) + 1 : 1;
+            const checkpoints = points.map(([latitude, longitude], index) => ({
+                id: 0,
+                index,
+                latitude,
+                longitude,
+            }));
 
             const routeData = {
-                id: nextId,
-                nameRoute: routeName,
-                coords: points,
-                distance: routeDistance / 1000,
+                id: 0,
+                name: routeName,
+                description,
+                difficulty,
+                distance: routeDistance,
+                duration: 0,
+                categoryIds: [],
+                checkpoints,
+                image: {
+                    id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                    path: "string",
+                    displayOrder: 0,
+                },
             };
 
-            const saveResponse = await fetch("http://localhost:5000/routes", {
+            const response = await fetch(API_ROUTE_URL, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -153,11 +157,13 @@ const YandexMap = () => {
                 body: JSON.stringify(routeData),
             });
 
-            if (saveResponse.ok) {
+            if (response.ok) {
                 alert("Маршрут успешно сохранен!");
                 setRouteName("");
+                setDescription("");
                 setPoints([]);
                 setRouteDistance(0);
+                setDifficulty("EASY");
                 if (route) {
                     mapInstance.geoObjects.remove(route);
                     setRoute(null);
@@ -218,6 +224,17 @@ const YandexMap = () => {
                         onChange={handleNameChange}
                         style={styles.input}
                     />
+                    <textarea
+                        placeholder="Введите описание маршрута"
+                        value={description}
+                        onChange={handleDescriptionChange}
+                        style={styles.textarea}
+                    />
+                    <select value={difficulty} onChange={handleDifficultyChange} style={styles.select}>
+                        <option value="EASY">Легкий</option>
+                        <option value="MEDIUM">Средний</option>
+                        <option value="HARD">Сложный</option>
+                    </select>
                     {nameError && <p style={styles.error}>{nameError}</p>}
                     <button style={styles.button} onClick={saveRoute}>
                         Сохранить маршрут
@@ -254,6 +271,11 @@ const styles = {
         alignItems: 'center',
         width: '800px',
     },
+    controls: {
+        marginTop: "20px",
+        textAlign: "center",
+        width: "80%",
+    },
     coordinatesList: {
         marginTop: "20px",
         textAlign: "left",
@@ -264,7 +286,18 @@ const styles = {
         textAlign: "center",
     },
     input: {
-        marginTop: "20px",
+        marginTop: "10px",
+        padding: "10px",
+        width: "60%",
+    },
+    textarea: {
+        marginTop: "10px",
+        padding: "10px",
+        width: "60%",
+        height: "80px",
+    },
+    select: {
+        marginTop: "10px",
         padding: "10px",
         width: "60%",
     },
@@ -276,6 +309,10 @@ const styles = {
         border: "none",
         borderRadius: "5px",
         cursor: "pointer",
+    },
+    error: {
+        color: "red",
+        marginTop: "10px",
     },
 };
 

@@ -28,7 +28,7 @@ const RoutesOnMap = () => {
     const [isTooFar, setIsTooFar] = useState(false);
     const [routeDistance, setRouteDistance] = useState(0);
     const [isStarted, setIsStarted] = useState(false);
-    const [nextPointDistance, setNextPointDistance] = useState(null);
+    const [progress, setProgress] = useState(0);
 
     const fetchRoute = async () => {
         setIsLoading(true);
@@ -37,6 +37,9 @@ const RoutesOnMap = () => {
             const response = await fetch(
                 `http://localhost:5000/routes?nameRoute=${routeName}`
             );
+            if (!response.ok) {
+                throw new Error("Не удалось получить данные с сервера");
+            }
             const data = await response.json();
             if (data.length > 0) {
                 setRouteData(data[0]);
@@ -53,8 +56,8 @@ const RoutesOnMap = () => {
         }
     };
 
-    useEffect(() => {
-        if (ymaps && mapInstance && routeData && routeData.coords && routeData.coords.length > 1) {
+    const updateRoute = () => {
+        if (ymaps && mapInstance && routeData?.coords.length > 1) {
             mapInstance.geoObjects.removeAll();
 
             const multiRoute = new ymaps.multiRouter.MultiRoute(
@@ -69,47 +72,74 @@ const RoutesOnMap = () => {
 
             multiRoute.model.events.add("update", () => {
                 const activeRoute = multiRoute.getActiveRoute();
-                if (activeRoute && activeRoute.properties) {
-                    const routeDistance = activeRoute.properties.get("distance")?.value;
-                    if (routeDistance !== undefined) {
-                        setRouteDistance(routeDistance);
-                    }
+                if (activeRoute) {
+                    const distance = activeRoute.properties.get("distance")?.value || 0;
+                    setRouteDistance(distance);
                 }
             });
-
-            const nextPointRoute = new ymaps.multiRouter.MultiRoute(
-                {
-                    referencePoints: [coords, routeData.coords[1]],
-                    params: { routingMode: "pedestrian" },
-                },
-                { boundsAutoApply: true }
-            );
-
-            nextPointRoute.model.events.add("update", () => {
-                const activeRoute = nextPointRoute.getActiveRoute();
-                if (activeRoute && activeRoute.properties) {
-                    const distanceNextPoint = activeRoute.properties.get("distance")?.value;
-                    if (distanceNextPoint !== undefined) {
-                        setNextPointDistance((distanceNextPoint / 1000).toFixed(2));  // Расстояние в километрах
-                    }
-                }
-            });
-
 
             return () => {
                 mapInstance.geoObjects.remove(multiRoute);
             };
         }
-    }, [ymaps, mapInstance, routeData, coords]);
-
-    const onYMapsLoad = (ymapsInstance) => {
-        if (ymapsInstance) {
-            setYmaps(ymapsInstance);
-        } else {
-            console.error("Ошибка при загрузке Yandex Maps API.");
-            setErrorMessage("Не удалось загрузить карту.");
-        }
     };
+
+    const findNearestPoint = (routeCoords, userCoords) => {
+        let minDistance = Infinity;
+        let nearestIndex = -1;
+
+        routeCoords.forEach((point, index) => {
+            const distance = calculateDistance(
+                userCoords[0],
+                userCoords[1],
+                point[0],
+                point[1]
+            );
+            if (distance < minDistance) {
+                minDistance = distance;
+                nearestIndex = index;
+            }
+        });
+
+        return { nearestIndex, minDistance };
+    };
+
+    const calculateRemainingDistance = (routeCoords, startIndex) => {
+        let remainingDistance = 0;
+
+        for (let i = startIndex; i < routeCoords.length - 1; i++) {
+            remainingDistance += calculateDistance(
+                routeCoords[i][0],
+                routeCoords[i][1],
+                routeCoords[i + 1][0],
+                routeCoords[i + 1][1]
+            );
+        }
+
+        return remainingDistance;
+    };
+
+    useEffect(() => {
+        if (routeData && coords.length === 2 && routeDistance > 0) {
+            const geometry = routeData.coords; // Массив точек маршрута
+            const { nearestIndex, minDistance } = findNearestPoint(geometry, coords);
+
+
+            if (minDistance > 60) {
+                const remainingDistance = calculateRemainingDistance(geometry, nearestIndex);
+                const progress = ((routeDistance - remainingDistance) / routeDistance) * 100;
+                setProgress(progress.toFixed(2)); // Обновляем прогресс
+            }
+        }
+    }, [coords, routeData, routeDistance]);
+
+
+    const onYMapsLoad = (ymaps) => {
+        console.log("Yandex Maps API загружен:", ymaps);
+        setYmaps(ymaps);
+    };
+
+    useEffect(updateRoute, [ymaps, mapInstance, routeData]);
 
     // Функция для отслеживания геопозиции пользователя
     useEffect(() => {
@@ -138,12 +168,9 @@ const RoutesOnMap = () => {
                 alert("Геолокация не поддерживается вашим браузером.");
             }
         };
-
         startWatching();
         return () => {
-            if (watchId) {
-                navigator.geolocation.clearWatch(watchId);
-            }
+            if (watchId) navigator.geolocation.clearWatch(watchId);
         };
     }, [mapInstance]);
 
@@ -164,14 +191,14 @@ const RoutesOnMap = () => {
                     const timeInSeconds = routeDistance / averageSpeed;
                     const timeInMinutes = (timeInSeconds / 60).toFixed();
 
-                    const difficulty = routeData.coords.length > 10 ? "Сложный" : "Легкий";
+                    const difficulty =
+                        routeData.coords.length > 10 ? "Сложный" : "Легкий";
 
                     setRealTimeInfo({
-                        routeDistance: (routeDistance / 1000).toFixed(1), // Дистанция маршрута в километрах
+                        routeDistance: (routeDistance / 1000).toFixed(1),
                         time: timeInMinutes,
                         difficulty,
                     });
-
                 }
             } catch (error) {
                 console.error("Ошибка при обработке маршрута или геопозиции:", error);
@@ -241,70 +268,90 @@ const RoutesOnMap = () => {
                                     iconImageHref: 'https://yastatic.net/s3/front-maps-static/maps-front-maps/static/v51/icons/core/map-placemark-dot-32.svg',
                                 }}
                             />
-                            {routeData.coords.map((point, index) => (
-                                <Placemark
-                                    key={index}
-                                    geometry={point}
-                                    options={{
-                                        iconLayout: "default#image",
-                                        iconImageHref:
-                                            "https://cdn-icons-png.flaticon.com/512/2776/2776063.png",
-                                    }}
-                                />
-                            ))}
+
                         </Map>
-                        <div>
-                            {isTooFar && (
-                                <div style={styles.errorMessageOverlay}>
-                                    <p style={styles.errorText}>
-                                        Вы слишком далеко от начала маршрута.
-                                    </p>
-                                </div>
-                            )}
-
-                            {isStarted ? (
-                                <div style={styles.infoPanel}>
-                                    <p>Дистанция до следующей точки: {nextPointDistance} км</p>
-                                    {realTimeInfo ? (
-                                        <>
-                                            <p>Расстояние маршрута: {realTimeInfo.routeDistance} км</p>
-                                            <p>Время: {realTimeInfo.time} мин</p>
-                                        </>
-                                    ) : (
-                                        <p>Загрузка данных маршрута...</p>
-                                    )}
-                                    <button
-                                        onClick={() => setIsStarted(false)}
-                                        style={styles.startButton}
-                                    >
-                                        Закончить
-                                    </button>
-                                </div>
-                            ) : (
-                                <div style={styles.infoPanel}>
-                                    {realTimeInfo ? (
-                                        <>
-                                            <p>Расстояние маршрута: {realTimeInfo.routeDistance} км</p>
-                                            <p>Время: {realTimeInfo.time} мин</p>
-                                            <p>Сложность: {realTimeInfo.difficulty}</p>
-                                        </>
-                                    ) : (
-                                        <p>Загрузка данных маршрута...</p>
-                                    )}
-                                    <button onClick={handleStart} style={styles.startButton}>
-                                        Начать
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-
                     </YMaps>
+                    <div>
+                        {isTooFar && (
+                            <div style={styles.errorMessageOverlay}>
+                                <p style={styles.errorText}>
+                                    Вы слишком далеко от начала маршрута.
+                                </p>
+                            </div>
+                        )}
+
+                        {isStarted ? (
+                            <div style={styles.infoPanel}>
+                                {realTimeInfo ? (
+                                    <>
+                                        <p>Расстояние маршрута: {realTimeInfo.routeDistance} км</p>
+                                        <div style={progressBarStyles.container}>
+                                            <div
+                                                style={{
+                                                    ...progressBarStyles.filler,
+                                                    width: `${progress}%`,
+                                                }}
+                                            >
+                                                <span style={progressBarStyles.label}>{progress}%</span>
+                                            </div>
+                                        </div>
+                                        <p>Время: {realTimeInfo.time} мин</p>
+                                    </>
+                                ) : (
+                                    <p>Загрузка данных маршрута...</p>
+                                )}
+                                <button
+                                    onClick={() => setIsStarted(false)}
+                                    style={styles.startButton}
+                                >
+                                    Закончить
+                                </button>
+                            </div>
+                        ) : (
+                            <div style={styles.infoPanel}>
+                                {realTimeInfo ? (
+                                    <>
+                                        <p>Расстояние маршрута: {realTimeInfo.routeDistance} км</p>
+                                        <p>Время: {realTimeInfo.time} мин</p>
+                                        <p>Сложность: {realTimeInfo.difficulty}</p>
+                                    </>
+                                ) : (
+                                    <p>Загрузка данных маршрута...</p>
+                                )}
+                                <button onClick={handleStart} style={styles.startButton}>
+                                    Начать
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </>
             ) : (
                 <p>Введите название маршрута и нажмите кнопку "Показать маршрут".</p>
             )}
         </div>
     );
+};
+
+const progressBarStyles = {
+    container: {
+        height: "20px",
+        width: "100%",
+        backgroundColor: "#e0e0df",
+        borderRadius: "5px",
+        margin: "20px 0",
+    },
+    filler: {
+        height: "100%",
+        backgroundColor: "#007BFF",
+        borderRadius: "inherit",
+        textAlign: "center",
+        transition: "width 0.2s ease-in-out",
+    },
+    label: {
+        padding: "5px",
+        color: "white",
+        fontWeight: "bold",
+    },
 };
 
 const styles = {
@@ -382,6 +429,30 @@ const styles = {
         borderRadius: "5px",
         zIndex: 1000,
     },
+    progressBarContainer: {
+        position: "fixed",
+        bottom: "50px",
+        left: "50%",
+        transform: "translateX(-50%)",
+        width: "80%",
+        height: "30px",
+        backgroundColor: "#f3f3f3",
+        borderRadius: "15px",
+        overflow: "hidden",
+        boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+    },
+    progressBar: {
+        height: "100%",
+        backgroundColor: "#4caf50",
+        transition: "width 0.5s ease",
+    },
+    progressText: {
+        textAlign: "center",
+        marginTop: "5px",
+        fontSize: "14px",
+        fontWeight: "bold",
+    },
+
 };
 
 export default RoutesOnMap;

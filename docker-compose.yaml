@@ -56,6 +56,8 @@ services:
       SPRING_DATASOURCE_DATABASE_PORT: 5432
       SPRING_DATASOURCE_DATABASE_NAME: *project-name
 
+      SECURITY_CORS_ALLOWED_ORIGIN: http://localhost:3000
+
     volumes:
       - ./uploads:/app/uploads
 

@@ -6,40 +6,61 @@ import "slick-carousel/slick/slick-theme.css";
 
 
 const MainPage = () => {
+
     const navigate = useNavigate()
 
-    const handleButtonClick = () => {
+    const handleButtonClickRouteOfTheDay = () => {
         navigate("/main_page/mapOfTheDay");
+    };
+
+    const handleButtonClickSearch = () => {
+        navigate("/map");
+    };
+
+    const handleButtonClickHistory = () => {
+        navigate("/history");
     };
 
     return (
         <div style={styles.container}>
-            {/* Header Section */}
+            {/* Header */}
             <header style={styles.header}>
-                <div style={styles.square}></div>
+                <img
+                    src="https://img.icons8.com/?size=100&id=6904&format=png&color=000000"
+                    alt="History Icon"
+                    style={styles.icon}
+                    onClick={handleButtonClickHistory}
+                />
                 <h1 style={styles.title}>SportLine</h1>
-                <div style={styles.square}></div>
+                <img
+                    src="https://img.icons8.com/?size=100&id=59878&format=png&color=000000"
+                    alt="Search Icon"
+                    style={styles.icon}
+                    onClick={handleButtonClickSearch}
+                />
             </header>
 
-            {/* Main Content */}
-            <main style={styles.mainContent}>
-                <div style={styles.contentContainer}>
-                    <h2 style={styles.subtitle}>Маршрут дня</h2>
-                    <button style={styles.button} onClick={handleButtonClick}>Поехали</button>
-                </div>
+            {/* Central Map */}
+            <div style={styles.mapContainer}>
+                <h2 style={styles.mapTitle}>Маршрут дня</h2>
+                <button style={styles.mapButton} onClick={handleButtonClickRouteOfTheDay}>
+                    Поехали
+                </button>
+            </div>
 
+            {/* Main Content */}
+            <main>
                 {/* Recommended Slider Section */}
                 <div style={styles.sliderSection}>
                     <h3 style={styles.recommendationTitle}>Рекомендуемые</h3>
                     <div style={styles.sliderContainer}>
                         <Slider {...sliderSettings}>
-                            <div style={styles.card}>
-                                <img
-                                    src="https://img.icons8.com/color-glass/96/owl.png"
-                                    alt="Example"
-                                    style={styles.cardImage}
-                                />
-                            </div>
+                            <img
+                                src="https://img.icons8.com/color-glass/96/owl.png"
+                                alt="Example"
+                                style={styles.cardImage}
+                            />
+
                             <img
                                 src="https://img.icons8.com/color-glass/96/owl.png"
                                 alt="Example"
@@ -47,17 +68,14 @@ const MainPage = () => {
                             />
                             <img
                                 src="https://img.icons8.com/color-glass/96/owl.png"
-                                alt="Example"
                                 style={styles.cardImage}
                             />
                             <img
                                 src="https://img.icons8.com/color-glass/96/owl.png"
-                                alt="Example"
                                 style={styles.cardImage}
                             />
                             <img
                                 src="https://img.icons8.com/color-glass/96/owl.png"
-                                alt="Example"
                                 style={styles.cardImage}
                             />
                         </Slider>
@@ -85,7 +103,7 @@ const styles = {
     container: {
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "#efefef",
+        backgroundColor: "#ffffff",
         height: "100vh",
         overflowY: "auto",
     },
@@ -95,23 +113,44 @@ const styles = {
         alignItems: "center",
         padding: "10px 20px",
         backgroundColor: "#ffffff",
-        borderBottom: "1px solid #ddd",
+        top: 0,
+        zIndex: 1000,
     },
-    square: {
-        width: "40px",
-        height: "40px",
-        backgroundColor: "#ddd",
+    icon: {
+        width: "30px",
+        height: "30px",
+        cursor: "pointer",
     },
     title: {
         fontSize: "24px",
         fontWeight: "bold",
         color: "#333",
     },
-    mainContent: {
+    mapContainer: {
         flex: 1,
-        padding: "20px",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundImage: "url('/main_page/Nizhniy_Novgorod.png')",
+        backgroundPosition: "center",
         textAlign: "center",
-        overflowY: "auto",
+    },
+    mapTitle: {
+        fontSize: "24px",
+        fontWeight: "bold",
+        color: "#000",
+        marginBottom: "20px",
+    },
+    mapButton: {
+        padding: "10px 20px",
+        fontSize: "18px",
+        backgroundColor: "#007BFF",
+        color: "#ffffff",
+        border: "none",
+        borderRadius: "8px",
+        cursor: "pointer",
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
     },
     contentContainer: {
         marginBottom: "20px",
@@ -135,7 +174,7 @@ const styles = {
     },
     sliderContainer: {
         width: "100%",
-        maxWidth: "1000px",
+        maxWidth: "800px",
         margin: "0 auto",
         position: "relative",
     },
@@ -151,10 +190,6 @@ const styles = {
         fontSize: "14px",
         fontWeight: "bold",
         color: "#000000",
-    },
-    cardImage: {
-        width: "300px",
-        height: "300px",
     },
     popularTitle: {
         marginTop: "30px",
@@ -190,24 +225,6 @@ const styles = {
         fontWeight: "bold",
         textAlign: "center",
     },
-    arrow: {
-        display: "flex",
-        width: "40px",
-        height: "40px",
-        lineHeight: "40px",
-        textAlign: "center",
-        position: "absolute",
-        top: "50%",
-        transform: "translateY(-50%)",
-        zIndex: 2,
-        cursor: "pointer",
-    },
-    prevArrow: {
-        left: "-30px",
-    },
-    nextArrow: {
-        right: "-30px",
-    },
     footer: {
         padding: "10px 20px",
         backgroundColor: "#fff",
@@ -219,31 +236,6 @@ const styles = {
     },
 };
 
-// Custom Arrows for the Slider
-const CustomNextArrow = (props) => {
-    const { style, onClick } = props;
-    return (
-        <div
-            style={{ ...styles.arrow, ...styles.nextArrow, ...style }}
-            onClick={onClick}
-        >
-            ▶
-        </div>
-    );
-};
-
-const CustomPrevArrow = (props) => {
-    const { style, onClick } = props;
-    return (
-        <div
-            style={{ ...styles.arrow, ...styles.prevArrow, ...style }}
-            onClick={onClick}
-        >
-            ◀
-        </div>
-    );
-};
-
 // Slider settings
 const sliderSettings = {
     dots: true,
@@ -251,20 +243,12 @@ const sliderSettings = {
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
-    nextArrow: <CustomNextArrow />,
-    prevArrow: <CustomPrevArrow />,
     responsive: [
         {
             breakpoint: 768,
             settings: {
                 slidesToShow: 1,
                 arrows: false,
-            },
-        },
-        {
-            breakpoint: 1200,
-            settings: {
-                slidesToShow: 3,
             },
         },
     ],

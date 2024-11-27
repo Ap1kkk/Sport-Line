@@ -20,8 +20,6 @@ import EditProfile from "./pages/all-profile-pages/EditProfilePage/EditProfilePa
 function App() {
     return (
         <Router>
-            <div style={styles.container}>
-                <div style={styles.content}>
                     <Routes>
                         <Route path="/" element={<Navigate to="/main_page" replace/>}/>
 
@@ -40,7 +38,6 @@ function App() {
                         <Route path="/RouteHistoryPage" element={<RouteHistory />} />
                         <Route path="/EditProfilePage" element={<EditProfile />} />
                     </Routes>
-                </div>
                 <nav style={styles.bottomNav}>
                     <Link to="/favourites" style={styles.navLink}>
                         <img
@@ -52,10 +49,6 @@ function App() {
                     <Link to="/yandex_map" style={styles.navLink}>
                         <i className="fa fa-map-marker" style={styles.navIcon}></i>
                         <span>Карта</span>
-                    </Link>
-                    <Link to="/map" style={styles.navLink}>
-                        <i className="fa fa-heart" style={styles.navIcon}></i>
-                        <span>Карта маршрута</span>
                     </Link>
                     <Link to="/main_page" style={styles.navLink}>
                         <img
@@ -76,22 +69,18 @@ function App() {
                         />
                     </Link>
                 </nav>
-            </div>
         </Router>
     );
 }
 
 const styles = {
+    content: {
+        flex: 1,
+    },
     container: {
         display: "flex",
         flexDirection: "column",
         height: "100vh",
-        margin: 0,
-    },
-    content: {
-        flexGrow: 1,
-        overflow: "auto",
-        paddingBottom: '60px',
     },
     bottomNav: {
         display: "flex",
@@ -102,7 +91,7 @@ const styles = {
         left: 0,
         width: "100%",
         height: "60px",
-        backgroundColor: "#bdbdbd",
+        backgroundColor: "#ffffff",
         borderTop: "1px solid #ddd",
         boxSizing: "border-box",
         padding: "0 10px",
@@ -123,7 +112,7 @@ const styles = {
     navImage: {
         width: '30px',
         height: '30px',
-    }
+    },
 };
 
 export default App;
