@@ -56,12 +56,12 @@ const Preferences = () => {
     return (
         <div className="_container">
             <h1>Предпочтения:</h1>
-            <div className="preferences-buttons">
+            <div className="_preferences-buttons">
                 {options.map((option) => (
                     <button
                         type="button"
                         key={option.id}
-                        className={`preference-button ${
+                        className={`_preference-button ${
                             preferences.includes(option.label) ? "active" : ""
                         }`}
                         onClick={() => handlePreferenceToggle(option.label)}
@@ -70,7 +70,7 @@ const Preferences = () => {
                     </button>
                 ))}
             </div>
-            <button type="submit" className="submit-button" onClick={handleSubmit}>
+            <button type="submit" className="_submit-button" onClick={handleSubmit}>
                 Продолжить
             </button>
         </div>
