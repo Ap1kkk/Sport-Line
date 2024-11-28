@@ -95,8 +95,6 @@ public class UserRouteService {
     }
 
     private HistoryRoute updateStatus(Long historyId, HistoryRouteStatus status) {
-        routeService.getById(historyId);
-
         HistoryRoute historyRoute = historyRouteRepository.findById(historyId)
                 .orElseThrow(() -> new EntityNotFoundException(HistoryRoute.class, historyId));
 
