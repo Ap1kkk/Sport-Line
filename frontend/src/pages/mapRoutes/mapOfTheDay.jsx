@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
 
-// Функция для вычисления расстояния между двумя точками на Земле
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371000; // Радиус Земли в метрах
     const φ1 = (lat1 * Math.PI) / 180;
@@ -16,6 +15,8 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
     return R * c; // Расстояние в метрах
 };
 
+const API_ROUTE_NAME = "http://localhost:8080/api/v1/route/daily"
+
 const MapOfTheDay = () => {
     const [mapInstance, setMapInstance] = useState(null);
     const [ymaps, setYmaps] = useState(null);
@@ -29,32 +30,25 @@ const MapOfTheDay = () => {
     const [isStarted, setIsStarted] = useState(false);
     const [progress, setProgress] = useState(0);
 
-    const routeName = "Ex"; // Название маршрута
-
-    const fetchRoute = async () => {
-        setIsLoading(true);
-        setErrorMessage("");
-        try {
-            const response = await fetch(
-                `http://localhost:5000/routes?nameRoute=${routeName}`
-            );
-            if (!response.ok) {
-                throw new Error("Не удалось получить данные с сервера");
+    useEffect(() => {
+        const fetchMapOfTheDay = async () => {
+            setIsLoading(true);
+            setErrorMessage("");
+            try {
+                const response = await fetch(API_ROUTE_NAME);
+                if (response.ok) {
+                    const data = await response.json();
+                    setRouteData(data);
+                } else {
+                    setErrorMessage("Маршрут не найден");
+                    setRouteData(null);
+                }
+            } catch (error) {
+                console.error("Ошибка при загрузке категорий:", error);
             }
-            const data = await response.json();
-            if (data.length > 0) {
-                setRouteData(data[0]);
-            } else {
-                setErrorMessage("Маршрут с таким названием не найден.");
-                setRouteData(null);
-            }
-        } catch (error) {
-            console.error("Ошибка загрузки маршрута:", error);
-            setErrorMessage("Ошибка при загрузке маршрута");
-        } finally {
-            setIsLoading(false);
-        }
-    };
+        };
+        fetchMapOfTheDay();
+    }, []);
 
     const updateRoute = () => {
         if (ymaps && mapInstance && routeData?.coords.length > 1) {
@@ -118,10 +112,6 @@ const MapOfTheDay = () => {
 
         return remainingDistance;
     };
-
-    useEffect(() => {
-        fetchRoute();
-    }, []);
 
     useEffect(() => {
         if (routeData && coords.length === 2 && routeDistance > 0) {
