@@ -40,18 +40,23 @@ public class RouteController {
         return routeService.getDaily();
     }
 
-    @GetMapping("/popular")
+    @PostMapping("/popular")
     public List<Route> getPopular(@RequestParam int limit) {
         return routeService.getPopular(limit);
     }
 
-    @GetMapping("/popular-filtered")
-    public List<Route> getPopularWithFilter(@RequestBody RouteFilter filter, @RequestParam int limit) {
+    @PostMapping("/popular-filtered")
+    public List<Route> getPopularWithFilter(@RequestParam int limit, @RequestBody RouteFilter filter) {
         return routeService.getPopularFiltered(filter, limit);
     }
 
-    @GetMapping("/recommended")
-    public List<Route> getRecommended() {
+    @PostMapping("/recommended")
+    public List<Route> getRecommended(@RequestParam int limit) {
+        return routeFaker.get(5, 10);
+    }
+
+    @PostMapping("/recommended")
+    public List<Route> getRecommended(@RequestParam int limit, @RequestBody RouteFilter filter) {
         return routeFaker.get(5, 10);
     }
 }

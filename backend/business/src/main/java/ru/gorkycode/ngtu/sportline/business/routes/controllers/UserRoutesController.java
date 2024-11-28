@@ -3,6 +3,7 @@ package ru.gorkycode.ngtu.sportline.business.routes.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.gorkycode.ngtu.sportline.business.routes.RouteFaker;
+import ru.gorkycode.ngtu.sportline.business.routes.jpa.RouteFilter;
 import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
 import ru.gorkycode.ngtu.sportline.business.routes.model.history.HistoryRoute;
 import ru.gorkycode.ngtu.sportline.business.routes.services.UserRouteService;
@@ -20,13 +21,13 @@ public class UserRoutesController {
     private final RouteFaker routeFaker;
     private final UserRouteService userRouteService;
 
-    @GetMapping("/history")
-    public List<Route> getPopular() {
+    @PostMapping("/history")
+    public List<Route> getPopular(@RequestBody RouteFilter filter) {
         return routeFaker.get(5, 10);
     }
 
-    @GetMapping("/favourite")
-    public List<Route> getRecommended() {
+    @PostMapping("/favourite")
+    public List<Route> getRecommended(@RequestBody RouteFilter filter) {
         return routeFaker.get(5, 10);
     }
 
