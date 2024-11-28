@@ -9,6 +9,7 @@ import Register from "./pages/Register/Register";
 import Preferences from "./pages/Preferences/Preferences";
 import Filters from "./pages/Filters/Filters";
 import RoutesOnMap from "./pages/mapRoutes/routesOnMap";
+import MapOfTheDay from "./pages/mapRoutes/mapOfTheDay";
 import Statistics from "./pages/all-profile-pages/StatisticsPage/StatisticsPage";
 import Achievements from "./pages/all-profile-pages/AchievementsPage/AchievementsPage";
 import RouteHistory from "./pages/all-profile-pages/RouteHistoryPage/RouteHistoryPage";
@@ -28,7 +29,8 @@ function App() {
                         <Route path="/register" element={<Register/>}/>
                         <Route path="/register/preferences" element={<Preferences/>}/>
                         <Route path="/filters" element={<Filters/>}/>
-                        <Route path="/routesonmap/:routeId" element={<RoutesOnMap />}/>
+                        <Route path="/map" element={<RoutesOnMap/>}/>
+                        <Route path="/main_page/mapOfTheDay/:routeId" element={<MapOfTheDay />}/>
                         <Route path="/ProfilePage" element={<Profile />}/>
                         <Route path="/StatisticsPage" element={<Statistics />} />
                         <Route path="/AchievementsPage" element={<Achievements />} />
