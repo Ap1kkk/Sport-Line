@@ -28,7 +28,7 @@ const MainPage = () => {
 
                 console.log("Route ID: ", routeId);
 
-                navigate(`/routesonmap/${routeId}`);
+                navigate(`/map/${routeId}`);
             } else {
                 throw new Error("Route not found or API error.");
             }
