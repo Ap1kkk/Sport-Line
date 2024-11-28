@@ -2,6 +2,7 @@ package ru.gorkycode.ngtu.sportline.business.routes.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import ru.gorkycode.ngtu.sportline.business.routes.jpa.RouteSpecification;
 import ru.gorkycode.ngtu.sportline.business.routes.mappers.RouteMapper;
 import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
 import ru.gorkycode.ngtu.sportline.business.system.exceptions.classes.data.EntityNotFoundException;
+import ru.gorkycode.ngtu.sportline.business.system.exceptions.classes.validation.ValidationException;
 import ru.gorkycode.ngtu.sportline.business.user.UserService;
 
 import java.util.List;
@@ -83,5 +85,12 @@ public class RouteService {
 
     public List<Route> getPopularFiltered(RouteFilter filter, int limit) {
         return repository.findAll(RouteSpecification.withFilters(filter), Pageable.ofSize(limit)).stream().toList();
+    }
+
+    public List<Route> search(String searchQuery, RouteFilter filter) {
+        if(Strings.isBlank(searchQuery))
+            throw ValidationException.builder().message("Search search query must not be blank").build();
+
+        return repository.findAll(RouteSpecification.withFilters(searchQuery, filter));
     }
 }

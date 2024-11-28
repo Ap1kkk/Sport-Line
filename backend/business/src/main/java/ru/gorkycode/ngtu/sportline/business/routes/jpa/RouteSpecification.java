@@ -14,8 +14,18 @@ import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
 public class RouteSpecification {
 
     public static Specification<Route> withFilters(RouteFilter filter) {
+        return withFilters(null, filter);
+    }
+
+    public static Specification<Route> withFilters(String searchQuery, RouteFilter filter) {
         return (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
+
+            // Фильтр по имени маршрута
+            if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + searchQuery.toLowerCase() + "%"));
+            }
 
             // Фильтр по сложностям
             if (filter.getDifficulties() != null && !filter.getDifficulties().isEmpty()) {

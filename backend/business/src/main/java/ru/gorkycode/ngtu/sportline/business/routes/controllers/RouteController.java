@@ -25,8 +25,13 @@ public class RouteController {
         return routeService.getById(id);
     }
 
+    @GetMapping("/search")
+    public List<Route> getAll(@RequestBody RouteFilter filter, @RequestParam String query) {
+        return routeService.search(query, filter);
+    }
+
     @GetMapping("/filter")
-    public List<Route> getAll(@RequestBody RouteFilter filter) {
+    public List<Route> getFiltered(@RequestBody RouteFilter filter) {
         return routeService.getFilteredRoutes(filter);
     }
 
