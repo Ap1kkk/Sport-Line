@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
+import { useParams } from "react-router-dom";
 
-// Функция для вычисления расстояния между двумя точками на Земле
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371000; // Радиус Земли в метрах
     const φ1 = (lat1 * Math.PI) / 180;
@@ -16,11 +16,16 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
     return R * c; // Расстояние в метрах
 };
 
-const RoutesOnMap = () => {
+const API_ROUTE_NAME = "http://localhost:8080/api/v1/route";
+const API_START_URL = "http://localhost:8080/api/v1/user/routes/start";
+const API_LEAVE_URL = "http://localhost:8080/api/v1/user/routes/leave";
+const API_FINISH_URL = "http://localhost:8080/api/v1/user/routes/finish";
+
+const Routes = () => {
+    const { routeId } = useParams();
     const [mapInstance, setMapInstance] = useState(null);
     const [ymaps, setYmaps] = useState(null);
     const [routeData, setRouteData] = useState(null);
-    const [routeName, setRouteName] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const [coords, setCoords] = useState([56.315309, 43.993506]);
     const [isLoading, setIsLoading] = useState(false);
@@ -29,40 +34,60 @@ const RoutesOnMap = () => {
     const [routeDistance, setRouteDistance] = useState(0);
     const [isStarted, setIsStarted] = useState(false);
     const [progress, setProgress] = useState(0);
+    const [historyId, setHistoryId] = useState(null);
 
-    const fetchRoute = async () => {
-        setIsLoading(true);
-        setErrorMessage("");
-        try {
-            const response = await fetch(
-                `http://localhost:5000/routes?nameRoute=${routeName}`
-            );
-            if (!response.ok) {
-                throw new Error("Не удалось получить данные с сервера");
+    useEffect(() => {
+        const fetchRouteData = async () => {
+            setIsLoading(true);
+            setErrorMessage("");
+            try {
+                const user = JSON.parse(localStorage.getItem("user"));
+                if (!user || !user.token) {
+                    throw new Error("Authorization token is missing.");
+                }
+
+                const url = `${API_ROUTE_NAME}/by-id?id=${routeId}`;
+
+                const response = await fetch(url, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setRouteData(data);
+                    setRouteDistance(data.distance);
+                }
+            } catch (error) {
+                console.error("Error fetching route:", error);
+                setErrorMessage(error.message || "An error occurred.");
+            } finally {
+                setIsLoading(false);
             }
-            const data = await response.json();
-            if (data.length > 0) {
-                setRouteData(data[0]);
-            } else {
-                setErrorMessage("Маршрут с таким названием не найден.");
-                setRouteData(null);
-            }
-        } catch (error) {
-            console.error("Ошибка загрузки маршрута:", error);
-            alert("Не удалось загрузить маршрут. Проверьте соединение с сервером.");
-            setErrorMessage("Ошибка при загрузке маршрута");
-        } finally {
-            setIsLoading(false);
-        }
-    };
+        };
+
+        fetchRouteData();
+    }, [routeId]);
 
     const updateRoute = () => {
-        if (ymaps && mapInstance && routeData?.coords.length > 1) {
+        if (ymaps && mapInstance && routeData?.checkpoints?.length > 1) {
+            const coords = routeData.checkpoints.map((checkpoint) => [
+                checkpoint.latitude,
+                checkpoint.longitude,
+            ]);
+
+            if (!coords || coords.length < 2) {
+                console.error("Недостаточно данных для построения маршрута.");
+                return;
+            }
+
             mapInstance.geoObjects.removeAll();
 
             const multiRoute = new ymaps.multiRouter.MultiRoute(
                 {
-                    referencePoints: routeData.coords,
+                    referencePoints: coords,
                     params: { routingMode: "pedestrian" },
                 },
                 { boundsAutoApply: true }
@@ -84,64 +109,13 @@ const RoutesOnMap = () => {
         }
     };
 
-    const findNearestPoint = (routeCoords, userCoords) => {
-        let minDistance = Infinity;
-        let nearestIndex = -1;
-
-        routeCoords.forEach((point, index) => {
-            const distance = calculateDistance(
-                userCoords[0],
-                userCoords[1],
-                point[0],
-                point[1]
-            );
-            if (distance < minDistance) {
-                minDistance = distance;
-                nearestIndex = index;
-            }
-        });
-
-        return { nearestIndex, minDistance };
-    };
-
-    const calculateRemainingDistance = (routeCoords, startIndex) => {
-        let remainingDistance = 0;
-
-        for (let i = startIndex; i < routeCoords.length - 1; i++) {
-            remainingDistance += calculateDistance(
-                routeCoords[i][0],
-                routeCoords[i][1],
-                routeCoords[i + 1][0],
-                routeCoords[i + 1][1]
-            );
-        }
-
-        return remainingDistance;
-    };
-
-    useEffect(() => {
-        if (routeData && coords.length === 2 && routeDistance > 0) {
-            const geometry = routeData.coords; // Массив точек маршрута
-            const { nearestIndex, minDistance } = findNearestPoint(geometry, coords);
-
-
-            if (minDistance > 60) {
-                const remainingDistance = calculateRemainingDistance(geometry, nearestIndex);
-                const progress = ((routeDistance - remainingDistance) / routeDistance) * 100;
-                setProgress(progress.toFixed(2)); // Обновляем прогресс
-            }
-        }
-    }, [coords, routeData, routeDistance]);
-
+    useEffect(updateRoute, [ymaps, mapInstance, routeData]);
 
     const onYMapsLoad = (ymaps) => {
         console.log("Yandex Maps API загружен:", ymaps);
         setYmaps(ymaps);
     };
 
-    useEffect(updateRoute, [ymaps, mapInstance, routeData]);
-
-    // Функция для отслеживания геопозиции пользователя
     useEffect(() => {
         let watchId;
         const startWatching = () => {
@@ -159,9 +133,9 @@ const RoutesOnMap = () => {
                         alert("Не удалось получить вашу геопозицию.");
                     },
                     {
-                        enableHighAccuracy: true,
+                        enableHighAccuracy: false,
                         maximumAge: 0,
-                        timeout: 1000,
+                        timeout: 5000,
                     }
                 );
             } else {
@@ -175,43 +149,106 @@ const RoutesOnMap = () => {
     }, [mapInstance]);
 
     useEffect(() => {
-        if (routeData && coords.length === 2 && routeData.coords?.length > 0) {
+        if (routeData && coords.length === 2 && routeDistance > 0) {
             try {
-                const distance = calculateDistance(
-                    coords[0],
-                    coords[1],
-                    routeData.coords[0][0],
-                    routeData.coords[0][1]
-                );
+                const startLat = routeData.checkpoints[0]?.latitude;
+                const startLon = routeData.checkpoints[0]?.longitude;
+                if (startLat && startLon) {
+                    const distanceToStart = calculateDistance(coords[0], coords[1], startLat, startLon);
+                    setIsTooFar(distanceToStart > 100);
 
-                setIsTooFar(distance > 100);
-
-                if (distance <= 100) {
                     const averageSpeed = 1.39; // Средняя скорость в м/с
                     const timeInSeconds = routeDistance / averageSpeed;
-                    const timeInMinutes = (timeInSeconds / 60).toFixed();
-
-                    const difficulty =
-                        routeData.coords.length > 10 ? "Сложный" : "Легкий";
+                    const timeInMinutes = Math.ceil(timeInSeconds / 60);
 
                     setRealTimeInfo({
-                        routeDistance: (routeDistance / 1000).toFixed(1),
+                        routeDistance: (routeDistance / 1000).toFixed(2),
                         time: timeInMinutes,
-                        difficulty,
                     });
                 }
             } catch (error) {
-                console.error("Ошибка при обработке маршрута или геопозиции:", error);
-                setErrorMessage("Произошла ошибка при обработке данных маршрута.");
+                console.error("Ошибка при обработке маршрута:", error);
             }
         }
-    }, [coords, routeData, routeDistance]);
+    }, [routeDistance, coords, routeData]);
 
-    const handleSearch = () => {
-        if (routeName.trim()) {
-            fetchRoute();
-        } else {
-            setErrorMessage("Введите название маршрута.");
+    const sendStartRoute = async (progressData) => {
+        try {
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (!user || !user.token) {
+                throw new Error("Authorization token is missing.");
+            }
+
+            const response = await fetch(`${API_START_URL}?routeId=${routeId}`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log("API response data:", data);
+                if (data && data.id) {
+                    setHistoryId(data.id);
+                } else {
+                    console.error("Error: History ID not found in the response.");
+                }
+            } else {
+                console.error("Failed to start route. Response not OK:", response.statusText);
+            }
+        } catch (error) {
+            console.error("Error sending progress update:", error);
+        }
+    };
+
+    const sendLeaveRequest = async (progressData) => {
+        try {
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (!user || !user.token) {
+                throw new Error("Authorization token is missing.");
+            }
+
+            const response = await fetch(`${API_LEAVE_URL}?historyId=${historyId}`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+                body: JSON.stringify(progressData),
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to send progress update.");
+            }
+
+            console.log("Progress updated successfully:", progressData);
+        } catch (error) {
+            console.error("Error sending progress update:", error);
+        }
+    };
+
+    const sendFinishRequest = async (progressData) => {
+        try {
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (!user || !user.token) {
+                throw new Error("Authorization token is missing.");
+            }
+
+            const response = await fetch(`${API_FINISH_URL}?historyId=${historyId}`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+                body: JSON.stringify(progressData),
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to send progress update.");
+            }
+
+            console.log("Progress updated successfully:", progressData);
+        } catch (error) {
+            console.error("Error sending progress update:", error);
         }
     };
 
@@ -219,25 +256,34 @@ const RoutesOnMap = () => {
         if (!isTooFar) {
             setIsStarted(true);
             setErrorMessage("");
+            sendStartRoute()
+        }
+    };
+
+    const handleFinish = async () => {
+        if (routeData && coords.length === 2 && routeDistance > 0) {
+            try {
+                const lastCheckpoint = routeData.checkpoints[routeData.checkpoints.length - 1];
+                const lastLat = lastCheckpoint.latitude;
+                const lastLon = lastCheckpoint.longitude;
+
+                if (lastLat && lastLon) {
+                    const distanceToEnd = calculateDistance(coords[0], coords[1], lastLat, lastLon);
+                    if (distanceToEnd > 100) {
+                        sendLeaveRequest();
+                    }
+                    else {
+                        sendFinishRequest();
+                    }
+                }
+            } catch (error) {
+                console.error("Error sending progress update:", error);
+            }
         }
     };
 
     return (
         <div style={styles.container}>
-            <div style={styles.inputContainer}>
-                <input
-                    type="text"
-                    placeholder="Введите название маршрута"
-                    value={routeName}
-                    onChange={(e) => setRouteName(e.target.value)}
-                    style={styles.input}
-                />
-                <button onClick={handleSearch} style={styles.button}>
-                    Показать маршрут
-                </button>
-                {errorMessage && <p style={styles.error}>{errorMessage}</p>}
-            </div>
-
             {isLoading ? (
                 <p>Загрузка маршрута...</p>
             ) : routeData ? (
@@ -258,7 +304,7 @@ const RoutesOnMap = () => {
                                 controls: [],
                             }}
                             width={"400px"}
-                            height={"600px"}
+                            height={"700px"}
                             onLoad={(ymaps) => onYMapsLoad(ymaps)}
                         >
                             <Placemark
@@ -268,7 +314,6 @@ const RoutesOnMap = () => {
                                     iconImageHref: 'https://yastatic.net/s3/front-maps-static/maps-front-maps/static/v51/icons/core/map-placemark-dot-32.svg',
                                 }}
                             />
-
                         </Map>
                     </YMaps>
                     <div>
@@ -301,7 +346,7 @@ const RoutesOnMap = () => {
                                     <p>Загрузка данных маршрута...</p>
                                 )}
                                 <button
-                                    onClick={() => setIsStarted(false)}
+                                    onClick={handleFinish}
                                     style={styles.startButton}
                                 >
                                     Закончить
@@ -313,20 +358,26 @@ const RoutesOnMap = () => {
                                     <>
                                         <p>Расстояние маршрута: {realTimeInfo.routeDistance} км</p>
                                         <p>Время: {realTimeInfo.time} мин</p>
-                                        <p>Сложность: {realTimeInfo.difficulty}</p>
+                                        <p>Сложность: {routeData.difficulty || "Не указана"}</p>
+                                        <p>
+                                            Категории:{" "}
+                                            {routeData.categories && routeData.categories.length > 0
+                                                ? routeData.categories.map((category) => category.name).join(", ")
+                                                : "Нет категорий"}
+                                        </p>
                                     </>
                                 ) : (
                                     <p>Загрузка данных маршрута...</p>
                                 )}
                                 <button onClick={handleStart} style={styles.startButton}>
-                                    Начать
+                                Начать
                                 </button>
                             </div>
                         )}
                     </div>
                 </>
             ) : (
-                <p style={styles.textRoute}>Введите название маршрута и нажмите кнопку "Показать маршрут".</p>
+                <p>Ошибка загрузки маршрута.</p>
             )}
         </div>
     );
@@ -357,28 +408,11 @@ const progressBarStyles = {
 const styles = {
     container: {
         display: "flex",
-        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         width: "100%",
     },
-    inputContainer: {
-        marginBottom: "10px",
-        textAlign: "center",
-    },
-    textRoute: {
-        fontSize: "15px",
-        textAlign: "center",
-    },
-    input: {
-        padding: "10px",
-        width: "200px",
-        marginRight: "10px",
-        border: "1px solid #ccc",
-        borderRadius: "4px",
-    },
     button: {
-        marginTop: "10px",
         padding: "10px 20px",
         backgroundColor: "#007BFF",
         color: "#fff",
@@ -402,18 +436,18 @@ const styles = {
         color: "red",
     },
     errorText: {
-        margin: 0,
         fontSize: "16px",
         fontWeight: "bold",
     },
     routeName: {
-        fontSize: "24px",
+        fontSize: "20px",
         fontWeight: "bold",
         marginBottom: "10px",
+        marginTop: "10px",
     },
     errorMessageOverlay: {
         position: "fixed",
-        bottom: "200px",
+        bottom: "250px",
         left: "50%",
         transform: "translateX(-50%)",
         backgroundColor: "rgba(255, 0, 0, 0.8)",
@@ -457,6 +491,7 @@ const styles = {
         fontSize: "14px",
         fontWeight: "bold",
     },
+
 };
 
-export default RoutesOnMap;
+export default Routes;
