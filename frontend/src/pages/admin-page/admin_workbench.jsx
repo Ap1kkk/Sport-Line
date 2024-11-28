@@ -20,17 +20,25 @@ const Admin_workbench = () => {
 
     useEffect(() => {
         const fetchCategories = async () => {
-            try {
-                const response = await fetch(API_ROUTE_URL_CATEGORIES);
+
+                const user = JSON.parse(localStorage.getItem("user"));
+                if (!user || !user.token) {
+                    throw new Error("Authorization token is missing.");
+                }
+
+                const response = await fetch(API_ROUTE_URL_CATEGORIES, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                });
+
                 if (response.ok) {
                     const data = await response.json();
                     setCategories(data);
                 } else {
-                    console.error("Ошибка загрузки категорий");
+                    throw new Error("Route not found or API error.");
                 }
-            } catch (error) {
-                console.error("Ошибка при загрузке категорий:", error);
-            }
         };
         fetchCategories();
     }, []);
@@ -255,18 +263,27 @@ const Admin_workbench = () => {
                         onChange={handleDescriptionChange}
                         style={styles.textarea}
                     />
-                    <select
-                        multiple
-                        value={selectedCategories}
-                        onChange={handleCategoryChange}
-                        style={styles.multiselect}
-                    >
+                    <div style={styles.checkboxGroup}>
                         {categories.map((category) => (
-                            <option key={category.id} value={category.id}>
+                            <label key={category.id} style={styles.checkboxLabel}>
+                                <input
+                                    type="checkbox"
+                                    value={category.id}
+                                    checked={selectedCategories.includes(category.id)}
+                                    onChange={(e) => {
+                                        const value = Number(e.target.value); // Преобразование строки в число, если ID числовой
+                                        setSelectedCategories((prevSelected) =>
+                                            e.target.checked
+                                                ? [...prevSelected, value] // Добавить выбранную категорию
+                                                : prevSelected.filter((id) => id !== value) // Убрать отменённую категорию
+                                        );
+                                    }}
+                                    style={styles.checkbox}
+                                />
                                 {category.name}
-                            </option>
+                            </label>
                         ))}
-                    </select>
+                    </div>
                     <select
                         value={difficulty}
                         onChange={handleDifficultyChange}
@@ -339,11 +356,19 @@ const styles = {
         width: "60%",
         height: "80px",
     },
-    multiselect: {
+    checkboxGroup: {
+        display: "flex",
+        alignItems : "center",
+        flexDirection: "column",
         marginTop: "10px",
-        padding: "10px",
-        width: "60%",
-        height: "120px",
+    },
+    checkboxLabel: {
+        marginBottom: "5px",
+        cursor: "pointer",
+        fontSize: "14px",
+    },
+    checkbox: {
+        marginRight: "10px",
     },
     select: {
         marginTop: "10px",

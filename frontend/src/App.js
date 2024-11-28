@@ -30,7 +30,7 @@ function App() {
                         <Route path="/register/preferences" element={<Preferences/>}/>
                         <Route path="/filters" element={<Filters/>}/>
                         <Route path="/map" element={<RoutesOnMap/>}/>
-                        <Route path="/main_page/mapOfTheDay" element={<MapOfTheDay />}/>
+                        <Route path="/main_page/mapOfTheDay/:routeId" element={<MapOfTheDay />}/>
                         <Route path="/ProfilePage" element={<Profile />}/>
                         <Route path="/StatisticsPage" element={<Statistics />} />
                         <Route path="/AchievementsPage" element={<Achievements />} />
