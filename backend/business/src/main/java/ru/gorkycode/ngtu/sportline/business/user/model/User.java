@@ -9,6 +9,7 @@ import ru.gorkycode.ngtu.sportline.business.achievement.Achievement;
 import ru.gorkycode.ngtu.sportline.business.category.Category;
 import ru.gorkycode.ngtu.sportline.business.common.BaseEntity;
 import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
+import ru.gorkycode.ngtu.sportline.business.user.avatar.UserAvatar;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -40,10 +41,6 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRole role;
-
-    @Enumerated(EnumType.ORDINAL)
-    @Column(nullable = false)
-    private UserAvatar avatar;
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -77,6 +74,11 @@ public class User extends BaseEntity {
     )
     @ToString.Exclude
     private List<Route> favouriteRoutes;
+
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "avatar_id", referencedColumnName = "id")
+    @ToString.Exclude
+    private UserAvatar avatar;
 
     @Override
     public final boolean equals(Object o) {

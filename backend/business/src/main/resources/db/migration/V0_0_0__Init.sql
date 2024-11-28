@@ -71,14 +71,20 @@ CREATE TABLE achievement_images (
     FOREIGN KEY (achievement_id) REFERENCES achievements(id)
 );
 
+CREATE TABLE user_avatars (
+    id          BIGSERIAL PRIMARY KEY,
+    path        TEXT
+);
+
 CREATE TABLE users (
     id          BIGSERIAL PRIMARY KEY,
     username    VARCHAR,
     email       VARCHAR,
-    avatar      SMALLINT,
+    avatar_id   BIGSERIAL,
     password    VARCHAR,
     role        VARCHAR,
-    created_at  TIMESTAMP WITH TIME ZONE
+    created_at  TIMESTAMP WITH TIME ZONE,
+    FOREIGN KEY (avatar_id) REFERENCES user_avatars(id)
 );
 
 CREATE TABLE user_preferences (

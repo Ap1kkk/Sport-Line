@@ -8,6 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.gorkycode.ngtu.sportline.business.auth.AuthService;
 import ru.gorkycode.ngtu.sportline.business.category.Category;
 import ru.gorkycode.ngtu.sportline.business.category.CategoryService;
+import ru.gorkycode.ngtu.sportline.business.system.exceptions.classes.data.EntityNotFoundException;
+import ru.gorkycode.ngtu.sportline.business.user.avatar.UserAvatar;
+import ru.gorkycode.ngtu.sportline.business.user.avatar.UserAvatarRepository;
 import ru.gorkycode.ngtu.sportline.business.user.dto.CreateCredentialsDto;
 import ru.gorkycode.ngtu.sportline.business.user.dto.EditProfileDto;
 import ru.gorkycode.ngtu.sportline.business.user.dto.ProfileDto;
@@ -35,6 +38,7 @@ public class UserService {
     private final CategoryService categoryService;
 
     private final Faker faker = new Faker();
+    private final UserAvatarRepository userAvatarRepository;
 
     public User getById(Long id) {
         return validator.throwIfNotExists(id);
@@ -46,6 +50,7 @@ public class UserService {
 
         validator.validateToCreate(dto);
         User user = mapper.map(dto);
+        user.setAvatar(getRandomAvatar());
 
         return projectionMapper.toDto(repository.saveAndFlush(user));
     }
@@ -70,7 +75,10 @@ public class UserService {
 
         validator.validateEditProfile(dto);
 
-        currentUser.setAvatar(dto.getAvatar());
+        Long avatarId = dto.getAvatarId();
+        UserAvatar userAvatar = userAvatarRepository.findById(avatarId)
+                .orElseThrow(() -> new EntityNotFoundException(UserAvatar.class, avatarId));
+        currentUser.setAvatar(userAvatar);
         List<Category> preferences = categoryService.getByIds(dto.getPreferencesIds());
         currentUser.setPreferences(preferences);
 
@@ -87,5 +95,13 @@ public class UserService {
                 .totalAchievements(faker.random().nextLong(1000L))
                 .user(projectionMapper.toDto(currentUser))
                 .build();
+    }
+
+    private UserAvatar getRandomAvatar() {
+        List<Long> allIds = userAvatarRepository.findAllIds();
+
+        Long id = allIds.getFirst();
+        return userAvatarRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(UserAvatar.class, id));
     }
 }

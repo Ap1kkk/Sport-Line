@@ -91,8 +91,8 @@ public class UserValidator {
             throw exceptionBuilder.build();
         }
 
-        if(dto.getAvatar() == null)
-            exceptionBuilder.addViolation(requiredIsNull("avatar", "Avatar"));
+        if(dto.getAvatarId() == null)
+            exceptionBuilder.addViolation(requiredIsNull("avatarId", "Avatar id"));
 
         validatePreferencesIds(dto.getPreferencesIds(), exceptionBuilder);
 

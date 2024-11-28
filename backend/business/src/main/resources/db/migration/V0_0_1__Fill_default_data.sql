@@ -1,8 +1,17 @@
+INSERT INTO user_avatars(id, path) VALUES (1, '/avatars/avatar1.png');
+INSERT INTO user_avatars(id, path) VALUES (2, '/avatars/avatar2.png');
+INSERT INTO user_avatars(id, path) VALUES (3, '/avatars/avatar3.png');
+INSERT INTO user_avatars(id, path) VALUES (4, '/avatars/avatar4.png');
+INSERT INTO user_avatars(id, path) VALUES (5, '/avatars/avatar5.png');
+INSERT INTO user_avatars(id, path) VALUES (6, '/avatars/avatar6.png');
+INSERT INTO user_avatars(id, path) VALUES (7, '/avatars/avatar7.png');
+INSERT INTO user_avatars(id, path) VALUES (8, '/avatars/avatar8.png');
+
 INSERT INTO
     users(
           username,
           email,
-          avatar,
+          avatar_id,
           password,
           role,
           created_at
@@ -10,7 +19,7 @@ INSERT INTO
 VALUES (
         'User',
         'user@mail.ru',
-        0,
+        1,
         '$2a$12$l4XNiFWEdstG4CE1L3jvEe2nYeaKwNb0PnuBzcHuFfdquNUXyx/qG',
         'USER',
         CURRENT_TIMESTAMP
@@ -20,7 +29,7 @@ INSERT INTO
     users(
         username,
         email,
-        avatar,
+        avatar_id,
         password,
         role,
         created_at

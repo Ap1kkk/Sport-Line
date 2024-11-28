@@ -38,6 +38,11 @@ spring:
       max-file-size: 20MB
       max-request-size: 20MB
 
+mvc:
+  date-format: "yyyy-MM-dd"
+  resource-location: "/uploads/"
+  resource-path-pattern: "/static/**"
+
 security:
   jwt:
     secret: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
