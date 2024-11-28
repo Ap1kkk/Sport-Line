@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gorkycode.ngtu.sportline.business.auth.AuthService;
 import ru.gorkycode.ngtu.sportline.business.common.BaseEntity;
+import ru.gorkycode.ngtu.sportline.business.routes.RouteFaker;
+import ru.gorkycode.ngtu.sportline.business.routes.jpa.RouteFilter;
 import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
 import ru.gorkycode.ngtu.sportline.business.routes.model.history.HistoryRoute;
 import ru.gorkycode.ngtu.sportline.business.routes.model.history.HistoryRouteRepository;
@@ -15,6 +17,8 @@ import ru.gorkycode.ngtu.sportline.business.system.exceptions.classes.validation
 import ru.gorkycode.ngtu.sportline.business.user.UserRepository;
 import ru.gorkycode.ngtu.sportline.business.user.UserService;
 import ru.gorkycode.ngtu.sportline.business.user.model.User;
+
+import java.util.List;
 
 /**
  * @author Egor Bokov
@@ -27,8 +31,8 @@ public class UserRouteService {
     private final AuthService authService;
 
     private final UserRepository userRepository;
-    private final UserService userService;
 
+    private final RouteFaker routeFaker;
     private final RouteService routeService;
     private final HistoryRouteRepository historyRouteRepository;
 
@@ -103,5 +107,13 @@ public class UserRouteService {
         historyRoute.setStatus(status);
 
         return historyRouteRepository.save(historyRoute);
+    }
+
+    public List<Route> getHistory(RouteFilter filter) {
+        return routeFaker.get(5, 10);
+    }
+
+    public List<Route> getFavourite(RouteFilter filter) {
+        return routeFaker.get(5, 10);
     }
 }

@@ -55,8 +55,8 @@ public class RouteController {
         return routeFaker.get(5, 10);
     }
 
-    @PostMapping("/recommended")
-    public List<Route> getRecommended(@RequestParam int limit, @RequestBody RouteFilter filter) {
+    @PostMapping("/recommended-filtered")
+    public List<Route> getRecommendedWithFilters(@RequestParam int limit, @RequestBody RouteFilter filter) {
         return routeFaker.get(5, 10);
     }
 }

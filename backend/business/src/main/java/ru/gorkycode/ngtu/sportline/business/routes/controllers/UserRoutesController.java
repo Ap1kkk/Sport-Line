@@ -22,13 +22,13 @@ public class UserRoutesController {
     private final UserRouteService userRouteService;
 
     @PostMapping("/history")
-    public List<Route> getPopular(@RequestBody RouteFilter filter) {
-        return routeFaker.get(5, 10);
+    public List<Route> getHistory(@RequestBody RouteFilter filter) {
+        return userRouteService.getHistory(filter);
     }
 
     @PostMapping("/favourite")
-    public List<Route> getRecommended(@RequestBody RouteFilter filter) {
-        return routeFaker.get(5, 10);
+    public List<Route> getFavourite(@RequestBody RouteFilter filter) {
+        return userRouteService.getFavourite(filter);
     }
 
     @PostMapping("/like")
