@@ -21,7 +21,7 @@ const API_START_URL = "http://localhost:8080/api/v1/user/routes/start";
 const API_LEAVE_URL = "http://localhost:8080/api/v1/user/routes/leave";
 const API_FINISH_URL = "http://localhost:8080/api/v1/user/routes/finish";
 
-const Routes = () => {
+const RoutesOnMap = () => {
     const { routeId } = useParams();
     const [mapInstance, setMapInstance] = useState(null);
     const [ymaps, setYmaps] = useState(null);
@@ -494,4 +494,4 @@ const styles = {
 
 };
 
-export default Routes;
+export default RoutesOnMap;
