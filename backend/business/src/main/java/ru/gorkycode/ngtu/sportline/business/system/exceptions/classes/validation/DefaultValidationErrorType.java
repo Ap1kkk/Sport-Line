@@ -8,10 +8,11 @@ import lombok.RequiredArgsConstructor;
  */
 @Getter
 @RequiredArgsConstructor
-public enum DefaultValidationErrorTypes implements ValidationErrorType {
+public enum DefaultValidationErrorType implements ValidationErrorType {
     CONSTRAINT_VIOLATION("constraint_violation"),
     WRONG_VALUE("wrong_value"),
-    REQUIRED_FIELD_NOT_PRESENT("required_field_not_present");
+    REQUIRED_FIELD_NOT_PRESENT("required_field_not_present"),
+    UNIQUE_VIOLATION("unique_violation"),;
 
 
     private final String type;
