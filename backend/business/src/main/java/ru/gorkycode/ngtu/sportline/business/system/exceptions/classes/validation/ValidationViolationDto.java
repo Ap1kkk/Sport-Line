@@ -51,7 +51,7 @@ public class ValidationViolationDto {
     public static ValidationViolationDto requiredIsNull(@NonNull String field, @NonNull String messageStart) {
         String message = String.format("%s must not be null", messageStart);
 
-        return new ValidationViolationDto(field, DefaultValidationErrorTypes.REQUIRED_FIELD_NOT_PRESENT, message);
+        return new ValidationViolationDto(field, DefaultValidationErrorType.REQUIRED_FIELD_NOT_PRESENT, message);
     }
 
     @JsonProperty("errorType")
