@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
 import ru.gorkycode.ngtu.sportline.business.routes.dto.RouteDto;
-import ru.gorkycode.ngtu.sportline.business.routes.RouteService;
+import ru.gorkycode.ngtu.sportline.business.routes.services.RouteService;
 
 import java.util.List;
 

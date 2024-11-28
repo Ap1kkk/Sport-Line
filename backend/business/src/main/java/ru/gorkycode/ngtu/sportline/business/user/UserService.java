@@ -8,12 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.gorkycode.ngtu.sportline.business.auth.AuthService;
 import ru.gorkycode.ngtu.sportline.business.category.Category;
 import ru.gorkycode.ngtu.sportline.business.category.CategoryService;
-import ru.gorkycode.ngtu.sportline.business.common.BaseEntity;
-import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
-import ru.gorkycode.ngtu.sportline.business.user.dto.ProfileDto;
-import ru.gorkycode.ngtu.sportline.business.routes.RouteService;
 import ru.gorkycode.ngtu.sportline.business.user.dto.CreateCredentialsDto;
 import ru.gorkycode.ngtu.sportline.business.user.dto.EditProfileDto;
+import ru.gorkycode.ngtu.sportline.business.user.dto.ProfileDto;
 import ru.gorkycode.ngtu.sportline.business.user.dto.UserProjectionDto;
 import ru.gorkycode.ngtu.sportline.business.user.mappers.UserMapper;
 import ru.gorkycode.ngtu.sportline.business.user.mappers.UserProjectionMapper;
@@ -36,7 +33,6 @@ public class UserService {
 
     private final AuthService authService;
     private final CategoryService categoryService;
-    private final RouteService routeService;
 
     private final Faker faker = new Faker();
 
@@ -79,42 +75,6 @@ public class UserService {
         currentUser.setPreferences(preferences);
 
         return projectionMapper.toDto(repository.save(currentUser));
-    }
-
-    @Transactional
-    public void likeRoute(Long routeId) {
-        User currentUser = authService.getCurrentUser();
-        log.debug("[User] : user [{}] like route [{}]", currentUser.getId(), routeId);
-
-        repository.loadWithFavouriteRoutes(currentUser.getId());
-
-        if(currentUser.getFavouriteRoutes().stream().map(BaseEntity::getId).anyMatch(routeId::equals))
-            return;
-
-        Route route = routeService.getById(routeId);
-        currentUser.addRoute(route);
-        route.setLikes(route.getLikes() + 1);
-
-        repository.save(currentUser);
-    }
-
-    @Transactional
-    public void unlikeRoute(Long routeId) {
-        User currentUser = authService.getCurrentUser();
-        log.debug("[User] : user [{}] unlike route [{}]", currentUser.getId(), routeId);
-
-        repository.loadWithFavouriteRoutes(currentUser.getId());
-
-        if(currentUser.getFavouriteRoutes().stream().map(BaseEntity::getId).noneMatch(routeId::equals))
-            return;
-
-        Route route = routeService.getById(routeId);
-        currentUser.removeRoute(route);
-        long updatedLikes = route.getLikes() - 1;
-        route.setLikes(updatedLikes > 0 ? updatedLikes : 0);
-
-        repository.save(currentUser);
-        routeService.save(route);
     }
 
     @Transactional

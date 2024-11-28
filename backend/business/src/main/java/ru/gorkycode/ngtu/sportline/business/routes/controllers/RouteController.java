@@ -1,11 +1,10 @@
 package ru.gorkycode.ngtu.sportline.business.routes.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
 import ru.gorkycode.ngtu.sportline.business.routes.RouteFaker;
-import ru.gorkycode.ngtu.sportline.business.routes.RouteService;
+import ru.gorkycode.ngtu.sportline.business.routes.services.RouteService;
 import ru.gorkycode.ngtu.sportline.business.routes.jpa.RouteFilter;
 
 import java.util.List;
@@ -49,20 +48,5 @@ public class RouteController {
     @GetMapping("/recommended")
     public List<Route> getRecommended() {
         return routeFaker.get(5, 10);
-    }
-
-    @PostMapping("/start")
-    public Route start(@RequestParam Long routeId) {
-        return routeFaker.get();
-    }
-
-    @PostMapping("/leave")
-    public Route leave(@RequestParam Long routeId) {
-        return routeFaker.get();
-    }
-
-    @PostMapping("/finish")
-    public Route finish(@RequestParam Long routeId) {
-        return routeFaker.get();
     }
 }

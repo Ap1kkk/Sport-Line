@@ -1,8 +1,11 @@
-package ru.gorkycode.ngtu.sportline.business.routes.travelled;
+package ru.gorkycode.ngtu.sportline.business.routes.model.history;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.proxy.HibernateProxy;
+import ru.gorkycode.ngtu.sportline.business.common.BaseEntity;
 import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
 import ru.gorkycode.ngtu.sportline.business.user.model.User;
 
@@ -17,27 +20,28 @@ import java.util.Objects;
 @Getter
 @Setter
 @ToString
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class HistoryRoute {
+public class HistoryRoute extends BaseEntity {
 
-    @EmbeddedId
-    private HistoryRouteId id;
+    @Enumerated(EnumType.STRING)
+    @Column
+    private HistoryRouteStatus status;
 
-    @Column(name = "done_at")
+    @Column(name = "started_at")
     @Builder.Default
-    private ZonedDateTime doneAt = ZonedDateTime.now();
+    private ZonedDateTime startedAt = ZonedDateTime.now();
 
     // Relationships
 
-    @MapsId("userId")
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @MapsId("routeId")
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "route_id", referencedColumnName = "id")
     private Route route;
 
@@ -54,6 +58,6 @@ public class HistoryRoute {
 
     @Override
     public final int hashCode() {
-        return Objects.hash(id);
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

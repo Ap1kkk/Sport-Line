@@ -64,6 +64,15 @@ public class RouteSpecification {
                         criteriaBuilder.lessThanOrEqualTo(root.get("distance"), filter.getDistanceTo()));
             }
 
+            // Применение сортировки по дате
+            if (filter.getOrder() != null) {
+                if (filter.getOrder() == RouteFilterOrder.ASC) {
+                    query.orderBy(criteriaBuilder.asc(root.get("createdAt")));
+                } else if (filter.getOrder() == RouteFilterOrder.DESC) {
+                    query.orderBy(criteriaBuilder.desc(root.get("createdAt")));
+                }
+            }
+
             return predicate;
         };
     }

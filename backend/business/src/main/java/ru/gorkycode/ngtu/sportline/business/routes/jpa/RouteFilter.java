@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RouteFilter {
+    private RouteFilterOrder order = RouteFilterOrder.DESC;
     private List<RouteDifficulty> difficulties;
     private List<Long> categoryIds;
     private Long durationFrom;

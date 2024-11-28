@@ -44,14 +44,4 @@ public class UserController {
     public UserProjectionDto edit(@RequestBody EditProfileDto dto) {
         return userService.editProfile(dto);
     }
-
-    @PostMapping("/like")
-    public void likeRoute(@RequestParam Long routeId) {
-        userService.likeRoute(routeId);
-    }
-
-    @PostMapping("/unlike")
-    public void unlikeRoute(@RequestParam Long routeId) {
-        userService.unlikeRoute(routeId);
-    }
 }

@@ -4,12 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Component;
 import ru.gorkycode.ngtu.sportline.business.system.exceptions.classes.data.EntityNotFoundException;
+import ru.gorkycode.ngtu.sportline.business.system.exceptions.classes.validation.DefaultValidationErrorType;
 import ru.gorkycode.ngtu.sportline.business.system.exceptions.classes.validation.ValidationException;
+import ru.gorkycode.ngtu.sportline.business.system.exceptions.classes.validation.ValidationViolationDto;
 import ru.gorkycode.ngtu.sportline.business.user.dto.CreateCredentialsDto;
 import ru.gorkycode.ngtu.sportline.business.user.dto.EditProfileDto;
 import ru.gorkycode.ngtu.sportline.business.user.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 import static ru.gorkycode.ngtu.sportline.business.system.exceptions.classes.validation.ValidationViolationDto.requiredIsNull;
 
@@ -41,8 +44,21 @@ public class UserValidator {
 
         if(Strings.isBlank(dto.getUsername()))
             exceptionBuilder.addViolation(requiredIsNull("username", "Username"));
-        if(Strings.isBlank(dto.getEmail()))
+        String userEmail = dto.getEmail();
+        if(Strings.isBlank(userEmail))
             exceptionBuilder.addViolation(requiredIsNull("email", "Email"));
+        else {
+            Optional<User> byEmail = repository.findByEmail(userEmail);
+            if(byEmail.isPresent())
+                exceptionBuilder.addViolation(ValidationViolationDto
+                        .builder()
+                                .field("email")
+                                .message("Email is not unique")
+                                .value(userEmail)
+                                .errorType(DefaultValidationErrorType.UNIQUE_VIOLATION)
+                        .build()
+                );
+        }
         if(Strings.isBlank(dto.getPassword()))
             exceptionBuilder.addViolation(requiredIsNull("password", "Password"));
 
