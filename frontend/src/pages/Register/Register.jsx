@@ -81,11 +81,15 @@ const Register = () => {
             });
 
             if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('user', JSON.stringify(data));
+
                 setMessage('Регистрация успешна!');
                 setUsername('');
                 setEmail('');
                 setPassword('');
                 navigate("/register/preferences");
+
             } else {
                 const errorData = await response.json();
                 setMessage(`Ошибка регистрации: ${errorData.message || 'Попробуйте еще раз.'}`);
