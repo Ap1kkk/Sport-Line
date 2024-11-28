@@ -1,6 +1,8 @@
-package ru.gorkycode.ngtu.sportline.business.routes;
+package ru.gorkycode.ngtu.sportline.business.routes.mappers;
 
 import org.mapstruct.*;
+import ru.gorkycode.ngtu.sportline.business.routes.dto.RouteDto;
+import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface RouteMapper {

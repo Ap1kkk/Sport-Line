@@ -1,16 +1,40 @@
-import React from "react";
+import React, {useState} from "react";
 import Slider from "react-slick";
 import {useNavigate} from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-
 const MainPage = () => {
+    const navigate = useNavigate();
+    const [routeData, setRouteData] = useState(null);
 
-    const navigate = useNavigate()
+    const handleButtonClickRouteOfTheDay = async () => {
+        try {
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (!user || !user.token) {
+                throw new Error("Authorization token is missing.");
+            }
+            const response = await fetch("http://localhost:8080/api/v1/route/daily", {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+            });
 
-    const handleButtonClickRouteOfTheDay = () => {
-        navigate("/main_page/mapOfTheDay");
+            if (response.ok) {
+                const data = await response.json();
+                setRouteData(data);
+                const routeId = data.id;
+
+                console.log("Route ID: ", routeId);
+
+                navigate(`/main_page/mapOfTheDay/${routeId}`);
+            } else {
+                throw new Error("Route not found or API error.");
+            }
+        } catch (error) {
+            console.error("Error fetching route data:", error);
+        }
     };
 
     const handleButtonClickSearch = () => {

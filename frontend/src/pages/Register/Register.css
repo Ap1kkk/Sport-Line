@@ -6,16 +6,6 @@
     box-sizing: border-box;
 }
 
-body {
-    font-family: Roboto, sans-serif;
-    background-color: #fff;
-    height: 100vh;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 label {
     font-family: 'Inter', sans-serif;
     font-size: 14px;

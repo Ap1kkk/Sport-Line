@@ -8,7 +8,7 @@ import org.hibernate.proxy.HibernateProxy;
 import ru.gorkycode.ngtu.sportline.business.achievement.Achievement;
 import ru.gorkycode.ngtu.sportline.business.category.Category;
 import ru.gorkycode.ngtu.sportline.business.common.BaseEntity;
-import ru.gorkycode.ngtu.sportline.business.routes.Route;
+import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -99,5 +99,12 @@ public class User extends BaseEntity {
             favouriteRoutes = new ArrayList<>();
 
         favouriteRoutes.add(route);
+    }
+
+    public void removeRoute(Route route) {
+        if(favouriteRoutes == null)
+            return;
+
+        favouriteRoutes.remove(route);
     }
 }

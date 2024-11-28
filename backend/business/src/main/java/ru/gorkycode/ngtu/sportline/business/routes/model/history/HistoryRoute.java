@@ -1,9 +1,12 @@
-package ru.gorkycode.ngtu.sportline.business.routes.travelled;
+package ru.gorkycode.ngtu.sportline.business.routes.model.history;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.proxy.HibernateProxy;
-import ru.gorkycode.ngtu.sportline.business.routes.Route;
+import ru.gorkycode.ngtu.sportline.business.common.BaseEntity;
+import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
 import ru.gorkycode.ngtu.sportline.business.user.model.User;
 
 import java.time.ZonedDateTime;
@@ -13,31 +16,32 @@ import java.util.Objects;
  * @author Egor Bokov
  */
 @Entity
-@Table(name = "user_travelled_routes")
+@Table(name = "user_routes_history")
 @Getter
 @Setter
 @ToString
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TravelledRoute {
+public class HistoryRoute extends BaseEntity {
 
-    @EmbeddedId
-    private TravelledRouteId id;
+    @Enumerated(EnumType.STRING)
+    @Column
+    private HistoryRouteStatus status;
 
-    @Column(name = "done_at")
+    @Column(name = "started_at")
     @Builder.Default
-    private ZonedDateTime doneAt = ZonedDateTime.now();
+    private ZonedDateTime startedAt = ZonedDateTime.now();
 
     // Relationships
 
-    @MapsId("userId")
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    @MapsId("routeId")
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "route_id", referencedColumnName = "id")
     private Route route;
 
@@ -48,12 +52,12 @@ public class TravelledRoute {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        TravelledRoute that = (TravelledRoute) o;
+        HistoryRoute that = (HistoryRoute) o;
         return getId() != null && Objects.equals(getId(), that.getId());
     }
 
     @Override
     public final int hashCode() {
-        return Objects.hash(id);
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

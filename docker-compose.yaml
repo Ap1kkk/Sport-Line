@@ -42,8 +42,8 @@ services:
     container_name: sportline_backend_business
     ports:
       - "8080:8080"
-#    depends_on:
-#      - postgres
+    depends_on:
+      - postgres
     environment:
       SERVER_HOST: *host
       SERVER_PROTOCOL: *protocol
@@ -84,11 +84,3 @@ services:
       - "80:80"
     volumes:
       - ./nginx/frontend:/etc/nginx/conf.d
-
-  api-gateway:
-    image: nginx:stable-alpine3.19
-    container_name: sportline_api_gateway
-    ports:
-      - "9000:9000"
-    volumes:
-      - ./nginx/api-gateway:/etc/nginx/conf.d

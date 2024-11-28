@@ -1,3 +1,7 @@
+server:
+  host: localhost
+  protocol: http
+
 spring:
   application:
     name: business-service
@@ -18,6 +22,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+#    show-sql: true
+#    properties:
+#      hibernate.format_sql: true
 
   flyway:
     enabled: true
@@ -34,6 +41,8 @@ spring:
 security:
   jwt:
     secret: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
+  cors:
+    allowed-origin: ${server.protocol}://${server.host}:3000
 
 logging:
   level:

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
-import "./Authorization.css"
+import "./Authorization.css";
+import { useNavigate } from "react-router-dom";
 
 const Authorization = () => {
     const [email, setEmail] = useState('');
@@ -12,6 +13,7 @@ const Authorization = () => {
     const [passwordError, setPasswordError] = useState('Password не может быть пустым!');
 
     const [message, setMessage] = useState('');
+    const navigate = useNavigate();
 
     // Проверка валидности email
     const validateEmail = (value) => {
@@ -49,31 +51,58 @@ const Authorization = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (emailError || passwordError) {
-            setMessage('Исправьте ошибки перед отправкой формы.');
-            return;
-        }
 
         try {
-            const response = await fetch('http://localhost:5000/users');
-            if (!response.ok) throw new Error('Ошибка при запросе данных с сервера');
+            const body = { email, password };
 
-            const users = await response.json();
+            const response = await fetch('http://localhost:8080/api/v1/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body),
+            });
 
-            const user = users.find(
-                (user) => user.email === email && user.password === password
-            );
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Ответ сервера:", data);
 
-            if (user) {
+                // Извлекаем роль из объекта user
+                const role = data.user?.role;
+
+                if (!role) {
+                    console.error("Поле role отсутствует в user:", data);
+                    setMessage('Ошибка: роль пользователя не определена.');
+                    return;
+                }
+
+                localStorage.setItem('user', JSON.stringify(data));
+
                 setMessage('Авторизация успешна!');
+                setEmail('');
+                setPassword('');
+
+                if (role === "USER") {
+                    console.log("Navigating to /main_page");
+                    navigate("/main_page");
+                } else if (role === "ADMIN") {
+                    console.log("Navigating to /admin");
+                    navigate("/admin");
+                } else {
+                    console.error("Unknown role:", role);
+                    setMessage('Роль пользователя неизвестна.');
+                }
             } else {
-                setMessage('Неправильный email или пароль.');
+                const errorData = await response.json();
+                setMessage(errorData.message || 'Неправильный email или пароль.');
             }
         } catch (error) {
             console.error('Ошибка авторизации:', error);
             setMessage('Ошибка сервера.');
         }
     };
+
+
+    // Вычисляем валидность формы
+    const isFormValid = !emailError && !passwordError;
 
     return (
         <div className="__container">
@@ -112,7 +141,13 @@ const Authorization = () => {
                     />
                     {passwordDirty && passwordError && <div style={{ color: 'red' }}>{passwordError}</div>}
                 </div>
-                <button type="submit" className="button">Войти</button>
+                <button
+                    type="submit"
+                    className="button_log"
+                    disabled={!isFormValid} // Блокируем кнопку, если форма невалидна
+                >
+                    Войти
+                </button>
             </form>
             <div className="footer">
                 <span>Нет аккаунта?</span>

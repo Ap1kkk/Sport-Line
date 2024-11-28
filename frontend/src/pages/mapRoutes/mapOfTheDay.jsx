@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
+import { useParams } from "react-router-dom";
 
-// Функция для вычисления расстояния между двумя точками на Земле
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371000; // Радиус Земли в метрах
     const φ1 = (lat1 * Math.PI) / 180;
@@ -16,7 +16,10 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
     return R * c; // Расстояние в метрах
 };
 
+const API_ROUTE_NAME = "http://localhost:8080/api/v1/route";
+
 const MapOfTheDay = () => {
+    const { routeId } = useParams();
     const [mapInstance, setMapInstance] = useState(null);
     const [ymaps, setYmaps] = useState(null);
     const [routeData, setRouteData] = useState(null);
@@ -29,40 +32,58 @@ const MapOfTheDay = () => {
     const [isStarted, setIsStarted] = useState(false);
     const [progress, setProgress] = useState(0);
 
-    const routeName = "Ex"; // Название маршрута
+    useEffect(() => {
+        const fetchRouteData = async () => {
+            setIsLoading(true);
+            setErrorMessage("");
+            try {
+                const user = JSON.parse(localStorage.getItem("user"));
+                if (!user || !user.token) {
+                    throw new Error("Authorization token is missing.");
+                }
 
-    const fetchRoute = async () => {
-        setIsLoading(true);
-        setErrorMessage("");
-        try {
-            const response = await fetch(
-                `http://localhost:5000/routes?nameRoute=${routeName}`
-            );
-            if (!response.ok) {
-                throw new Error("Не удалось получить данные с сервера");
+                const url = `${API_ROUTE_NAME}/by-id?id=${routeId}`;
+
+                const response = await fetch(url, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setRouteData(data);
+                    setRouteDistance(data.distance);
+                }
+            } catch (error) {
+                console.error("Error fetching route:", error);
+                setErrorMessage(error.message || "An error occurred.");
+            } finally {
+                setIsLoading(false);
             }
-            const data = await response.json();
-            if (data.length > 0) {
-                setRouteData(data[0]);
-            } else {
-                setErrorMessage("Маршрут с таким названием не найден.");
-                setRouteData(null);
-            }
-        } catch (error) {
-            console.error("Ошибка загрузки маршрута:", error);
-            setErrorMessage("Ошибка при загрузке маршрута");
-        } finally {
-            setIsLoading(false);
-        }
-    };
+        };
+
+        fetchRouteData();
+    }, [routeId]);
 
     const updateRoute = () => {
-        if (ymaps && mapInstance && routeData?.coords.length > 1) {
+        if (ymaps && mapInstance && routeData?.checkpoints?.length > 1) {
+            const coords = routeData.checkpoints.map((checkpoint) => [
+                checkpoint.latitude,
+                checkpoint.longitude,
+            ]);
+
+            if (!coords || coords.length < 2) {
+                console.error("Недостаточно данных для построения маршрута.");
+                return;
+            }
+
             mapInstance.geoObjects.removeAll();
 
             const multiRoute = new ymaps.multiRouter.MultiRoute(
                 {
-                    referencePoints: routeData.coords,
+                    referencePoints: coords,
                     params: { routingMode: "pedestrian" },
                 },
                 { boundsAutoApply: true }
@@ -84,67 +105,13 @@ const MapOfTheDay = () => {
         }
     };
 
-    const findNearestPoint = (routeCoords, userCoords) => {
-        let minDistance = Infinity;
-        let nearestIndex = -1;
-
-        routeCoords.forEach((point, index) => {
-            const distance = calculateDistance(
-                userCoords[0],
-                userCoords[1],
-                point[0],
-                point[1]
-            );
-            if (distance < minDistance) {
-                minDistance = distance;
-                nearestIndex = index;
-            }
-        });
-
-        return { nearestIndex, minDistance };
-    };
-
-    const calculateRemainingDistance = (routeCoords, startIndex) => {
-        let remainingDistance = 0;
-
-        for (let i = startIndex; i < routeCoords.length - 1; i++) {
-            remainingDistance += calculateDistance(
-                routeCoords[i][0],
-                routeCoords[i][1],
-                routeCoords[i + 1][0],
-                routeCoords[i + 1][1]
-            );
-        }
-
-        return remainingDistance;
-    };
-
-    useEffect(() => {
-        fetchRoute();
-    }, []);
-
-    useEffect(() => {
-        if (routeData && coords.length === 2 && routeDistance > 0) {
-            const geometry = routeData.coords; // Массив точек маршрута
-            const { nearestIndex, minDistance } = findNearestPoint(geometry, coords);
-
-
-            if (minDistance > 60) {
-                const remainingDistance = calculateRemainingDistance(geometry, nearestIndex);
-                const progress = ((routeDistance - remainingDistance) / routeDistance) * 100;
-                setProgress(progress.toFixed(2)); // Обновляем прогресс
-            }
-        }
-    }, [coords, routeData, routeDistance]);
+    useEffect(updateRoute, [ymaps, mapInstance, routeData]);
 
     const onYMapsLoad = (ymaps) => {
         console.log("Yandex Maps API загружен:", ymaps);
         setYmaps(ymaps);
     };
 
-    useEffect(updateRoute, [ymaps, mapInstance, routeData]);
-
-    // Функция для отслеживания геопозиции пользователя
     useEffect(() => {
         let watchId;
         const startWatching = () => {
@@ -162,9 +129,9 @@ const MapOfTheDay = () => {
                         alert("Не удалось получить вашу геопозицию.");
                     },
                     {
-                        enableHighAccuracy: true,
+                        enableHighAccuracy: false,
                         maximumAge: 0,
-                        timeout: 1000,
+                        timeout: 3000,
                     }
                 );
             } else {
@@ -178,37 +145,24 @@ const MapOfTheDay = () => {
     }, [mapInstance]);
 
     useEffect(() => {
-        if (routeData && coords.length === 2 && routeData.coords?.length > 0) {
+        if (routeData && coords.length === 2 && routeDistance > 0) {
             try {
-                const distance = calculateDistance(
-                    coords[0],
-                    coords[1],
-                    routeData.coords[0][0],
-                    routeData.coords[0][1]
-                );
+                const isTooFar = routeDistance > 100; // Примерное ограничение в 100 м
+                setIsTooFar(isTooFar);
 
-                setIsTooFar(distance > 100);
+                const averageSpeed = 1.39; // Средняя скорость в м/с
+                const timeInSeconds = routeDistance / averageSpeed;
+                const timeInMinutes = Math.ceil(timeInSeconds / 60);
 
-                if (distance <= 100) {
-                    const averageSpeed = 1.39; // Средняя скорость в м/с
-                    const timeInSeconds = routeDistance / averageSpeed;
-                    const timeInMinutes = (timeInSeconds / 60).toFixed();
-
-                    const difficulty =
-                        routeData.coords.length > 10 ? "Сложный" : "Легкий";
-
-                    setRealTimeInfo({
-                        routeDistance: (routeDistance / 1000).toFixed(1),
-                        time: timeInMinutes,
-                        difficulty,
-                    });
-                }
+                setRealTimeInfo({
+                    routeDistance: (routeDistance / 1000).toFixed(2),
+                    time: timeInMinutes,
+                });
             } catch (error) {
-                console.error("Ошибка при обработке маршрута или геопозиции:", error);
-                setErrorMessage("Произошла ошибка при обработке данных маршрута.");
+                console.error("Ошибка при обработке маршрута:", error);
             }
         }
-    }, [coords, routeData, routeDistance]);
+    }, [routeDistance, coords, routeData]);
 
     const handleStart = () => {
         if (!isTooFar) {
@@ -238,8 +192,8 @@ const MapOfTheDay = () => {
                                 zoom: 12,
                                 controls: [],
                             }}
-                            width={"1000px"}
-                            height={"800px"}
+                            width={"400px"}
+                            height={"700px"}
                             onLoad={(ymaps) => onYMapsLoad(ymaps)}
                         >
                             <Placemark
@@ -293,13 +247,19 @@ const MapOfTheDay = () => {
                                     <>
                                         <p>Расстояние маршрута: {realTimeInfo.routeDistance} км</p>
                                         <p>Время: {realTimeInfo.time} мин</p>
-                                        <p>Сложность: {realTimeInfo.difficulty}</p>
+                                        <p>Сложность: {routeData.difficulty || "Не указана"}</p>
+                                        <p>
+                                            Категории:{" "}
+                                            {routeData.categories && routeData.categories.length > 0
+                                                ? routeData.categories.map((category) => category.name).join(", ")
+                                                : "Нет категорий"}
+                                        </p>
                                     </>
                                 ) : (
                                     <p>Загрузка данных маршрута...</p>
                                 )}
                                 <button onClick={handleStart} style={styles.startButton}>
-                                    Начать
+                                Начать
                                 </button>
                             </div>
                         )}
@@ -318,7 +278,7 @@ const progressBarStyles = {
         width: "100%",
         backgroundColor: "#e0e0df",
         borderRadius: "5px",
-        margin: "20px 0",
+        margin: "10px 0",
     },
     filler: {
         height: "100%",
@@ -342,20 +302,6 @@ const styles = {
         alignItems: "center",
         width: "100%",
     },
-    inputContainer: {
-        marginBottom: "20px",
-        textAlign: "center",
-    },
-    input: {
-        padding: "10px",
-        width: "300px",
-        marginRight: "10px",
-        border: "1px solid #ccc",
-        borderRadius: "4px",
-    },
-    map: {
-        zIndex: 1,
-    },
     button: {
         padding: "10px 20px",
         backgroundColor: "#007BFF",
@@ -365,31 +311,33 @@ const styles = {
         cursor: "pointer",
     },
     startButton: {
-        padding: "10px 20px",
+        padding: "10px 10px",
         backgroundColor: "#28a745",
         color: "#fff",
         border: "none",
         borderRadius: "4px",
         cursor: "pointer",
-        marginTop: "20px",
+        marginTop: "10px",
+        position: "relative",
+        left: "50%",
+        transform: "translateX(-50%)",
     },
     error: {
         color: "red",
     },
     errorText: {
-        margin: 0,
         fontSize: "16px",
         fontWeight: "bold",
     },
-
     routeName: {
-        fontSize: "24px",
+        fontSize: "20px",
         fontWeight: "bold",
-        marginBottom: "20px",
+        marginBottom: "10px",
+        marginTop: "10px",
     },
     errorMessageOverlay: {
         position: "fixed",
-        bottom: "300px",
+        bottom: "250px",
         left: "50%",
         transform: "translateX(-50%)",
         backgroundColor: "rgba(255, 0, 0, 0.8)",
@@ -401,6 +349,7 @@ const styles = {
     infoPanel: {
         position: "fixed",
         bottom: "100px",
+        width: "80%",
         left: "50%",
         transform: "translateX(-50%)",
         backgroundColor: "rgba(0, 0, 0, 0.7)",

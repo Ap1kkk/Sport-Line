@@ -1,4 +1,4 @@
-package ru.gorkycode.ngtu.sportline.business.routes;
+package ru.gorkycode.ngtu.sportline.business.routes.model;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -44,8 +44,12 @@ public class Route extends BaseEntity {
     @Column
     private Long duration;
 
+    @Column
+    @Builder.Default
+    private Long likes = 0L;
+
     @Column(name = "created_at")
-    private ZonedDateTime createdAt;
+    private ZonedDateTime createdAt = ZonedDateTime.now();
 
     // Relationships
 

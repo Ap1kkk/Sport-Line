@@ -1,11 +1,11 @@
 package ru.gorkycode.ngtu.sportline.business.routes.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ru.gorkycode.ngtu.sportline.business.routes.Route;
+import org.springframework.web.bind.annotation.*;
 import ru.gorkycode.ngtu.sportline.business.routes.RouteFaker;
+import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
+import ru.gorkycode.ngtu.sportline.business.routes.model.history.HistoryRoute;
+import ru.gorkycode.ngtu.sportline.business.routes.services.UserRouteService;
 
 import java.util.List;
 
@@ -18,6 +18,7 @@ import java.util.List;
 public class UserRoutesController {
 
     private final RouteFaker routeFaker;
+    private final UserRouteService userRouteService;
 
     @GetMapping("/history")
     public List<Route> getPopular() {
@@ -29,5 +30,28 @@ public class UserRoutesController {
         return routeFaker.get(5, 10);
     }
 
+    @PostMapping("/like")
+    public void likeRoute(@RequestParam Long routeId) {
+        userRouteService.likeRoute(routeId);
+    }
 
+    @PostMapping("/unlike")
+    public void unlikeRoute(@RequestParam Long routeId) {
+        userRouteService.unlikeRoute(routeId);
+    }
+
+    @PostMapping("/start")
+    public HistoryRoute start(@RequestParam Long routeId)  {
+        return userRouteService.start(routeId);
+    }
+
+    @PostMapping("/leave")
+    public HistoryRoute leave(@RequestParam Long historyId) {
+        return userRouteService.leave(historyId);
+    }
+
+    @PostMapping("/finish")
+    public HistoryRoute finish(@RequestParam Long historyId) {
+        return userRouteService.finish(historyId);
+    }
 }

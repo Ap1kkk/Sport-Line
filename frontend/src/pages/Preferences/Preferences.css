@@ -12,7 +12,7 @@
     margin-bottom: 15px;
 }
 
-.preferences-buttons {
+._preferences-buttons {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
@@ -20,7 +20,7 @@
     margin-bottom: auto; /* Кнопки остаются выше кнопки "Продолжить" */
 }
 
-.preference-button {
+._preference-button {
     padding: 10px 20px;
     background-color: #D9D9D9;
     border: 1px solid #ccc;
@@ -31,18 +31,18 @@
     white-space: nowrap;
 }
 
-.preference-button:hover {
+._preference-button:hover {
     background-color: #b3b3b3;
     transform: scale(1.05);
 }
 
-.preference-button.active {
+._preference-button.active {
     background-color: #595959;
     color: white;
     border: 1px solid #D9D9D9;
 }
 
-.submit-button {
+._submit-button {
     padding: 15px 20px;
     background-color: #D9D9D9;
     color: white;
@@ -56,6 +56,6 @@
     width: 80%; /* Устанавливает ширину кнопки */
 }
 
-.submit-button:hover {
+._submit-button:hover {
     background-color: #595959;
 }

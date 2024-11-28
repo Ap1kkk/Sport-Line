@@ -3,7 +3,6 @@ import {BrowserRouter as Router, Link, Navigate, Route, Routes} from "react-rout
 
 import MainPage from "./pages/main-page/main_page";
 import Profile from "./pages/all-profile-pages/ProfilePage/ProfilePage";
-import Yandex_map from "./pages/map-page/yandex_map";
 import Favorites from "./pages/favorites/favorites";
 import Authorization from "./pages/Authorization/Authorization";
 import Register from "./pages/Register/Register";
@@ -15,7 +14,7 @@ import Statistics from "./pages/all-profile-pages/StatisticsPage/StatisticsPage"
 import Achievements from "./pages/all-profile-pages/AchievementsPage/AchievementsPage";
 import RouteHistory from "./pages/all-profile-pages/RouteHistoryPage/RouteHistoryPage";
 import EditProfile from "./pages/all-profile-pages/EditProfilePage/EditProfilePage";
-
+import Admin_workbench from "./pages/admin-page/admin_workbench";
 
 function App() {
     return (
@@ -23,7 +22,7 @@ function App() {
                     <Routes>
                         <Route path="/" element={<Navigate to="/main_page" replace/>}/>
 
-                        <Route path="/Yandex_map" element={<Yandex_map/>}/>
+                        <Route path="/admin" element={<Admin_workbench/>}/>
                         <Route path="/favourites" element={<Favorites/>}/>
                         <Route path="/main_page" element={<MainPage/>}/>
                         <Route path="/login" element={<Authorization/>}/>
@@ -31,7 +30,7 @@ function App() {
                         <Route path="/register/preferences" element={<Preferences/>}/>
                         <Route path="/filters" element={<Filters/>}/>
                         <Route path="/map" element={<RoutesOnMap/>}/>
-                        <Route path="/main_page/mapOfTheDay" element={<MapOfTheDay />}/>
+                        <Route path="/main_page/mapOfTheDay/:routeId" element={<MapOfTheDay />}/>
                         <Route path="/ProfilePage" element={<Profile />}/>
                         <Route path="/StatisticsPage" element={<Statistics />} />
                         <Route path="/AchievementsPage" element={<Achievements />} />
@@ -46,10 +45,10 @@ function App() {
                             style={styles.navImage}
                         />
                     </Link>
-                    <Link to="/yandex_map" style={styles.navLink}>
-                        <i className="fa fa-map-marker" style={styles.navIcon}></i>
-                        <span>Карта</span>
-                    </Link>
+                    {/*<Link to="/admin" style={styles.navLink}>*/}
+                    {/*    <i className="fa fa-map-marker" style={styles.navIcon}></i>*/}
+                    {/*    <span>Карта</span>*/}
+                    {/*</Link>*/}
                     <Link to="/main_page" style={styles.navLink}>
                         <img
                             src="https://img.icons8.com/ios/50/region-code.png"
@@ -57,10 +56,10 @@ function App() {
                             style={styles.navImage}
                         />
                     </Link>
-                    <Link to="/login" style={styles.navLink}>
-                        <i className="fa fa-heart" style={styles.navIcon}></i>
-                        <span>Авторизация</span>
-                    </Link>
+                    {/*<Link to="/login" style={styles.navLink}>*/}
+                    {/*    <i className="fa fa-heart" style={styles.navIcon}></i>*/}
+                    {/*    <span>Авторизация</span>*/}
+                    {/*</Link>*/}
                     <Link to="/ProfilePage" style={styles.navLink}>
                         <img
                             src="https://img.icons8.com/pastel-glyph/64/user-male-circle.png"
@@ -74,44 +73,37 @@ function App() {
 }
 
 const styles = {
-    content: {
-        flex: 1,
-    },
     container: {
         display: "flex",
-        flexDirection: "column",
         height: "100vh",
     },
     bottomNav: {
-        display: "flex",
-        justifyContent: "space-around",
-        alignItems: "center",
         position: "fixed",
         bottom: 0,
         left: 0,
         width: "100%",
         height: "60px",
-        backgroundColor: "#ffffff",
-        borderTop: "1px solid #ddd",
-        boxSizing: "border-box",
-        padding: "0 10px",
+        backgroundColor: "#fff",
+        display: "flex",
+        justifyContent: "space-around",
+        alignItems: "center",
+        boxShadow: "0 -2px 5px rgba(0, 0, 0, 0.1)",
         zIndex: 1000,
     },
     navLink: {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
         textDecoration: "none",
-        color: "#000000",
-        fontSize: "12px",
-    },
-    navIcon: {
-        fontSize: "20px",
-        marginBottom: "5px",
+        color: "#333",
+        display: "flex",
+
+        alignItems: "center",
+        justifyContent: "center",
     },
     navImage: {
-        width: '30px',
-        height: '30px',
+        width: "30px",
+        height: "30px",
+    },
+    navIcon: {
+        fontSize: "24px",
     },
 };
 

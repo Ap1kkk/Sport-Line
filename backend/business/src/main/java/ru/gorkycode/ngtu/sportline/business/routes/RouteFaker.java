@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import ru.gorkycode.ngtu.sportline.business.category.CategoryFaker;
 import ru.gorkycode.ngtu.sportline.business.checkpoint.CheckpointFaker;
 import ru.gorkycode.ngtu.sportline.business.file.image.ImageFaker;
+import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
+import ru.gorkycode.ngtu.sportline.business.routes.model.RouteDifficulty;
 
 import java.util.ArrayList;
 import java.util.List;
