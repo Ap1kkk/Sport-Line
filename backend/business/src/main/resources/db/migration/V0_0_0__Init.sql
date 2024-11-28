@@ -107,10 +107,12 @@ CREATE TABLE user_favourite_routes (
 );
 
 CREATE TABLE user_routes_history (
+    id          BIGSERIAL,
     user_id     BIGSERIAL,
     route_id    BIGSERIAL,
-    done_at     TIMESTAMP WITH TIME ZONE,
-    PRIMARY KEY (user_id, route_id, done_at),
+    status      VARCHAR,
+    started_at  TIMESTAMP WITH TIME ZONE,
+    PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (route_id) REFERENCES routes(id)
 );
