@@ -17,6 +17,8 @@ import Recommendation from "./pages/Filters/Recommendation";
 import PopularRouts from "./pages/PopularRouts/PopularRouts";
 import UserHistory from "./pages/UserHistory/UserHistory";
 import UserLikeRouts from "./pages/UserLikeRouts/UserLikeRouts";
+import SearchRouts from "./pages/SearchRouts/SearchRouts";
+import StatisticsPage from "./pages/all-profile-pages/StatisticsPage/StatisticsPage";
 
 function App() {
     return (
@@ -48,9 +50,10 @@ function AppComponent() {
                 <Route path="/main_page/popular" element={<PopularRouts/>}/>
                 <Route path="/history" element={<UserHistory/>}/>
                 <Route path="/user_like" element={<UserLikeRouts/>}/>
+                <Route path="/search_page" element={<SearchRouts />}/>
 
                 <Route path="/profile_page" element={<Profile />}/>
-                <Route path="/profile_page/statistics_page" element={<Statistics />} />
+                <Route path="/profile_page/statistics_page" element={<StatisticsPage />} />
                 <Route path="/profile_page/achievements_page" element={<Achievements />} />
                 <Route path="/profile_page/route_history_page" element={<RouteHistory />} />
                 <Route path="/profile_page/edit_profile_page" element={<EditProfile />} />

@@ -98,7 +98,8 @@ const Preferences = () => {
 
     return (
         <div className="_container">
-            <h1>Предпочтения:</h1>
+            <h1>Создание личного кабинета</h1>
+            <h3>Предпочтения:</h3>
             {message && <p>{message}</p>}
             <div className="_preferences-buttons">
                 {options.map((option) => (

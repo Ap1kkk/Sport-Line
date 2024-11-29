@@ -1,54 +1,110 @@
 import React, { useState, useEffect } from "react";
 import "./StatisticsPage.css";
 
-const USER_STATISTIC_URL = "http://localhost:8080/api/v1/user/statistics";
-
-const StatCard = ({ title, value }) => {
-    return (
-        <div className="stat-card">
-            <h3 className="stat-card-title">{title}</h3>
-            <p className="stat-card-value-container">{value}</p>
-        </div>
-    );
-};
-
 const StatisticsPage = () => {
-    const [statistics, setStatistics] = useState("");
+    const [statistics, setStatistics] = useState(null); // Данные статистики
+    const [selectedPeriod, setSelectedPeriod] = useState("DAY"); // Текущий выбранный период
+    const [loading, setLoading] = useState(true); // Состояние загрузки
+    const [error, setError] = useState(null); // Ошибки
 
+    const fetchStatistics = async (period) => {
+        try {
+            setLoading(true);
+            setError(null);
+
+            const storedData = JSON.parse(localStorage.getItem("user"));
+            if (!storedData) {
+                throw new Error("Пользователь не найден в localStorage");
+            }
+
+            const userId = storedData.id; // Извлекаем id пользователя
+            const token = storedData.token; // Извлекаем токен авторизации
+
+            if (!token) {
+                throw new Error("Токен авторизации отсутствует");
+            }
+
+            // Формируем URL с параметром запроса
+            const url = `http://localhost:8080/api/v1/user/statistics?period=${period}`;
+
+            console.log("Отправляем запрос с URL:", url);
+
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    userId: userId, // В теле запроса оставляем только userId
+                }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error("Ответ сервера с ошибкой:", errorData);
+                throw new Error(errorData.message || `Ошибка: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log("Полученные данные статистики:", data);
+            setStatistics(data);
+        } catch (err) {
+            console.error("Ошибка при загрузке статистики:", err.message);
+            setError(err.message || "Произошла ошибка");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Обновляем статистику при изменении периода
     useEffect(() => {
-        const fetchStatistics = async () => {
-                const user = JSON.parse(localStorage.getItem("user")); // Парсинг строки в объект
-                const response = await fetch(USER_STATISTIC_URL, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `Bearer ${user.token}`,
-                    },
-                });
-                const data = await response.json();
-                setStatistics(data);
-        };
-        fetchStatistics();
-    }, []);
+        fetchStatistics(selectedPeriod);
+    }, [selectedPeriod]);
 
-
-    if (!statistics) {
-        return <div>Загрузка статистики...</div>;
-    }
+    const handlePeriodChange = (period) => {
+        setSelectedPeriod(period); // Устанавливаем выбранный период
+    };
 
     return (
-        <div className="statistics-container">
-            <h1 className="statistics-title">Статистика</h1>
-            <div className="statistics-grid">
-                <StatCard title="Всего пройдено метров" value={statistics.totalDistance || 0}/>
-                <StatCard title="Всего пройдено шагов" value={statistics.totalSteps || 0}/>
-                <StatCard title="Общее время пройденных маршрутов" value={statistics.totalDuration || "0д 0ч 0м"}/>
-                <StatCard title="Среднее время прохождения маршрутов" value={statistics.averageRouteDuration || "N/A"}/>
-                <StatCard title="Количество Завершенных маршрутов" value={statistics.travelledRoutesCount || 0}/>
-                <StatCard title="Число пройденных чекпоинтов" value={statistics.totalCheckpoints || 0}/>
-                <StatCard title="Число понравившихся маршрутов" value={statistics.favouriteRoutesCount || 0}/>
-                <StatCard title="Среняя длина пройденных маршрутов" value={statistics.averageRouteDistance || 0}/>
+        <div className="user-statistics-container">
+            <h1>Статистика пользователя</h1>
+
+            {/* Кнопки переключения периода */}
+            <div className="period-buttons">
+                {["DAY", "WEEK", "MONTH", "YEAR"].map((period) => (
+                    <button
+                        key={period}
+                        className={`period-button ${
+                            selectedPeriod === period ? "active" : ""
+                        }`}
+                        onClick={() => handlePeriodChange(period)}
+                    >
+                        {period === "DAY"
+                            ? "За день"
+                            : period === "WEEK"
+                                ? "За неделю"
+                                : period === "MONTH"
+                                    ? "За месяц"
+                                    : "За год"}
+                    </button>
+                ))}
             </div>
-            <div className="bottom-spacer"></div>
+
+            {/* Загрузка */}
+            {loading && <p>Загрузка статистики...</p>}
+
+            {/* Ошибка */}
+            {error && <p style={{ color: "red" }}>{error}</p>}
+
+            {/* Статистика */}
+            {statistics && (
+                <div className="statistics-data">
+                    <p>Пройдено шагов: {statistics.steps || 0}</p>
+                    <p>Дистанция: {statistics.distance || 0} км</p>
+                    <p>Калории: {statistics.calories || 0} ккал</p>
+                </div>
+            )}
         </div>
     );
 };

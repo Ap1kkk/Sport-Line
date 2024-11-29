@@ -1,93 +1,175 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-label {
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    font-weight: bold;
-    color: #BBBBBB;
-}
-
-.form div {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 15px;
-}
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;500;700&display=swap');
 
 .__container {
-    width: 85%;
-    max-width: 320px;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100%; /* Занимает всю ширину экрана */
     padding: 20px;
-    border-radius: 10px;
-
-    /* Центрирование блока */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    box-sizing: border-box; /* Учитывает padding при расчете ширины */
 }
 
 .title {
-    font-family: 'Roboto', sans-serif;
-    text-align: left;
-    font-size: 32px;
+    font-size: 16px;
     font-weight: bold;
+    color: #343a40;
     margin-bottom: 20px;
+    text-align: center;
+    font-family: 'Roboto Flex', sans-serif;
 }
 
 .form {
+    width: 100%; /* Форма растягивается на всю ширину родителя */
+    max-width: 360px; /* Ограничение для больших экранов */
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 20px;
+    box-sizing: border-box;
+}
+
+.form div {
+    position: relative;
+    width: 100%; /* Поля ввода занимают всю ширину */
+}
+
+label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 5px;
 }
 
 .input {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: none;
-    border-bottom: 2px solid #ccc;
+    font-family: 'Roboto Flex', sans-serif;
+    width: 100%; /* Поля ввода растягиваются */
+    padding: 10px 12px;
+    font-size: 14px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    color: #495057;
+    outline: none;
+    transition: border-color 0.3s, background-color 0.3s;
 }
 
 .input:focus {
-    outline: none;
+    border-color: #007bff;
+    background-color: #ffffff;
+}
+
+.input-error {
+    border-color: #dc3545 !important;
+    background-color: #ffe6e6;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+    text-align: left;
 }
 
 .button {
     width: 100%;
     padding: 12px;
     font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    background-color: #BBBBBB;
-    border: none;
-    border-radius: 25px;
+    color: #007bff; /* Синяя надпись */
+    background-color: #ffffff; /* Белый фон */
+    border: 2px solid #007bff; /* Тонкие голубые границы */
+    border-radius: 10px;
     cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
 
 .button:hover {
-    background-color: #878787;
+    background-color: #007bff; /* Синий фон при наведении */
+    color: #ffffff; /* Белый текст при наведении */
+    border-color: #0056b3; /* Более насыщенный синий для границы */
 }
+
+.button:active {
+    background-color: #0056b3; /* Темно-синий при клике */
+    color: #ffffff;
+    border-color: #003f7f;
+}
+
+.button:disabled {
+    background-color: #f8f9fa; /* Серый фон для неактивной кнопки */
+    color: #ced4da; /* Серый текст */
+    border-color: #ced4da; /* Серые границы */
+    cursor: not-allowed; /* Курсор для неактивного состояния */
+}
+
 
 .footer {
     margin-top: 20px;
+    text-align: center;
     font-size: 14px;
+    color: #495057;
 }
 
-.footer .link {
-    margin-left: 5px;
+.link {
     color: #007bff;
-    text-decoration: underline;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 5px;
+    transition: color 0.3s;
 }
 
-.footer .link:hover {
-    text-decoration: underline;
-    color: #BBBBBB;
+.link:hover {
+    color: #0056b3;
+}
+
+/* Адаптивные стили для iPhone SE (320px) */
+@media (max-width: 320px) {
+    .title {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    .form {
+        gap: 15px;
+    }
+
+    label {
+        font-size: 13px;
+    }
+
+    .input {
+        font-size: 13px;
+        padding: 8px 10px;
+    }
+
+    .button {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .footer {
+        font-size: 13px;
+    }
+}
+
+/* Адаптивные стили для iPhone XR (414px) */
+@media (max-width: 414px) {
+    .title {
+        font-size: 20px;
+    }
+
+    .form {
+        gap: 20px;
+    }
+
+    .input {
+        font-size: 16px;
+        padding: 12px;
+    }
+
+    .button {
+        font-size: 16px;
+    }
 }

@@ -105,7 +105,7 @@ const Authorization = () => {
     const isFormValid = !emailError && !passwordError;
 
     return (
-        <div className="__container">
+        <div className="_container">
             <h1 className="title">Авторизация</h1>
             {message && <p>{message}</p>}
             <form className="form" onSubmit={handleSubmit}>

@@ -102,13 +102,13 @@ const Register = () => {
 
     return (
         <div className='__container'>
-            <h1 className='title'>Регистрация</h1>
+            <h1 className='title'>Создание личного кабинета</h1>
             {message && <p>{message}</p>}
             <form className='form' onSubmit={handleSubmit}>
                 <div>
-                    <label>Username</label>
+                    <label>Имя</label>
                     <input
-                        className='input'
+                        className={`input ${usernameDirty && usernameError ? 'input-error' : ''}`}
                         type='text'
                         name='username'
                         value={username}
@@ -119,12 +119,12 @@ const Register = () => {
                         }}
                         required
                     />
-                    {usernameDirty && usernameError && <div style={{ color: 'red' }}>{usernameError}</div>}
+                    {usernameDirty && usernameError && <div className="error-message">{usernameError}</div>}
                 </div>
                 <div>
-                    <label>Email</label>
+                    <label>Электронная почта</label>
                     <input
-                        className='input'
+                        className={`input ${emailDirty && emailError ? 'input-error' : ''}`}
                         type='email'
                         name='email'
                         value={email}
@@ -135,12 +135,12 @@ const Register = () => {
                         }}
                         required
                     />
-                    {emailDirty && emailError && <div style={{ color: 'red' }}>{emailError}</div>}
+                    {emailDirty && emailError && <div className="error-message">{emailError}</div>}
                 </div>
                 <div>
-                    <label>Password</label>
+                    <label>Пароль</label>
                     <input
-                        className='input'
+                        className={`input ${passwordDirty && passwordError ? 'input-error' : ''}`}
                         type="password"
                         name="password"
                         value={password}
@@ -151,7 +151,7 @@ const Register = () => {
                         }}
                         required
                     />
-                    {passwordDirty && passwordError && <div style={{ color: 'red' }}>{passwordError}</div>}
+                    {passwordDirty && passwordError && <div className="error-message">{passwordError}</div>}
                 </div>
                 <button className='button' type='submit'>Продолжить</button>
             </form>
