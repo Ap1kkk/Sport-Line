@@ -17,6 +17,7 @@ const Admin_workbench = () => {
     const [difficulty, setDifficulty] = useState("EASY");
     const [categories, setCategories] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -169,20 +170,17 @@ const Admin_workbench = () => {
                 longitude,
             }));
 
-            const routeData = {
-                name: routeName,
-                description,
-                difficulty,
-                distance: routeDistance,
-                duration: 0,
-                categoryIds: [],
-                checkpoints,
-                image: {
-                    id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                    path: "string",
-                    displayOrder: 0,
-                },
-            };
+            const formData = new FormData();
+            formData.append("name", routeName);
+            formData.append("description", description);
+            formData.append("difficulty", difficulty);
+            formData.append("distance", routeDistance);
+            formData.append("duration", 0);
+            formData.append("categories", JSON.stringify(selectedCategories));
+            formData.append("checkpoints", JSON.stringify(checkpoints));
+            if (selectedImage) {
+                formData.append("image", selectedImage); // Добавляем изображение
+            }
 
             const response = await fetch(API_ROUTE_URL, {
                 method: "POST",
@@ -190,7 +188,7 @@ const Admin_workbench = () => {
                     Authorization: `Bearer ${user.token}`,
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(routeData),
+                body: formData,
             });
 
             if (response.ok) {
@@ -200,16 +198,26 @@ const Admin_workbench = () => {
                 setPoints([]);
                 setRouteDistance(0);
                 setDifficulty("EASY");
+                setSelectedCategories([]);
+                setSelectedImage(null);
                 if (route) {
                     mapInstance.geoObjects.remove(route);
                     setRoute(null);
                 }
             } else {
-                alert("Ошибка при сохранении маршрута.");
+                const error = await response.json();
+                alert(`Ошибка при сохранении маршрута: ${error.message || "Неизвестная ошибка."}`);
             }
         } catch (error) {
             console.error("Ошибка отправки данных:", error);
             alert("Не удалось сохранить маршрут. Проверьте соединение с сервером.");
+        }
+    };
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setSelectedImage(file);
         }
     };
 
@@ -287,6 +295,13 @@ const Admin_workbench = () => {
                             </label>
                         ))}
                     </div>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        style={styles.input}
+                    />
+
                     <select
                         value={difficulty}
                         onChange={handleDifficultyChange}

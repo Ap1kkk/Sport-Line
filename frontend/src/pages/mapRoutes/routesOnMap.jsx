@@ -20,6 +20,8 @@ const API_ROUTE_NAME = "http://localhost:8080/api/v1/route";
 const API_START_URL = "http://localhost:8080/api/v1/user/routes/start";
 const API_LEAVE_URL = "http://localhost:8080/api/v1/user/routes/leave";
 const API_FINISH_URL = "http://localhost:8080/api/v1/user/routes/finish";
+const API_LIKE_URL = "http://localhost:8080/api/v1/user/routes/like";
+const API_UNLIKE_URL = "http://localhost:8080/api/v1/user/routes/unlike";
 
 const RoutesOnMap = () => {
     const { routeId } = useParams();
@@ -35,6 +37,7 @@ const RoutesOnMap = () => {
     const [isStarted, setIsStarted] = useState(false);
     const [progress, setProgress] = useState(0);
     const [historyId, setHistoryId] = useState(null);
+    const [isLiked, setIsLiked] = useState(false);
 
     useEffect(() => {
         const fetchRouteData = async () => {
@@ -260,6 +263,47 @@ const RoutesOnMap = () => {
         }
     };
 
+    const toggleLike = async () => {
+        try {
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (!user || !user.token) {
+                throw new Error("Authorization token is missing.");
+            }
+
+            if (isLiked) {
+                const response = await fetch(`${API_UNLIKE_URL}?routeId=${routeId}`, {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                });
+
+                if (response.ok) {
+                    console.log("Лайк снят");
+                    setIsLiked(false);
+                } else {
+                    console.error("Ошибка снятия лайка:", response.statusText);
+                }
+            } else {
+                const response = await fetch(`${API_LIKE_URL}?routeId=${routeId}`, {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                });
+
+                if (response.ok) {
+                    console.log("Лайк поставлен");
+                    setIsLiked(true);
+                } else {
+                    console.error("Ошибка постановки лайка:", response.statusText);
+                }
+            }
+        } catch (error) {
+            console.error("Ошибка при обработке лайка:", error);
+        }
+    };
+
     const handleFinish = async () => {
         if (routeData && coords.length === 2 && routeDistance > 0) {
             try {
@@ -345,11 +389,11 @@ const RoutesOnMap = () => {
                                 ) : (
                                     <p>Загрузка данных маршрута...</p>
                                 )}
-                                <button
-                                    onClick={handleFinish}
-                                    style={styles.startButton}
-                                >
+                                <button onClick={handleFinish} style={styles.startButton}>
                                     Закончить
+                                </button>
+                                <button onClick={toggleLike} style={styles.button}>
+                                    {isLiked ? "Убрать лайк" : "Поставить лайк"}
                                 </button>
                             </div>
                         ) : (
@@ -370,7 +414,10 @@ const RoutesOnMap = () => {
                                     <p>Загрузка данных маршрута...</p>
                                 )}
                                 <button onClick={handleStart} style={styles.startButton}>
-                                Начать
+                                    Начать
+                                </button>
+                                <button onClick={toggleLike} style={styles.button}>
+                                    {isLiked ? "Убрать лайк" : "Поставить лайк"}
                                 </button>
                             </div>
                         )}
