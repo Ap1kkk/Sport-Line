@@ -9,6 +9,7 @@ import ru.gorkycode.ngtu.sportline.business.system.exceptions.classes.validation
 import ru.gorkycode.ngtu.sportline.business.system.exceptions.classes.validation.ValidationViolationDto;
 import ru.gorkycode.ngtu.sportline.business.user.dto.CreateCredentialsDto;
 import ru.gorkycode.ngtu.sportline.business.user.dto.EditProfileDto;
+import ru.gorkycode.ngtu.sportline.business.user.dto.FinishRegistrationDto;
 import ru.gorkycode.ngtu.sportline.business.user.model.User;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class UserValidator {
     private static final String CREATE_ERROR_MESSAGE = "Create credentials validation failed";
     private static final String PREFERENCES_IDS_ERROR_MESSAGE = "User preferences ids validation failed";
     private static final String EDIT_PROFILE_ERROR_MESSAGE = "Edit profile dto validation failed";
+    private static final String FINISH_REGISTRATION_ERROR_MESSAGE = "Finish registration dto validation failed";
 
     private final UserRepository repository;
 
@@ -95,6 +97,27 @@ public class UserValidator {
             exceptionBuilder.addViolation(requiredIsNull("avatarId", "Avatar id"));
 
         validatePreferencesIds(dto.getPreferencesIds(), exceptionBuilder);
+
+        if(exceptionBuilder.hasViolations())
+            throw exceptionBuilder.build();
+    }
+
+    public void validateFinishRegistration(FinishRegistrationDto dto) {
+        ValidationException.Builder exceptionBuilder = ValidationException.builder().message(FINISH_REGISTRATION_ERROR_MESSAGE);
+
+        if(dto == null) {
+            exceptionBuilder.addViolation(requiredIsNull("dto", "Dto"));
+            throw exceptionBuilder.build();
+        }
+
+        if(dto.getBirthday() == null)
+            exceptionBuilder.addViolation(requiredIsNull("birthday", "Birthday"));
+        if(dto.getGender() == null)
+            exceptionBuilder.addViolation(requiredIsNull("gender", "Gender"));
+        if(dto.getRegionId() == null)
+            exceptionBuilder.addViolation(requiredIsNull("regionId", "Region id"));
+        if(dto.getActivityId() == null)
+            exceptionBuilder.addViolation(requiredIsNull("activityId", "Activity id"));
 
         if(exceptionBuilder.hasViolations())
             throw exceptionBuilder.build();

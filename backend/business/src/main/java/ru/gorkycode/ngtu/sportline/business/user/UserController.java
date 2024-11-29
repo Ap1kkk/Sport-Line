@@ -2,10 +2,7 @@ package ru.gorkycode.ngtu.sportline.business.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.gorkycode.ngtu.sportline.business.user.dto.CreateCredentialsDto;
-import ru.gorkycode.ngtu.sportline.business.user.dto.EditProfileDto;
-import ru.gorkycode.ngtu.sportline.business.user.dto.ProfileDto;
-import ru.gorkycode.ngtu.sportline.business.user.dto.UserProjectionDto;
+import ru.gorkycode.ngtu.sportline.business.user.dto.*;
 import ru.gorkycode.ngtu.sportline.business.user.model.User;
 
 import java.util.List;
@@ -33,6 +30,11 @@ public class UserController {
     @PostMapping("/create")
     public UserProjectionDto create(@RequestBody CreateCredentialsDto dto) {
         return userService.create(dto);
+    }
+
+    @PostMapping("/finish-registration")
+    public UserProjectionDto finishRegistration(@RequestBody FinishRegistrationDto dto) {
+        return userService.finishRegistration(dto);
     }
 
     @PostMapping("/choose-preferences")

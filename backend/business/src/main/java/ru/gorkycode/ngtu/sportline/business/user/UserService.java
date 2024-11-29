@@ -8,13 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.gorkycode.ngtu.sportline.business.auth.AuthService;
 import ru.gorkycode.ngtu.sportline.business.category.Category;
 import ru.gorkycode.ngtu.sportline.business.category.CategoryService;
+import ru.gorkycode.ngtu.sportline.business.region.RegionRepository;
 import ru.gorkycode.ngtu.sportline.business.system.exceptions.classes.data.EntityNotFoundException;
 import ru.gorkycode.ngtu.sportline.business.user.avatar.UserAvatar;
 import ru.gorkycode.ngtu.sportline.business.user.avatar.UserAvatarRepository;
-import ru.gorkycode.ngtu.sportline.business.user.dto.CreateCredentialsDto;
-import ru.gorkycode.ngtu.sportline.business.user.dto.EditProfileDto;
-import ru.gorkycode.ngtu.sportline.business.user.dto.ProfileDto;
-import ru.gorkycode.ngtu.sportline.business.user.dto.UserProjectionDto;
+import ru.gorkycode.ngtu.sportline.business.user.dto.*;
 import ru.gorkycode.ngtu.sportline.business.user.mappers.UserMapper;
 import ru.gorkycode.ngtu.sportline.business.user.mappers.UserProjectionMapper;
 import ru.gorkycode.ngtu.sportline.business.user.model.User;
@@ -39,6 +37,7 @@ public class UserService {
 
     private final Faker faker = new Faker();
     private final UserAvatarRepository userAvatarRepository;
+    private final RegionRepository regionRepository;
 
     public User getById(Long id) {
         return validator.throwIfNotExists(id);
@@ -103,5 +102,13 @@ public class UserService {
         Long id = allIds.getFirst();
         return userAvatarRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(UserAvatar.class, id));
+    }
+
+    public UserProjectionDto finishRegistration(FinishRegistrationDto dto) {
+        User currentUser = authService.getCurrentUser();
+        validator.validateFinishRegistration(dto);
+
+        User updatedUser = mapper.map(currentUser, dto);
+        return projectionMapper.toDto(repository.save(currentUser));
     }
 }

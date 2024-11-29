@@ -8,9 +8,12 @@ import org.hibernate.proxy.HibernateProxy;
 import ru.gorkycode.ngtu.sportline.business.achievement.Achievement;
 import ru.gorkycode.ngtu.sportline.business.category.Category;
 import ru.gorkycode.ngtu.sportline.business.common.BaseEntity;
+import ru.gorkycode.ngtu.sportline.business.region.Region;
 import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
+import ru.gorkycode.ngtu.sportline.business.user.activity.UserActivity;
 import ru.gorkycode.ngtu.sportline.business.user.avatar.UserAvatar;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +42,13 @@ public class User extends BaseEntity {
     private String password;
 
     @Enumerated(EnumType.STRING)
+    @Column
+    private UserGender gender;
+
+    @Column
+    private LocalDate birthday;
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRole role;
 
@@ -47,6 +57,16 @@ public class User extends BaseEntity {
     private ZonedDateTime createdAt;
 
     // Relationships
+
+    @OneToOne
+    @JoinColumn(name = "region_id", referencedColumnName = "id")
+    @ToString.Exclude
+    private Region region;
+
+    @OneToOne
+    @JoinColumn(name = "activity_id", referencedColumnName = "id")
+    @ToString.Exclude
+    private UserActivity activity;
 
     @OneToMany
     @JoinTable(

@@ -1,3 +1,14 @@
+INSERT INTO regions(name) VALUES ('Нижегородский район');
+INSERT INTO regions(name) VALUES ('Советский район');
+INSERT INTO regions(name) VALUES ('Автозаводский район');
+INSERT INTO regions(name) VALUES ('Московский район');
+INSERT INTO regions(name) VALUES ('Канавинский район');
+INSERT INTO regions(name) VALUES ('Сормовский район');
+
+INSERT INTO user_activity(name) VALUES ('Школьник');
+INSERT INTO user_activity(name) VALUES ('В полном расцвете сил');
+INSERT INTO user_activity(name) VALUES ('Пенсионер');
+
 INSERT INTO user_avatars(id, path) VALUES (1, '/avatars/avatar1.png');
 INSERT INTO user_avatars(id, path) VALUES (2, '/avatars/avatar2.png');
 INSERT INTO user_avatars(id, path) VALUES (3, '/avatars/avatar3.png');
@@ -9,16 +20,24 @@ INSERT INTO user_avatars(id, path) VALUES (8, '/avatars/avatar8.png');
 
 INSERT INTO
     users(
-          username,
-          email,
-          avatar_id,
-          password,
-          role,
-          created_at
+        username,
+        email,
+        gender,
+        region_id,
+        birthday,
+        activity_id,
+        avatar_id,
+        password,
+        role,
+        created_at
 )
 VALUES (
         'User',
         'user@mail.ru',
+        'MALE',
+        1,
+        '11-11-1990',
+        1,
         1,
         '$2a$12$l4XNiFWEdstG4CE1L3jvEe2nYeaKwNb0PnuBzcHuFfdquNUXyx/qG',
         'USER',
@@ -29,18 +48,26 @@ INSERT INTO
     users(
         username,
         email,
+        gender,
+        region_id,
+        birthday,
+        activity_id,
         avatar_id,
         password,
         role,
         created_at
 )
 VALUES (
-       'Admin',
-       'admin@mail.ru',
-       1,
-       '$2a$12$l4XNiFWEdstG4CE1L3jvEe2nYeaKwNb0PnuBzcHuFfdquNUXyx/qG',
-       'ADMIN',
-       CURRENT_TIMESTAMP
+        'Admin',
+        'admin@mail.ru',
+        'MALE',
+        1,
+        '11-11-1990',
+        1,
+        1,
+        '$2a$12$l4XNiFWEdstG4CE1L3jvEe2nYeaKwNb0PnuBzcHuFfdquNUXyx/qG',
+        'ADMIN',
+        CURRENT_TIMESTAMP
 );
 
 INSERT INTO categories(name) VALUES ('Прогулка');

@@ -24,6 +24,8 @@ import java.util.Objects;
 @AllArgsConstructor
 public class Achievement extends BaseEntity {
 
+    //TODO add icon as path
+
     @Column
     private String name;
 

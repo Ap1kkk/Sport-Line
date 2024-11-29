@@ -15,6 +15,11 @@ CREATE TABLE images_to_clean (
         ON DELETE CASCADE
 );
 
+CREATE TABLE regions (
+    id          BIGSERIAL PRIMARY KEY,
+    name        VARCHAR
+);
+
 CREATE TABLE categories (
     id      BIGSERIAL PRIMARY KEY,
     name    VARCHAR
@@ -76,11 +81,20 @@ CREATE TABLE user_avatars (
     path        TEXT
 );
 
+CREATE TABLE user_activity (
+    id          BIGSERIAL PRIMARY KEY,
+    name        VARCHAR
+);
+
 CREATE TABLE users (
     id          BIGSERIAL PRIMARY KEY,
     username    VARCHAR,
     email       VARCHAR,
     avatar_id   BIGSERIAL,
+    region_id   BIGINT,
+    activity_id BIGINT,
+    gender      VARCHAR,
+    birthday    DATE,
     password    VARCHAR,
     role        VARCHAR,
     created_at  TIMESTAMP WITH TIME ZONE,
