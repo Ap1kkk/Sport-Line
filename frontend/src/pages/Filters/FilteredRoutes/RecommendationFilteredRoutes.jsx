@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./RecommendationFilteredRoutes.css";
 
-const RecommendationFilteredRoutes = ({ filters }) => {
+const RecommendationFilteredRoutes = ({ filters, searchQuery }) => {
     const [routes, setRoutes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -15,11 +15,15 @@ const RecommendationFilteredRoutes = ({ filters }) => {
                     throw new Error("Отсутствует токен авторизации");
                 }
 
-                const response = await fetch("http://localhost:8080/api/v1/route/recommended-filtered?limit=10", {
+                const endpoint = searchQuery
+                    ? `http://localhost:8080/api/v1/route/search?query=${encodeURIComponent(searchQuery)}`
+                    : "http://localhost:8080/api/v1/route/recommended-filtered?limit=10";
+
+                const response = await fetch(endpoint, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": `Bearer ${user.token}`,
+                        Authorization: `Bearer ${user.token}`,
                     },
                     body: JSON.stringify(filters),
                 });
@@ -39,7 +43,7 @@ const RecommendationFilteredRoutes = ({ filters }) => {
         };
 
         fetchRoutes();
-    }, [filters]);
+    }, [filters, searchQuery]);
 
     return (
         <div className="routes-container">
