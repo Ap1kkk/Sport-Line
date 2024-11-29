@@ -6,19 +6,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.gorkycode.ngtu.sportline.business.auth.AuthService;
 import ru.gorkycode.ngtu.sportline.business.common.BaseEntity;
-import ru.gorkycode.ngtu.sportline.business.routes.RouteFaker;
+import ru.gorkycode.ngtu.sportline.business.routes.jpa.HistoryRouteSpecification;
 import ru.gorkycode.ngtu.sportline.business.routes.jpa.RouteFilter;
+import ru.gorkycode.ngtu.sportline.business.routes.jpa.RouteFilterOrder;
 import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
+import ru.gorkycode.ngtu.sportline.business.routes.model.RouteDifficulty;
 import ru.gorkycode.ngtu.sportline.business.routes.model.history.HistoryRoute;
 import ru.gorkycode.ngtu.sportline.business.routes.model.history.HistoryRouteRepository;
 import ru.gorkycode.ngtu.sportline.business.routes.model.history.HistoryRouteStatus;
 import ru.gorkycode.ngtu.sportline.business.system.exceptions.classes.data.EntityNotFoundException;
 import ru.gorkycode.ngtu.sportline.business.system.exceptions.classes.validation.ValidationException;
 import ru.gorkycode.ngtu.sportline.business.user.UserRepository;
-import ru.gorkycode.ngtu.sportline.business.user.UserService;
 import ru.gorkycode.ngtu.sportline.business.user.model.User;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Egor Bokov
@@ -32,7 +34,6 @@ public class UserRouteService {
 
     private final UserRepository userRepository;
 
-    private final RouteFaker routeFaker;
     private final RouteService routeService;
     private final HistoryRouteRepository historyRouteRepository;
 
@@ -108,10 +109,58 @@ public class UserRouteService {
     }
 
     public List<Route> getHistory(RouteFilter filter) {
-        return routeFaker.get(5, 10);
+        return historyRouteRepository.findAll(HistoryRouteSpecification.withFilters(filter))
+                .stream()
+                .map(HistoryRoute::getRoute)
+                .collect(Collectors.toList());
     }
 
+    @Transactional
     public List<Route> getFavourite(RouteFilter filter) {
-        return routeFaker.get(5, 10);
+        User currentUser = authService.getCurrentUser();
+
+        return currentUser.getFavouriteRoutes().stream()
+                .filter(route -> filterByDifficulty(route, filter.getDifficulties()))
+                .filter(route -> filterByCategory(route, filter.getCategoryIds()))
+                .filter(route -> filterByDuration(route, filter.getDurationFrom(), filter.getDurationTo()))
+                .filter(route -> filterByDistance(route, filter.getDistanceFrom(), filter.getDistanceTo()))
+                .sorted((r1, r2) -> sortByDate(r1, r2, filter.getOrder()))
+                .collect(Collectors.toList());
+    }
+
+    private boolean filterByDifficulty(Route route, List<RouteDifficulty> difficulties) {
+        return difficulties == null || difficulties.isEmpty() || difficulties.contains(route.getDifficulty());
+    }
+
+    private boolean filterByCategory(Route route, List<Long> categoryIds) {
+        if (categoryIds == null || categoryIds.isEmpty()) return true; // Нет фильтра по категориям
+        if (route.getCategories() == null || route.getCategories().isEmpty()) return false; // У маршрута нет категорий
+
+        List<Long> routeCategoryIds = route.getCategories().stream()
+                .map(BaseEntity::getId)
+                .collect(Collectors.toList());
+
+        // Проверяем, есть ли пересечение категорий
+        return routeCategoryIds.stream().anyMatch(categoryIds::contains);
+    }
+
+    private boolean filterByDuration(Route route, Long durationFrom, Long durationTo) {
+        if (durationFrom != null && route.getDuration() < durationFrom) return false;
+        if (durationTo != null && route.getDuration() > durationTo) return false;
+        return true;
+    }
+
+    private boolean filterByDistance(Route route, Long distanceFrom, Long distanceTo) {
+        if (distanceFrom != null && route.getDistance() < distanceFrom) return false;
+        if (distanceTo != null && route.getDistance() > distanceTo) return false;
+        return true;
+    }
+
+    private int sortByDate(Route r1, Route r2, RouteFilterOrder order) {
+        if (order == null || order == RouteFilterOrder.ASC) {
+            return r1.getCreatedAt().compareTo(r2.getCreatedAt());
+        } else {
+            return r2.getCreatedAt().compareTo(r1.getCreatedAt());
+        }
     }
 }
