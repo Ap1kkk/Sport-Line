@@ -178,22 +178,51 @@ const Admin_workbench = () => {
             }));
 
             const formData = new FormData();
-            formData.append("name", routeName);
-            formData.append("description", description);
-            formData.append("difficulty", difficulty);
-            formData.append("distance", routeDistance);
-            formData.append("duration", 0);
 
-            // Добавляем категории
-            selectedCategories.forEach((category, index) => {
-                formData.append(`categoryIds[${index}]`, category);
-            });
-            // Добавляем точки маршрута
-            checkpoints.forEach((checkpoint, index) => {
-                formData.append(`checkpoints[${index}].index`, checkpoint.index); // индекс
-                formData.append(`checkpoints[${index}].latitude`, checkpoint.latitude); // широта
-                formData.append(`checkpoints[${index}].longitude`, checkpoint.longitude); // долгота
-            });
+            const appendFormData = (data, parentKey = null) => {
+                if (data && typeof data === 'object' && !(data instanceof File)) {
+                    if (Array.isArray(data)) {
+                        data.forEach((value, index) => {
+                            appendFormData(value, `${parentKey}[${index}]`);
+                        });
+                    } else {
+                        Object.keys(data).forEach((key) => {
+                            appendFormData(data[key], parentKey ? `${parentKey}.${key}` : key);
+                        });
+                    }
+                } else {
+                    formData.append(parentKey, data);
+                }
+            };
+
+            const route = {
+                name: routeName,
+                description: description,
+                difficulty: difficulty,
+                distance: routeDistance ,
+                duration: 0,
+                checkpoints: checkpoints,
+                categoryIds: categories
+            }
+
+            // formData.append("name", routeName);
+            // formData.append("description", description);
+            // formData.append("difficulty", difficulty);
+            // formData.append("distance", routeDistance);
+            // formData.append("duration", 0);
+
+            appendFormData(route)
+
+            // // Добавляем категории
+            // selectedCategories.forEach((category, index) => {
+            //     formData.append(`categoryIds[${index}]`, category);
+            // });
+            // // Добавляем точки маршрута
+            // checkpoints.forEach((checkpoint, index) => {
+            //     formData.append(`checkpoints[${index}].index`, checkpoint.index); // индекс
+            //     formData.append(`checkpoints[${index}].latitude`, checkpoint.latitude); // широта
+            //     formData.append(`checkpoints[${index}].longitude`, checkpoint.longitude); // долгота
+            // });
 
             console.log("Selected categories:", selectedCategories);
             console.log("Checkpoints:", checkpoints);
