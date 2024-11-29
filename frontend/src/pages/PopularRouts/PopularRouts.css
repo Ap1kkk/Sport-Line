@@ -1,13 +1,25 @@
 .popular-routes-container {
     padding: 20px;
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-    color: #333;
+    max-width: 900px;
+    margin: 0 auto;
 }
 
 .routes-title {
-    font-size: 2rem;
-    color: #007bff;
     text-align: center;
-    margin-bottom: 20px;
 }
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.search-bar input {
+    width: 60%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+

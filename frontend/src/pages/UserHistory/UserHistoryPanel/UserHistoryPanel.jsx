@@ -91,15 +91,20 @@ const UserHistoryPanel = ({ categories, onFilterChange, currentFilters }) => {
                     step={10}
                     value={[filters.durationFrom, filters.durationTo]}
                     onChange={(values) => handleSliderChange("duration", values)}
-                    renderThumb={(props, state) => (
-                        <div {...props}>{state.valueNow}</div>
-                    )}
+                    renderThumb={(props, state) => {
+                        const { key, ...restProps } = props; // Извлекаем key из props
+                        return (
+                            <div key={key} {...restProps}>
+                                {state.valueNow}
+                            </div>
+                        );
+                    }}
                 />
             </div>
 
             <div className="filter-section">
                 <label>Расстояние (км):</label>
-                UserLikeRoutsPanel               <ReactSlider
+                <ReactSlider
                     className="slider"
                     thumbClassName="thumb"
                     trackClassName="track"
@@ -108,9 +113,14 @@ const UserHistoryPanel = ({ categories, onFilterChange, currentFilters }) => {
                     step={1}
                     value={[filters.distanceFrom, filters.distanceTo]}
                     onChange={(values) => handleSliderChange("distance", values)}
-                    renderThumb={(props, state) => (
-                        <div {...props}>{state.valueNow}</div>
-                    )}
+                    renderThumb={(props, state) => {
+                        const { key, ...restProps } = props; // Извлекаем key из props
+                        return (
+                            <div key={key} {...restProps}>
+                                {state.valueNow}
+                            </div>
+                        );
+                    }}
                 />
             </div>
 

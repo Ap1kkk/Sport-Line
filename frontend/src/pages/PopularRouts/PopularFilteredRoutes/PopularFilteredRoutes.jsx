@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./PopularFilteredRoutes.css";
 
-const PopularFilteredRoutes = ({ filters }) => {
+const PopularFilteredRoutes = ({ filters, searchQuery }) => {
     const [routes, setRoutes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -11,42 +11,37 @@ const PopularFilteredRoutes = ({ filters }) => {
             try {
                 const user = JSON.parse(localStorage.getItem("user"));
                 if (!user || !user.token) {
-                    console.error("Токен отсутствует или пользователь не авторизован.");
                     throw new Error("Отсутствует токен авторизации");
                 }
 
-                console.log("Токен авторизации:", user.token);
-                console.log("Фильтры для запроса:", JSON.stringify(filters, null, 2));
+                const endpoint = searchQuery
+                    ? `http://localhost:8080/api/v1/route/search?query=${encodeURIComponent(searchQuery)}`
+                    : "http://localhost:8080/api/v1/route/popular-filtered?limit=10";
 
-                const response = await fetch("http://localhost:8080/api/v1/route/popular-filtered?limit=10", {
+                const response = await fetch(endpoint, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": `Bearer ${user.token}`,
+                        Authorization: `Bearer ${user.token}`,
                     },
                     body: JSON.stringify(filters),
                 });
-
-                console.log("Ответ сервера:", response);
 
                 if (!response.ok) {
                     throw new Error(`Ошибка загрузки маршрутов: ${response.status}`);
                 }
 
                 const data = await response.json();
-                console.log("Маршруты, полученные от сервера:", data);
                 setRoutes(data);
             } catch (error) {
-                console.error("Ошибка загрузки маршрутов:", error);
                 setError("Не удалось загрузить маршруты");
             } finally {
                 setLoading(false);
             }
         };
 
-
         fetchRoutes();
-    }, [filters]);
+    }, [filters, searchQuery]);
 
     return (
         <div className="routes-container">

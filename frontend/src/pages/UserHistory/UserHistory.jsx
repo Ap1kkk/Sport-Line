@@ -16,6 +16,20 @@ const UserHistory = () => {
         distanceTo: 0,
     });
 
+    const [searchQuery, setSearchQuery] = useState(""); // Строка поиска
+    const [debouncedQuery, setDebouncedQuery] = useState(""); // Дебаунс-строка поиска
+
+    // Дебаунсинг строки поиска
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedQuery(searchQuery); // Обновляем строку после задержки
+        }, 500);
+
+        return () => {
+            clearTimeout(handler); // Очищаем таймер при изменении searchQuery
+        };
+    }, [searchQuery]);
+
     useEffect(() => {
         const fetchCategories = async () => {
             try {
@@ -44,7 +58,11 @@ const UserHistory = () => {
     const fetchFilteredRoutes = async () => {
         try {
             const user = JSON.parse(localStorage.getItem("user"));
-            const response = await fetch("http://localhost:8080/api/v1/user/routes/history", {
+            const endpoint = debouncedQuery
+                ? `http://localhost:8080/api/v1/route/search?query=${encodeURIComponent(debouncedQuery)}`
+                : "http://localhost:8080/api/v1/user/routes/history";
+
+            const response = await fetch(endpoint, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -63,16 +81,30 @@ const UserHistory = () => {
 
     useEffect(() => {
         fetchFilteredRoutes();
-    }, [filterParams]);
+    }, [filterParams, debouncedQuery]);
 
     return (
         <div className="user-history-container">
             <h1>История маршрутов</h1>
+
+            {/* Поисковая строка */}
+            <div className="search-bar">
+                <input
+                    type="text"
+                    placeholder="Введите название маршрута"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+            </div>
+
+            {/* Панель фильтров */}
             <UserHistoryPanel
                 categories={categories}
                 onFilterChange={handleFilterChange}
                 currentFilters={filterParams}
             />
+
+            {/* Отображение маршрутов */}
             <UserHistoryRouts routes={filteredRoutes} />
         </div>
     );
