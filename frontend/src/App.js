@@ -117,17 +117,10 @@ const styles = {
         textDecoration: "none",
         color: "#333",
         display: "flex",
-
         alignItems: "center",
         justifyContent: "center",
-    },
-    navImage: {
-        width: "30px",
-        height: "30px",
-    },
-    navIcon: {
-        fontSize: "24px",
-    },
+        width: "100%",
+    }
 };
 
 export default App;

@@ -1,8 +1,10 @@
-import React, {useState} from "react";
-import Slider from "react-slick";
-import {useNavigate} from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { Icon32SearchOutline, Icon56ClockCircleDashedOutline } from "@vkontakte/icons";
+import { Card, CardScroll, Group } from "@vkontakte/vkui";
+import "@vkontakte/vkui/dist/vkui.css";
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -26,8 +28,6 @@ const MainPage = () => {
                 setRouteData(data);
                 const routeId = data.id;
 
-                console.log("Route ID: ", routeId);
-
                 navigate(`/map/${routeId}`);
             } else {
                 throw new Error("Route not found or API error.");
@@ -38,7 +38,7 @@ const MainPage = () => {
     };
 
     const handleButtonClickSearch = () => {
-        navigate("/map");
+        navigate("/");
     };
 
     const handleButtonClickHistory = () => {
@@ -49,76 +49,70 @@ const MainPage = () => {
         <div style={styles.container}>
             {/* Header */}
             <header style={styles.header}>
-                <img
-                    src="https://img.icons8.com/?size=100&id=6904&format=png&color=000000"
-                    alt="UserHistory Icon"
-                    style={styles.icon}
+                <Icon56ClockCircleDashedOutline
                     onClick={handleButtonClickHistory}
+                    width={32}
+                    height={32}
+                    color="#2975CC"
                 />
                 <h1 style={styles.title}>SportLine</h1>
-                <img
-                    src="https://img.icons8.com/?size=100&id=59878&format=png&color=000000"
-                    alt="Search Icon"
-                    style={styles.icon}
-                    onClick={handleButtonClickSearch}
-                />
+                <Icon32SearchOutline onClick={handleButtonClickSearch} width={32} height={32} color="#2975CC" />
             </header>
 
-            {/* Central Map */}
-            <div style={styles.mapContainer}>
-                <h2 style={styles.mapTitle}>Маршрут дня</h2>
-                <button style={styles.mapButton} onClick={handleButtonClickRouteOfTheDay}>
-                    Поехали
-                </button>
+            {/* Map Section */}
+            <div style={styles.mapSection}>
+                <div style={styles.mapOverlay}>
+                    <h2 style={styles.mapTitle}>Маршрут дня</h2>
+                    <button style={styles.mapButton} onClick={handleButtonClickRouteOfTheDay}>
+                        Поехали
+                    </button>
+                </div>
             </div>
 
-            {/* Main Content */}
-            <main>
-                {/* Recommended Slider Section */}
-                <div style={styles.sliderSection}>
-                    <h3 style={styles.recommendationTitle}>Рекомендуемые</h3>
-                    <div style={styles.sliderContainer}>
-                        <Slider {...sliderSettings}>
-                            <img
-                                src="https://img.icons8.com/color-glass/96/owl.png"
-                                alt="Example"
-                                style={styles.cardImage}
-                            />
+            {/* Recommended Routes */}
+            <div style={styles.recommendedSection}>
+                <h3 style={styles.sectionTitle}>Рекомендуемые</h3>
+                <Group>
+                    <CardScroll>
+                        {Array.from({ length: 4 }).map((_, index) => (
+                            <Card key={index} size="l" style={styles.recommendedCard}>
+                                <div>
+                                    <img
+                                        src={`https://via.placeholder.com/150?text=Route+${index + 1}`}
+                                        alt={`Route ${index + 1}`}
+                                        style={styles.cardImage}
+                                    />
+                                    <p style={styles.cardText}>Название маршрута</p>
+                                </div>
+                            </Card>
+                        ))}
+                    </CardScroll>
+                </Group>
+            </div>
 
-                            <img
-                                src="https://img.icons8.com/color-glass/96/owl.png"
-                                alt="Example"
-                                style={styles.cardImage}
-                            />
-                            <img
-                                src="https://img.icons8.com/color-glass/96/owl.png"
-                                style={styles.cardImage}
-                            />
-                            <img
-                                src="https://img.icons8.com/color-glass/96/owl.png"
-                                style={styles.cardImage}
-                            />
-                            <img
-                                src="https://img.icons8.com/color-glass/96/owl.png"
-                                style={styles.cardImage}
-                            />
-                        </Slider>
+            {/* Popular Section */}
+            <div style={styles.popularSection}>
+                <h3 style={styles.sectionTitle}>Популярные</h3>
+                {Array.from({ length: 2 }).map((_, index) => (
+                    <div key={index} style={styles.popularCard}>
+                        <img
+                            src={`https://via.placeholder.com/150?text=Popular+Route+${index + 1}`}
+                            alt={`Popular Route ${index + 1}`}
+                            style={styles.popularImage}
+                        />
+                        <div style={styles.popularContent}>
+                            <p style={styles.popularTitle}>Название маршрута</p>
+                            <p style={styles.popularInfo}>Расстояние - 5 480</p>
+                            <p style={styles.popularInfo}>Сложность - Средняя</p>
+                            <div style={styles.tagContainer}>
+                                <span style={styles.tag}>Бег</span>
+                                <span style={styles.tag}>Туризм</span>
+                                <span style={styles.tag}>С питомцем</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
-
-                {/* Popular Section */}
-                <h3 style={styles.popularTitle}>Популярное</h3>
-                <div style={styles.cardsContainer}>
-                    <div style={styles.cardPopular}>Карточка 1</div>
-                    <div style={styles.cardPopular}>Карточка 2</div>
-                    <div style={styles.cardPopular}>Карточка 3</div>
-                    <div style={styles.cardPopular}>Карточка 4</div>
-                    <div style={styles.cardPopular}>Карточка 5</div>
-                    <div style={styles.cardPopular}>Карточка 6</div>
-                    <div style={styles.cardPopular}>Карточка 7</div>
-                    <div style={styles.cardPopular}>Карточка 8</div>
-                </div>
-            </main>
+                ))}
+            </div>
         </div>
     );
 };
@@ -137,145 +131,115 @@ const styles = {
         alignItems: "center",
         padding: "10px 20px",
         backgroundColor: "#ffffff",
-        top: 0,
-        zIndex: 1000,
-    },
-    icon: {
-        width: "30px",
-        height: "30px",
-        cursor: "pointer",
+        borderBottom: "1px solid #ddd",
     },
     title: {
-        fontSize: "24px",
+        fontSize: "20px",
         fontWeight: "bold",
         color: "#333",
     },
-    mapContainer: {
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundImage: "url('/main_page/Nizhniy_Novgorod.png')",
+    mapSection: {
+        position: "relative",
+        width: "100%",
+        height: "300px",
+        backgroundImage: "url('./iconsVk/галвный_экран_осн_02.jpg')",
+        backgroundSize: "cover",
         backgroundPosition: "center",
+    },
+    mapOverlay: {
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
         textAlign: "center",
+        color: "#fff",
     },
     mapTitle: {
         fontSize: "24px",
         fontWeight: "bold",
-        color: "#000",
-        marginBottom: "20px",
+        marginBottom: "10px",
     },
     mapButton: {
         padding: "10px 20px",
-        fontSize: "18px",
+        fontSize: "16px",
         backgroundColor: "#007BFF",
         color: "#ffffff",
         border: "none",
         borderRadius: "8px",
         cursor: "pointer",
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
     },
-    contentContainer: {
-        marginBottom: "20px",
-    },
-    subtitle: {
-        fontSize: "20px",
-        marginBottom: "20px",
-    },
-    button: {
+    recommendedSection: {
         padding: "10px 20px",
-        fontSize: "16px",
-        backgroundColor: "#ddd",
-        border: "none",
-        borderRadius: "5px",
-        cursor: "pointer",
-        marginBottom: "30px",
+        marginTop: "10px",
     },
-    sliderSection: {
-        marginTop: "40px",
-        padding: "0 20px",
-    },
-    sliderContainer: {
-        width: "100%",
-        maxWidth: "800px",
-        margin: "0 auto",
-        position: "relative",
-    },
-    card: {
-        backgroundColor: "#684c4c",
-        border: "1px solid #ddd",
-        height: "200px",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: "8px",
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-        fontSize: "14px",
-        fontWeight: "bold",
-        color: "#000000",
-    },
-    popularTitle: {
-        marginTop: "30px",
+    sectionTitle: {
         fontSize: "18px",
         fontWeight: "bold",
-        textAlign: "center",
+        marginBottom: "10px",
     },
-    cardsContainer: {
+    recommendedCard: {
+        height: "120px",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        gap: "20px",
-        margin: "60px",
-    },
-    cardPopular: {
-        backgroundColor: "#fff",
-        border: "1px solid #ddd",
-        width: "200px",
-        height: "120px",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+        backgroundColor: "#f3f3f3",
         borderRadius: "8px",
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+        overflow: "hidden",
+        marginRight: "10px",
+    },
+    cardImage: {
+        width: "100%",
+        height: "80px",
+        objectFit: "cover",
+    },
+    cardText: {
         fontSize: "14px",
         fontWeight: "bold",
-        color: "#333",
+        marginTop: "5px",
     },
-    recommendationTitle: {
-        marginTop: "20px",
-        fontSize: "18px",
-        fontWeight: "bold",
-        textAlign: "center",
-    },
-    footer: {
+    popularSection: {
         padding: "10px 20px",
-        backgroundColor: "#fff",
-        borderTop: "1px solid #ddd",
-        display: "flex",
-        justifyContent: "space-around",
-        alignItems: "center",
-        position: "relative",
     },
-};
-
-// Slider settings
-const sliderSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    responsive: [
-        {
-            breakpoint: 768,
-            settings: {
-                slidesToShow: 1,
-                arrows: false,
-            },
-        },
-    ],
+    popularCard: {
+        display: "flex",
+        marginBottom: "15px",
+        backgroundColor: "#f3f3f3",
+        borderRadius: "8px",
+        overflow: "hidden",
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+    },
+    popularImage: {
+        width: "120px",
+        height: "120px",
+        objectFit: "cover",
+    },
+    popularContent: {
+        padding: "10px",
+        flex: 1,
+    },
+    popularTitle: {
+        fontSize: "16px",
+        fontWeight: "bold",
+    },
+    popularInfo: {
+        fontSize: "14px",
+        color: "#555",
+        marginTop: "5px",
+    },
+    tagContainer: {
+        marginTop: "10px",
+        display: "flex",
+        flexWrap: "wrap",
+        gap: "5px",
+    },
+    tag: {
+        padding: "5px 10px",
+        backgroundColor: "#007BFF",
+        color: "#fff",
+        borderRadius: "15px",
+        fontSize: "12px",
+    },
 };
 
 export default MainPage;

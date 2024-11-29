@@ -124,23 +124,38 @@ const RoutesOnMap = () => {
         const startWatching = () => {
             if (navigator.geolocation) {
                 console.log("navigator.geolocation.watchPosition(position)");
-                watchId = navigator.geolocation.watchPosition(
+                navigator.geolocation.watchPosition(
                     (position) => {
                         const { latitude, longitude } = position.coords;
                         setCoords([latitude, longitude]);
-                        console.log(latitude, longitude);
+                        console.log("Current position:", latitude, longitude);
                         if (mapInstance) {
                             mapInstance.setCenter([latitude, longitude], 16);
                         }
                     },
                     (error) => {
-                        console.error("Ошибка получения геопозиции: ", error);
-                        alert("Не удалось получить вашу геопозицию.");
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                console.error("User denied the request for Geolocation.");
+                                alert("Пожалуйста, разрешите доступ к геолокации в настройках браузера.");
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                console.error("Location information is unavailable.");
+                                alert("Информация о местоположении недоступна.");
+                                break;
+                            case error.TIMEOUT:
+                                console.error("The request to get user location timed out.");
+                                alert("Тайм-аут запроса геолокации.");
+                                break;
+                            default:
+                                console.error("An unknown error occurred.");
+                                alert("Произошла неизвестная ошибка.");
+                        }
                     },
                     {
                         enableHighAccuracy: true,
                         maximumAge: 0,
-                        timeout: 1000,
+                        timeout: 10000,
                     }
                 );
             } else {
@@ -266,6 +281,12 @@ const RoutesOnMap = () => {
         }
     };
 
+    const notError  = () => {
+        if (setIsStarted(true)) {
+
+        }
+    }
+
     const toggleLike = async () => {
         try {
             const user = JSON.parse(localStorage.getItem("user"));
@@ -364,7 +385,7 @@ const RoutesOnMap = () => {
                         </Map>
                     </YMaps>
                     <div>
-                        {isTooFar && (
+                        {!isStarted && isTooFar && (
                             <div style={styles.errorMessageOverlay}>
                                 <p style={styles.errorText}>
                                     Вы слишком далеко от начала маршрута.
