@@ -18,7 +18,6 @@ pytest-docker==3.1.1
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 pytz==2024.2
-pywin32==308
 requests==2.32.3
 scikit-learn==1.5.2
 scikit-surprise==1.1.4
