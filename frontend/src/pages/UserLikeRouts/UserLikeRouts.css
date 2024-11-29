@@ -1,0 +1,64 @@
+/* UserLikeRouts.css */
+
+._app {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+._routes-title {
+    text-align: center;
+    font-size: 2rem;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+._routes-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+._route-card {
+    width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+._route-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+._route-name {
+    font-size: 1.5rem;
+    color: #333;
+    margin: 10px 0;
+    text-align: center;
+}
+
+._route-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 10px;
+    text-align: justify;
+}
+
+._route-difficulty {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+._route-categories {
+    font-size: 0.9rem;
+    color: #007bff;
+    font-style: italic;
+    margin-bottom: 10px;
+}

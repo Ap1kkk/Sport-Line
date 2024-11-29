@@ -1,123 +1,182 @@
 import React, { useState, useEffect } from "react";
-import "./EditProfilePage.css";
 import { useNavigate } from "react-router-dom";
+import "./EditProfilePage.css";
 
-const avatarOptions = [
-    "/avatars/avatar1.png",
-    "/avatars/avatar2.png",
-    "/avatars/avatar3.png",
-    "/avatars/avatar4.png",
-    "/avatars/avatar5.png",
-    "/avatars/avatar6.png",
-    "/avatars/avatar7.png",
-    "/avatars/avatar8.png"
-];
-
-const options = [
-    { id: 1, label: "Бег" },
-    { id: 2, label: "Туризм" },
-    { id: 3, label: "С собачкой" },
-    { id: 4, label: "Без собачки" },
-    { id: 5, label: "На велосипеде" },
-    { id: 6, label: "Прогулка" },
-    { id: 7, label: "На выносливость" },
-];
+const USER_PROFILE_URL = "http://localhost:8080/api/v1/user/profile";
+const UPDATE_PROFILE_URL = "http://localhost:8080/api/v1/user/edit";
+const AVATAR_PATH = "http://localhost:8080/static/avatars";
 
 const EditProfilePage = () => {
-    const [currentAvatar, setCurrentAvatar] = useState("/avatars/avatar1.png");
-    const [newAvatar, setNewAvatar] = useState("/avatars/avatar1.png");
-    const [user, setUser] = useState(null);
+    const [currentAvatar, setCurrentAvatar] = useState(null);
+    const [newAvatar, setNewAvatar] = useState(null);
     const [preferences, setPreferences] = useState([]);
+    const [availablePreferences, setAvailablePreferences] = useState([]);
+    const [avatars, setAvatars] = useState([]);
+    const [message, setMessage] = useState("");
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            const response = await fetch("http://localhost:5000/users/5d0e");
-            const data = await response.json();
-            setUser(data);
-            setCurrentAvatar(data.avatar || "/avatars/avatar1.png");
-            setNewAvatar(data.avatar || "/avatars/avatar1.png");
-            setPreferences(data.preferences || []);
+        const fetchProfileData = async () => {
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (!user || !user.token) {
+                setMessage("Пользователь не авторизован");
+                return;
+            }
+
+            try {
+                // Fetch profile data
+                const response = await fetch(USER_PROFILE_URL, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                });
+                const data = await response.json();
+                setCurrentAvatar(data.user.avatar.path);
+                setPreferences(data.user.preferences.map(pref => pref.id));
+
+                // Fetch available avatars
+                setAvatars([
+                    "/avatar1.png",
+                    "/avatar2.png",
+                    "/avatar3.png",
+                    "/avatar4.png",
+                    "/avatar5.png",
+                    "/avatar6.png",
+                    "/avatar7.png",
+                    "/avatar8.png",
+                ]);
+
+                // Fetch available preferences
+                const preferencesResponse = await fetch(
+                    "http://localhost:8080/api/v1/category/all",
+                    {
+                        method: "GET",
+                        headers: {
+                            Authorization: `Bearer ${user.token}`,
+                        },
+                    }
+                );
+                const preferencesData = await preferencesResponse.json();
+                setAvailablePreferences(preferencesData);
+            } catch (error) {
+                console.error("Ошибка загрузки данных профиля:", error);
+                setMessage("Не удалось загрузить данные профиля.");
+            }
         };
 
-        fetchUserData();
+        fetchProfileData();
     }, []);
 
     const handleAvatarSelect = (avatar) => {
         setNewAvatar(avatar);
     };
 
-    const handlePreferenceToggle = (option) => {
+    const handlePreferenceToggle = (id) => {
         setPreferences((prev) =>
-            prev.includes(option)
-                ? prev.filter((item) => item !== option)
-                : [...prev, option]
+            prev.includes(id) ? prev.filter((prefId) => prefId !== id) : [...prev, id]
         );
     };
 
-    const handleSaveChanges = async () => {
-        const updatedUser = { ...user, avatar: newAvatar, preferences };
+    const handleSubmit = async () => {
+        try {
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (!user || !user.token) {
+                setMessage("Пользователь не авторизован");
+                return;
+            }
 
-        await fetch(`http://localhost:5000/users/5d0e`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(updatedUser),
-        });
+            const response = await fetch(UPDATE_PROFILE_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${user.token}`,
+                },
+                body: JSON.stringify({
+                    avatarId: avatars.indexOf(newAvatar)+1,
+                    preferencesIds: preferences,
+                }),
+            });
 
-        setCurrentAvatar(newAvatar);
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Ошибка обновления профиля");
+            }
 
-        navigate("/ProfilePage");
+            setMessage("Профиль успешно обновлён!");
+            navigate("/ProfilePage");
+        } catch (error) {
+            console.error("Ошибка обновления профиля:", error);
+            setMessage(error.message || "Не удалось обновить профиль.");
+        }
     };
 
     return (
         <div className="edit-profile-container">
-            <h1>Редактировать</h1>
+            <h1>Редактировать профиль</h1>
+            {message && <p className="message">{message}</p>}
+
             <div className="avatar-section">
-                <div className="avatar-wrapper">
-                    <div className="circle-edit">
-                        <img src={newAvatar} alt="Новая аватарка" className="avatar-img" />
+                <h2>Аватарка</h2>
+                <div className="avatar-preview">
+                    <div>
+                        <p>Старая:</p>
+                        {currentAvatar && (
+                            <img
+                                src={"http://localhost:8080/static" + currentAvatar}
+                                alt="Current Avatar"
+                                className="avatar-img"
+                            />
+                        )}
                     </div>
-                    <p className="avatar-label">новая</p>
+                    <div>
+                        <p>Новая:</p>
+                        {newAvatar && (
+                            <img
+                                src={AVATAR_PATH + newAvatar}
+                                alt="New Avatar"
+                                className="avatar-img"
+                            />
+                        )}
+                    </div>
                 </div>
-                <div className="avatar-wrapper">
-                    <div className="circle-edit">
-                        <img src={currentAvatar} alt="Старая аватарка" className="avatar-img" />
-                    </div>
-                    <p className="avatar-label">старая</p>
+
+                <div className="avatar-list">
+                    {avatars.map((avatar, index) => (
+                        <img
+                            key={index}
+                            src={AVATAR_PATH + avatar}
+                            alt={`Avatar ${index}`}
+                            className={`avatar-option ${
+                                newAvatar === avatar ? "selected" : ""
+                            }`}
+                            onClick={() => handleAvatarSelect(avatar)}
+                        />
+                    ))}
                 </div>
-            </div>
-            <h2>Выбрать аватарку</h2>
-            <div className="avatar-grid">
-                {avatarOptions.map((avatar, index) => (
-                    <div
-                        key={index}
-                        className="circle-edit avatar-option"
-                        onClick={() => handleAvatarSelect(avatar)}
-                    >
-                        <img src={avatar} alt={`Аватар ${index + 1}`} className="avatar-img" />
-                    </div>
-                ))}
             </div>
 
-            <h2>Предпочтения</h2>
-            <div className="preferences-buttons">
-                {options.map((option) => (
-                    <button
-                        type="button"
-                        key={option.id}
-                        className={`preference-button ${
-                            preferences.includes(option.label) ? "active" : ""
-                        }`}
-                        onClick={() => handlePreferenceToggle(option.label)}
-                    >
-                        {option.label}
-                    </button>
-                ))}
+            <div className="preferences-section">
+                <h2>Предпочтения</h2>
+                <div className="preferences-list">
+                    {availablePreferences.map((option) => (
+                        <button
+                            key={option.id}
+                            className={`preference-button ${
+                                preferences.includes(option.id) ? "active" : ""
+                            }`}
+                            onClick={() => handlePreferenceToggle(option.id)}
+                        >
+                            {option.name}
+                        </button>
+                    ))}
+                </div>
             </div>
 
-            <button onClick={handleSaveChanges} className="submit-button-edit">Сохранить изменения</button>
+            <button className="save-button" onClick={handleSubmit}>
+                Сохранить изменения
+            </button>
+            <div className="bottom-spacer"></div>
         </div>
     );
 };
