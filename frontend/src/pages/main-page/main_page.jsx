@@ -28,7 +28,7 @@ const MainPage = () => {
 
                 console.log("Route ID: ", routeId);
 
-                navigate(`/main_page/mapOfTheDay/${routeId}`);
+                navigate(`/map/${routeId}`);
             } else {
                 throw new Error("Route not found or API error.");
             }
@@ -51,7 +51,7 @@ const MainPage = () => {
             <header style={styles.header}>
                 <img
                     src="https://img.icons8.com/?size=100&id=6904&format=png&color=000000"
-                    alt="History Icon"
+                    alt="UserHistory Icon"
                     style={styles.icon}
                     onClick={handleButtonClickHistory}
                 />

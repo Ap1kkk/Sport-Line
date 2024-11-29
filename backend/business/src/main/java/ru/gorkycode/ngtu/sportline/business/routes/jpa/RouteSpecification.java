@@ -33,25 +33,11 @@ public class RouteSpecification {
                         root.get("difficulty").in(filter.getDifficulties()));
             }
 
-            // Фильтр по строгому совпадению категорий
+            // Фильтр по категориям
             if (filter.getCategoryIds() != null && !filter.getCategoryIds().isEmpty()) {
-                // Подзапрос для проверки наличия всех категорий
-                Subquery<Long> subquery = query.subquery(Long.class);
-                Root<Route> subRoot = subquery.from(Route.class);
-                Join<Route, Category> subCategories = subRoot.join("categories");
-
-                // Условие для проверки совпадения всех категорий
-                subquery.select(subRoot.get("id"))
-                        .where(subRoot.get("id").in(root.get("id")),
-                                subCategories.get("id").in(filter.getCategoryIds()))
-                        .groupBy(subRoot.get("id"))
-                        .having(criteriaBuilder.equal(
-                                criteriaBuilder.countDistinct(subCategories.get("id")),
-                                filter.getCategoryIds().size()
-                        ));
-
+                Join<Route, Category> categories = root.join("categories");
                 predicate = criteriaBuilder.and(predicate,
-                        criteriaBuilder.exists(subquery));
+                        categories.get("id").in(filter.getCategoryIds()));
             }
 
             // Фильтр по длительности

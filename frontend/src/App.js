@@ -7,14 +7,13 @@ import Favorites from "./pages/favorites/favorites";
 import Authorization from "./pages/Authorization/Authorization";
 import Register from "./pages/Register/Register";
 import Preferences from "./pages/Preferences/Preferences";
-import Filters from "./pages/Filters/Filters";
 import RoutesOnMap from "./pages/mapRoutes/routesOnMap";
-import MapOfTheDay from "./pages/mapRoutes/mapOfTheDay";
 import Statistics from "./pages/all-profile-pages/StatisticsPage/StatisticsPage";
 import Achievements from "./pages/all-profile-pages/AchievementsPage/AchievementsPage";
 import RouteHistory from "./pages/all-profile-pages/RouteHistoryPage/RouteHistoryPage";
 import EditProfile from "./pages/all-profile-pages/EditProfilePage/EditProfilePage";
 import Admin_workbench from "./pages/admin-page/admin_workbench";
+import Recommendation from "./pages/Filters/Recommendation";
 
 function App() {
     return (
@@ -28,9 +27,8 @@ function App() {
                         <Route path="/login" element={<Authorization/>}/>
                         <Route path="/register" element={<Register/>}/>
                         <Route path="/register/preferences" element={<Preferences/>}/>
-                        <Route path="/filters" element={<Filters/>}/>
-                        <Route path="/map" element={<RoutesOnMap/>}/>
-                        <Route path="/main_page/mapOfTheDay/:routeId" element={<MapOfTheDay />}/>
+                        <Route path="/filters" element={<Recommendation/>}/>
+                        <Route path="/map/:routeId" element={<RoutesOnMap/>}/>
                         <Route path="/ProfilePage" element={<Profile />}/>
                         <Route path="/StatisticsPage" element={<Statistics />} />
                         <Route path="/AchievementsPage" element={<Achievements />} />

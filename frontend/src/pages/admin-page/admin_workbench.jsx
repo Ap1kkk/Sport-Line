@@ -152,6 +152,10 @@ const Admin_workbench = () => {
             alert("Введите название маршрута и добавьте минимум две точки.");
             return;
         }
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user || !user.token) {
+            throw new Error("Authorization token is missing.");
+        }
 
         if (nameError) {
             alert("Пожалуйста, исправьте ошибки перед сохранением.");
@@ -160,14 +164,12 @@ const Admin_workbench = () => {
 
         try {
             const checkpoints = points.map(([latitude, longitude], index) => ({
-                id: 0,
                 index,
                 latitude,
                 longitude,
             }));
 
             const routeData = {
-                id: 0,
                 name: routeName,
                 description,
                 difficulty,
@@ -185,6 +187,7 @@ const Admin_workbench = () => {
             const response = await fetch(API_ROUTE_URL, {
                 method: "POST",
                 headers: {
+                    Authorization: `Bearer ${user.token}`,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(routeData),

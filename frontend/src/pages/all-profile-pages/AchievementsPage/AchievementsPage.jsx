@@ -112,6 +112,7 @@ const AchievementsPage = () => {
                     </div>
                 ))}
             </div>
+            <div class="bottom-spacer"></div>
         </div>
     );
 };
