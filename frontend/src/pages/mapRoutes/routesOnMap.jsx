@@ -123,10 +123,12 @@ const RoutesOnMap = () => {
         let watchId;
         const startWatching = () => {
             if (navigator.geolocation) {
+                console.log("navigator.geolocation.watchPosition(position)");
                 watchId = navigator.geolocation.watchPosition(
                     (position) => {
                         const { latitude, longitude } = position.coords;
                         setCoords([latitude, longitude]);
+                        console.log(latitude, longitude);
                         if (mapInstance) {
                             mapInstance.setCenter([latitude, longitude], 16);
                         }
@@ -136,9 +138,9 @@ const RoutesOnMap = () => {
                         alert("Не удалось получить вашу геопозицию.");
                     },
                     {
-                        enableHighAccuracy: false,
+                        enableHighAccuracy: true,
                         maximumAge: 0,
-                        timeout: 5000,
+                        timeout: 1000,
                     }
                 );
             } else {
@@ -146,6 +148,7 @@ const RoutesOnMap = () => {
             }
         };
         startWatching();
+        console.log("Начало отслеживани");
         return () => {
             if (watchId) navigator.geolocation.clearWatch(watchId);
         };
