@@ -21,4 +21,5 @@ public class StatisticsDto {
     private long averageRouteDuration;
     private int favouriteRoutesCount;
     private int travelledRoutesCount;
+    private int incompleteRoutes;
 }

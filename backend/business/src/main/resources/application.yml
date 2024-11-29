@@ -49,7 +49,12 @@ security:
   cors:
     allowed-origin: ${server.protocol}://${server.host}:3000
 
+clients:
+  analytics:
+    url: ${server.protocol}://${server.host}:8000/analytics
+
 logging:
   level:
+    feign: DEBUG
     root: INFO
     ru.gorkycode.ngtu.sportline: DEBUG
