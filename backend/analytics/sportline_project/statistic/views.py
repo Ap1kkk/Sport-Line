@@ -40,7 +40,7 @@ def get_user_statistics(request):
             COALESCE(SUM(c.count), 0) AS total_checkpoints,
             COALESCE(AVG(r.distance), 0) AS average_route_distance,
             COALESCE(AVG(r.duration), 0) AS average_route_duration,
-            COALESCE((
+            COALESCE(( 
                 SELECT COUNT(*) 
                 FROM user_favourite_routes ufr
                 WHERE ufr.user_id = %s
@@ -62,17 +62,17 @@ def get_user_statistics(request):
             cursor.execute(query, [user_id, user_id, start_date, end_date])
             row = cursor.fetchone()
 
-        # Формируем JSON-ответ
+        # Формируем JSON-ответ с целыми числами
         response_data = {
-            "totalDistance": row[0],
-            "totalSteps": row[1],
-            "totalDuration": row[2],
-            "totalCheckpoints": row[3],
-            "averageRouteDistance": row[4],
-            "averageRouteDuration": row[5],
-            "favouriteRoutesCount": row[6],
-            "travelledRoutesCount": row[7],
-            "incompleteRoutes": row[8]
+            "totalDistance": int(row[0]),
+            "totalSteps": int(row[1]),
+            "totalDuration": int(row[2]),
+            "totalCheckpoints": int(row[3]),
+            "averageRouteDistance": int(row[4]),
+            "averageRouteDuration": int(row[5]),
+            "favouriteRoutesCount": int(row[6]),
+            "travelledRoutesCount": int(row[7]),
+            "incompleteRoutes": int(row[8])
         }
 
         return JsonResponse(response_data)
