@@ -18,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserRoutesController {
 
-    private final RouteFaker routeFaker;
     private final UserRouteService userRouteService;
 
     @PostMapping("/history")
