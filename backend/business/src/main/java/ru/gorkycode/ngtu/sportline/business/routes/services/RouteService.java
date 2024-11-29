@@ -16,6 +16,7 @@ import ru.gorkycode.ngtu.sportline.business.file.enums.ApplicationTargetDirector
 import ru.gorkycode.ngtu.sportline.business.file.enums.DefaultTargetDirectory;
 import ru.gorkycode.ngtu.sportline.business.routes.RouteValidator;
 import ru.gorkycode.ngtu.sportline.business.routes.dto.GetRecommendationRoutesDto;
+import ru.gorkycode.ngtu.sportline.business.routes.dto.RecommendationRoutesDto;
 import ru.gorkycode.ngtu.sportline.business.routes.dto.RouteDto;
 import ru.gorkycode.ngtu.sportline.business.routes.jpa.RouteFilter;
 import ru.gorkycode.ngtu.sportline.business.routes.jpa.RouteRepository;
@@ -27,6 +28,7 @@ import ru.gorkycode.ngtu.sportline.business.system.exceptions.classes.validation
 import ru.gorkycode.ngtu.sportline.business.user.UserService;
 import ru.gorkycode.ngtu.sportline.business.user.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -120,7 +122,14 @@ public class RouteService {
                 .userId(currentUser.getId())
                 .filter(filter)
                 .build();
-        analyticsClient.getRecommendations(dto);
-        return null;
+        RecommendationRoutesDto recommendations = analyticsClient.getRecommendations(dto);
+
+        List<Long> recommendationIds = recommendations.getRecommendations();
+        if(recommendationIds == null || recommendations.getRecommendations().isEmpty()) {
+            log.warn("[Route]: recommendations were empty");
+            return getPopular(limit);
+        }
+
+        return repository.findAllById(recommendationIds);
     }
 }

@@ -20,6 +20,6 @@ public interface AnalyticsClient {
     @PostMapping(value = "/statistic")
     StatisticsDto getStatistics(@RequestBody GetStatisticsDto dto);
 
-    @GetMapping(value = "/recommendations", consumes = {APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/recommendations/")
     RecommendationRoutesDto getRecommendations(@RequestBody GetRecommendationRoutesDto dto);
 }
