@@ -56,8 +56,10 @@ services:
       SPRING_DATASOURCE_DATABASE_HOST: *db-host
       SPRING_DATASOURCE_DATABASE_PORT: 5432
       SPRING_DATASOURCE_DATABASE_NAME: *project-name
-      SECURITY_CORS_ALLOWED_ORIGIN: http://localhost:3000
 
+      SECURITY_CORS_ALLOWED_ORIGIN: "*"
+
+      MVC_RESOURCE_PATH_PATTERN: "/static/image/**"
 
     volumes:
       - ./uploads:/app/uploads
@@ -83,4 +85,4 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./nginx/frontend:/etc/nginx/conf.d
+      - ./nginx:/etc/nginx/conf.d

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {Link} from "react-router-dom";
 import "./ProfilePage.css";
 
-const  USER_INFORMATION_URL = "http://localhost:8080/api/v1/user/profile";
+const  USER_INFORMATION_URL = "/api/v1/user/profile";
 
 const ProfilePage = () => {
     const [profile, setProfile] = useState({
@@ -45,7 +45,7 @@ const ProfilePage = () => {
                 </div>
                 <div className="circle large-circle">
                     <img
-                        src={"http://localhost:8080/static"+profile.user.avatar.path}
+                        src={"/static/image"+profile.user.avatar.path}
                         alt="Аватар"
                         className="avatar-img"
                     />

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./AchievementsPage.css";
 
-const USER_ACHIEVEMENTS_URL = "http://localhost:8080/api/v1/user/achievements";
+const USER_ACHIEVEMENTS_URL = "/api/v1/user/achievements";
 
 const AchievementsPage = () => {
     const [achievements, setAchievements] = useState([]);

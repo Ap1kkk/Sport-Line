@@ -5,6 +5,6 @@ package ru.gorkycode.ngtu.sportline.business.routes.model.history;
  */
 public enum HistoryRouteStatus {
     STARTED,
-    LEAVED,
+    LEAVED, // left
     FINISHED
 }

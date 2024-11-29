@@ -10,10 +10,10 @@ FROM node:lts-alpine3.20
 
 WORKDIR /app
 RUN ls
-COPY --from=build /app/src/dist ./
+COPY --from=build /app/src/build ./
 CMD node server/server.mjs
 
 FROM nginx:stable-alpine3.19
 
-COPY --from=build /app/src/dist /usr/share/nginx/html
+COPY --from=build /app/src/build /usr/share/nginx/html
 #LABEL org.opencontainers.image.source=https://github.com/Ap1kkk/Sport-Line

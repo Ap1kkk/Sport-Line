@@ -16,7 +16,7 @@ const MainPage = () => {
             if (!user || !user.token) {
                 throw new Error("Authorization token is missing.");
             }
-            const response = await fetch("http://localhost:8080/api/v1/route/daily", {
+            const response = await fetch("/api/v1/route/daily", {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${user.token}`,

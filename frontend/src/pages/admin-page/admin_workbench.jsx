@@ -1,8 +1,8 @@
 import { YMaps, Map, Placemark } from '@pbe/react-yandex-maps';
 import React, { useEffect, useState } from "react";
 
-const API_ROUTE_URL = "http://localhost:8080/api/v1/admin/route/create";
-const API_ROUTE_URL_CATEGORIES = "http://localhost:8080/api/v1/category/all";
+const API_ROUTE_URL = "/api/v1/admin/route/create";
+const API_ROUTE_URL_CATEGORIES = "/api/v1/category/all";
 
 const Admin_workbench = () => {
     const [mapInstance, setMapInstance] = useState(null);

@@ -16,8 +16,8 @@ const RecommendationFilteredRoutes = ({ filters, searchQuery }) => {
                 }
 
                 const endpoint = searchQuery
-                    ? `http://localhost:8080/api/v1/route/search?query=${encodeURIComponent(searchQuery)}`
-                    : "http://localhost:8080/api/v1/route/recommended-filtered?limit=10";
+                    ? `/api/v1/route/search?query=${encodeURIComponent(searchQuery)}`
+                    : "/api/v1/route/recommended-filtered?limit=10";
 
                 const response = await fetch(endpoint, {
                     method: "POST",

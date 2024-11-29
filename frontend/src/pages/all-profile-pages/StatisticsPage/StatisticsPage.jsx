@@ -25,7 +25,7 @@ const StatisticsPage = () => {
             }
 
             // Формируем URL с параметром запроса
-            const url = `http://localhost:8080/api/v1/user/statistics?period=${period}`;
+            const url = `/api/v1/user/statistics?period=${period}`;
 
             console.log("Отправляем запрос с URL:", url);
 

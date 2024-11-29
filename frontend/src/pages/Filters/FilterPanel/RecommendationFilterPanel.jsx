@@ -22,7 +22,7 @@ const RecommendationFilterPanel = ({ filters, onApply }) => {
                     throw new Error("Отсутствует токен авторизации");
                 }
 
-                const response = await fetch("http://localhost:8080/api/v1/category/all", {
+                const response = await fetch("/api/v1/category/all", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",

@@ -41,7 +41,7 @@ spring:
 mvc:
   date-format: "yyyy-MM-dd"
   resource-location: "/uploads/"
-  resource-path-pattern: "/static/**"
+  resource-path-pattern: "/static/image/**"
 
 security:
   jwt:

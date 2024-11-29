@@ -34,7 +34,7 @@ const UserHistory = () => {
         const fetchCategories = async () => {
             try {
                 const user = JSON.parse(localStorage.getItem("user"));
-                const response = await fetch("http://localhost:8080/api/v1/category/all", {
+                const response = await fetch("/api/v1/category/all", {
                     method: "GET",
                     headers: {
                         Authorization: `Bearer ${user.token}`,
@@ -59,8 +59,8 @@ const UserHistory = () => {
         try {
             const user = JSON.parse(localStorage.getItem("user"));
             const endpoint = debouncedQuery
-                ? `http://localhost:8080/api/v1/route/search?query=${encodeURIComponent(debouncedQuery)}`
-                : "http://localhost:8080/api/v1/user/routes/history";
+                ? `/api/v1/route/search?query=${encodeURIComponent(debouncedQuery)}`
+                : "/api/v1/user/routes/history";
 
             const response = await fetch(endpoint, {
                 method: "POST",

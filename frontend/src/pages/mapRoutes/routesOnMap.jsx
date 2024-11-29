@@ -16,12 +16,12 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
     return R * c; // Расстояние в метрах
 };
 
-const API_ROUTE_NAME = "http://localhost:8080/api/v1/route";
-const API_START_URL = "http://localhost:8080/api/v1/user/routes/start";
-const API_LEAVE_URL = "http://localhost:8080/api/v1/user/routes/leave";
-const API_FINISH_URL = "http://localhost:8080/api/v1/user/routes/finish";
-const API_LIKE_URL = "http://localhost:8080/api/v1/user/routes/like";
-const API_UNLIKE_URL = "http://localhost:8080/api/v1/user/routes/unlike";
+const API_ROUTE_NAME = "/api/v1/route";
+const API_START_URL = "/api/v1/user/routes/start";
+const API_LEAVE_URL = "/api/v1/user/routes/leave";
+const API_FINISH_URL = "/api/v1/user/routes/finish";
+const API_LIKE_URL = "/api/v1/user/routes/like";
+const API_UNLIKE_URL = "/api/v1/user/routes/unlike";
 
 const RoutesOnMap = () => {
     const { routeId } = useParams();
@@ -274,6 +274,7 @@ const RoutesOnMap = () => {
     };
 
     const handleStart = () => {
+        console.log("Handle start. Coords: " + coords)
         if (!isTooFar) {
             setIsStarted(true);
             setErrorMessage("");

@@ -16,7 +16,7 @@ const Preferences = () => {
                     throw new Error("Пользователь не авторизован");
                 }
 
-                const response = await fetch("http://localhost:8080/api/v1/category/all", {
+                const response = await fetch("/api/v1/category/all", {
                     method: "GET",
                     headers: {
                         "Authorization": `Bearer ${user.token}`,
@@ -64,7 +64,7 @@ const Preferences = () => {
             console.log("Отправляемые предпочтения:", preferences);
             console.log("Токен:", user.token);
 
-            const response = await fetch("http://localhost:8080/api/v1/user/choose-preferences", {
+            const response = await fetch("/api/v1/user/choose-preferences", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

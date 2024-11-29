@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./EditProfilePage.css";
 
-const USER_PROFILE_URL = "http://localhost:8080/api/v1/user/profile";
-const UPDATE_PROFILE_URL = "http://localhost:8080/api/v1/user/edit";
-const AVATAR_PATH = "http://localhost:8080/static/avatars";
+const USER_PROFILE_URL = "/api/v1/user/profile";
+const UPDATE_PROFILE_URL = "/api/v1/user/edit";
+const AVATAR_PATH = "/static/avatars";
 
 const EditProfilePage = () => {
     const [currentAvatar, setCurrentAvatar] = useState(null);
@@ -49,7 +49,7 @@ const EditProfilePage = () => {
 
                 // Fetch available preferences
                 const preferencesResponse = await fetch(
-                    "http://localhost:8080/api/v1/category/all",
+                    "/api/v1/category/all",
                     {
                         method: "GET",
                         headers: {
@@ -123,7 +123,7 @@ const EditProfilePage = () => {
                         <p>Старая:</p>
                         {currentAvatar && (
                             <img
-                                src={"http://localhost:8080/static" + currentAvatar}
+                                src={"/static" + currentAvatar}
                                 alt="Current Avatar"
                                 className="avatar-img"
                             />

@@ -19,7 +19,7 @@ const FilterPopularRoutes = ({ filters, onApply }) => {
 
                 console.log("Токен авторизации:", user.token);
 
-                const response = await fetch("http://localhost:8080/api/v1/category/all", {
+                const response = await fetch("/api/v1/category/all", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
