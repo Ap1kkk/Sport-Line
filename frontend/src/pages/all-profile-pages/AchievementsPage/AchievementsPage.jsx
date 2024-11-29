@@ -1,104 +1,56 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "./AchievementsPage.css";
 
-const achievementsData = [
-    {
-        id: 1,
-        image: "achievements1.png",
-        title: "Новичок",
-        description: "пройти 5 маршрутов",
-        total: 5,
-    },
-    {
-        id: 2,
-        image: "achievements2.png",
-        title: "Романтик",
-        description: "посетить 5 маршрутов с видом на закат",
-        total: 5,
-    },
-    {
-        id: 3,
-        image: "achievements3.png",
-        title: "Спортсмен",
-        description: "участвовать в 5 спортивных маршрутах",
-        total: 5,
-    },
-    {
-        id: 4,
-        image: "achievements4.png",
-        title: "Ночная прогулка",
-        description: "пройти маршрут после полуночи",
-        total: 1,
-    },
-    {
-        id: 5,
-        image: "achievements5.png",
-        title: "Путешественник",
-        description: "пройти маршруты в 5 разных городах",
-        total: 5,
-    },
-    {
-        id: 6,
-        image: "achievements6.png",
-        title: "Завсегдатай",
-        description: "пройти один маршрут 10 раз",
-        total: 10,
-    },
-];
+const USER_ACHIEVEMENTS_URL = "http://localhost:8080/api/v1/user/achievements";
 
 const AchievementsPage = () => {
-    const [user, setUser] = useState(null);
-    const [progress, setProgress] = useState([]);
+    const [achievements, setAchievements] = useState([]);
 
     useEffect(() => {
-        // Загружаем данные пользователя
-        const fetchUser = async () => {
-            try {
-                const response = await fetch("http://localhost:5000/users/5d0e"); // Здесь замените ID на актуальный
-                const data = await response.json();
-                setUser(data);
 
-                // Загружаем прогресс ачивок пользователя
-                if (data.achievementsProgress) {
-                    setProgress(data.achievementsProgress);
-                }
+        const fetchAchievements = async () => {
+            const user = JSON.parse(localStorage.getItem("user"));
+            try {
+                const response = await fetch(USER_ACHIEVEMENTS_URL, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${user.token}`,
+                    },
+                });
+                const data = await response.json();
+                const mappedAchievements = data.map((item) => ({
+                    id: item.id,
+                    name: item.name,
+                    description: item.description,
+                    progress: item.progress,
+                    goal: item.goal,
+                    progressPercent: Math.round((item.progress / item.goal) * 100),
+                }));
+                setAchievements(mappedAchievements);
             } catch (error) {
-                console.error("Ошибка загрузки пользователя:", error);
+                console.error("Ошибка загрузки достижений:", error);
             }
         };
-
-        fetchUser();
+        fetchAchievements();
     }, []);
-
-    if (!user) {
-        return <p>Загрузка...</p>;
-    }
-
-    // Объединяем статическую информацию с прогрессом пользователя
-    const mergedData = achievementsData.map((achievement) => {
-        const progressData = progress.find((p) => p.id === achievement.id) || {
-            current: 0,
-        };
-        const progressPercent = Math.round(
-            (progressData.current / achievement.total) * 100
-        );
-        return { ...achievement, current: progressData.current, progressPercent };
-    });
 
     return (
         <div className="achievements-container">
-            <h1 className="achievements-title">Достижения</h1>
+            <div className="header">
+                <h1>Достижения</h1>
+            </div>
             <div className="achievements-grid">
-                {mergedData.map((achievement) => (
+                {achievements.map((achievement) => (
                     <div key={achievement.id} className="achievement-card">
-                        <div className="achievement-icon">
+                        <div className="circle large-circle">
                             <img
-                                src={`/AchievementsPicture/${achievement.image}`}
-                                alt={achievement.title}
+                                src={`/AchievementsPicture/achievements${achievement.id}.png`}
+                                alt={achievement.name}
                                 className="achievement-img"
                             />
                         </div>
-                        <h3 className="achievement-title">{achievement.title}</h3>
+                        <h3 className="achievement-title">{achievement.name}</h3>
                         <p className="achievement-description">{achievement.description}</p>
                         <div className="progress-bar">
                             <div
@@ -112,7 +64,6 @@ const AchievementsPage = () => {
                     </div>
                 ))}
             </div>
-            <div class="bottom-spacer"></div>
         </div>
     );
 };
