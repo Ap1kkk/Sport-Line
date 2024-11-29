@@ -52,11 +52,11 @@ public class RouteController {
 
     @PostMapping("/recommended")
     public List<Route> getRecommended(@RequestParam int limit) {
-        return routeFaker.get(5, 10);
+        return routeService.getRecommended(limit);
     }
 
     @PostMapping("/recommended-filtered")
     public List<Route> getRecommendedWithFilters(@RequestParam int limit, @RequestBody RouteFilter filter) {
-        return routeFaker.get(5, 10);
+        return routeService.getRecommended(limit, filter);
     }
 }

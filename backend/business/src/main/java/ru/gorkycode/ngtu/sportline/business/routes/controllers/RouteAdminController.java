@@ -24,7 +24,7 @@ public class RouteAdminController {
     }
 
     @PostMapping("/create")
-    public Route create(@RequestBody RouteDto dto) {
+    public Route create(@ModelAttribute RouteDto dto) {
         return routeService.create(dto);
     }
 }

@@ -1,14 +1,21 @@
 package ru.gorkycode.ngtu.sportline.business.routes.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.gorkycode.ngtu.sportline.business.analytics.AnalyticsClient;
+import ru.gorkycode.ngtu.sportline.business.auth.AuthService;
 import ru.gorkycode.ngtu.sportline.business.category.Category;
 import ru.gorkycode.ngtu.sportline.business.category.CategoryService;
+import ru.gorkycode.ngtu.sportline.business.file.FileService;
+import ru.gorkycode.ngtu.sportline.business.file.enums.ApplicationTargetDirectory;
+import ru.gorkycode.ngtu.sportline.business.file.enums.DefaultTargetDirectory;
 import ru.gorkycode.ngtu.sportline.business.routes.RouteValidator;
+import ru.gorkycode.ngtu.sportline.business.routes.dto.GetRecommendationRoutesDto;
 import ru.gorkycode.ngtu.sportline.business.routes.dto.RouteDto;
 import ru.gorkycode.ngtu.sportline.business.routes.jpa.RouteFilter;
 import ru.gorkycode.ngtu.sportline.business.routes.jpa.RouteRepository;
@@ -18,6 +25,7 @@ import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
 import ru.gorkycode.ngtu.sportline.business.system.exceptions.classes.data.EntityNotFoundException;
 import ru.gorkycode.ngtu.sportline.business.system.exceptions.classes.validation.ValidationException;
 import ru.gorkycode.ngtu.sportline.business.user.UserService;
+import ru.gorkycode.ngtu.sportline.business.user.model.User;
 
 import java.util.List;
 
@@ -33,7 +41,10 @@ public class RouteService {
     private final RouteMapper mapper;
     private final RouteValidator validator;
 
+    private final AuthService authService;
     private final CategoryService categoryService;
+    private final AnalyticsClient analyticsClient;
+    private final FileService fileService;
 
     public List<Route> getAll() {
         return repository.findAll();
@@ -51,6 +62,7 @@ public class RouteService {
     }
 
     @Transactional
+    @SneakyThrows
     public Route create(RouteDto dto) {
         log.debug("[Route] : Creating route from dto: {}", dto);
 
@@ -58,6 +70,8 @@ public class RouteService {
         mapper.linkCheckpoints(entity);
         List<Category> categories = categoryService.getByIds(dto.getCategoryIds());
         entity.setCategories(categories);
+        String imagePath = fileService.upload(dto.getImage(), ApplicationTargetDirectory.ROUTE_IMAGES);
+        entity.setImagePath(imagePath);
 
         return repository.save(entity);
     }
@@ -92,5 +106,21 @@ public class RouteService {
             throw ValidationException.builder().message("Search search query must not be blank").build();
 
         return repository.findAll(RouteSpecification.withFilters(searchQuery, filter));
+    }
+
+    public List<Route> getRecommended(int limit) {
+        return getRecommended(limit, null);
+    }
+
+    public List<Route> getRecommended(int limit, RouteFilter filter) {
+        User currentUser = authService.getCurrentUser();
+
+        GetRecommendationRoutesDto dto = GetRecommendationRoutesDto
+                .builder()
+                .userId(currentUser.getId())
+                .filter(filter)
+                .build();
+        analyticsClient.getRecommendations(dto);
+        return null;
     }
 }

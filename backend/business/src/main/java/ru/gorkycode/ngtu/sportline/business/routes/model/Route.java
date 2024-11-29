@@ -51,6 +51,8 @@ public class Route extends BaseEntity {
     @Column(name = "created_at")
     private ZonedDateTime createdAt = ZonedDateTime.now();
 
+    @Column(name = "image_path")
+    private String imagePath;
     // Relationships
 
     @OneToMany
@@ -72,24 +74,24 @@ public class Route extends BaseEntity {
     @ToString.Exclude
     private List<Checkpoint> checkpoints;
 
-    @ImageToHandle(
-            id = "image",
-            directory = ApplicationTargetDirectory.Values.ACHIEVEMENTS_IMAGES_VALUE
-    )
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "route_images",
-            joinColumns = @JoinColumn(
-                    name = "route_id",
-                    referencedColumnName = "id"
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name = "image_id",
-                    referencedColumnName = "id"
-            )
-    )
-    @ToString.Exclude
-    private Image image;
+//    @ImageToHandle(
+//            id = "image",
+//            directory = ApplicationTargetDirectory.Values.ACHIEVEMENTS_IMAGES_VALUE
+//    )
+//    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//    @JoinTable(
+//            name = "route_images",
+//            joinColumns = @JoinColumn(
+//                    name = "route_id",
+//                    referencedColumnName = "id"
+//            ),
+//            inverseJoinColumns = @JoinColumn(
+//                    name = "image_id",
+//                    referencedColumnName = "id"
+//            )
+//    )
+//    @ToString.Exclude
+//    private Image image;
 
     @Override
     public final boolean equals(Object o) {

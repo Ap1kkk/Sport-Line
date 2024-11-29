@@ -29,6 +29,7 @@ CREATE TABLE routes (
     id          BIGSERIAL PRIMARY KEY,
     name        VARCHAR,
     description TEXT,
+    image_path TEXT,
     difficulty  VARCHAR,
     distance    BIGINT,
     duration    BIGINT,

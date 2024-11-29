@@ -3,6 +3,7 @@ package ru.gorkycode.ngtu.sportline.business.routes.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 import ru.gorkycode.ngtu.sportline.business.checkpoint.Checkpoint;
 import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
 import ru.gorkycode.ngtu.sportline.business.routes.model.RouteDifficulty;
@@ -24,4 +25,5 @@ public class RouteDto {
     private Long duration;
     private List<Long> categoryIds;
     private List<Checkpoint> checkpoints;
+    private MultipartFile image;
 }

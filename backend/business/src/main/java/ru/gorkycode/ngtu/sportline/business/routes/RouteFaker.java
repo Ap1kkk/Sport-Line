@@ -33,7 +33,7 @@ public class RouteFaker {
                 .difficulty(RouteDifficulty.values()[faker.random().nextInt(RouteDifficulty.values().length)])
                 .distance(faker.random().nextLong(10000L))
                 .duration(faker.random().nextLong(10000L))
-                .image(imageFaker.get())
+//                .image(imageFaker.get())
                 .checkpoints(checkpointFaker.get(3, 5))
                 .categories(categoryFaker.get(2, 4))
                 .build();

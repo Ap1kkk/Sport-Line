@@ -4,6 +4,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import ru.gorkycode.ngtu.sportline.business.routes.dto.GetRecommendationRoutesDto;
 import ru.gorkycode.ngtu.sportline.business.routes.dto.RecommendationRoutesDto;
 import ru.gorkycode.ngtu.sportline.business.statisctics.GetStatisticsDto;
 import ru.gorkycode.ngtu.sportline.business.statisctics.StatisticsDto;
@@ -20,5 +21,5 @@ public interface AnalyticsClient {
     StatisticsDto getStatistics(@RequestBody GetStatisticsDto dto);
 
     @GetMapping(value = "/recommendations", consumes = {APPLICATION_JSON_VALUE})
-    RecommendationRoutesDto getRecommendations();
+    RecommendationRoutesDto getRecommendations(@RequestBody GetRecommendationRoutesDto dto);
 }
