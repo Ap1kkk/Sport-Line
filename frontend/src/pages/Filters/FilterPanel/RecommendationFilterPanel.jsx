@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReactSlider from "react-slider";
 import "./RecommendationFilterPanel.css";
+import {BASE_API_URL} from "../../../constants/globals";
 
 const RecommendationFilterPanel = ({ filters, onApply }) => {
     const [tempFilters, setTempFilters] = useState({
@@ -22,7 +23,7 @@ const RecommendationFilterPanel = ({ filters, onApply }) => {
                     throw new Error("Отсутствует токен авторизации");
                 }
 
-                const response = await fetch("/api/v1/category/all", {
+                const response = await fetch(`${BASE_API_URL}/category/all`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",

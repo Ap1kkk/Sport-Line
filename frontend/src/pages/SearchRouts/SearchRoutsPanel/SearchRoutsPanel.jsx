@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReactSlider from "react-slider";
 import "./SearchRoutsPanel.css";
+import {BASE_API_URL} from "../../../constants/globals";
 
 const SearchRoutsPanel = ({ filters, onApply }) => {
     const [tempFilters, setTempFilters] = useState(filters);
@@ -16,7 +17,7 @@ const SearchRoutsPanel = ({ filters, onApply }) => {
                     throw new Error("Отсутствует токен авторизации");
                 }
 
-                const response = await fetch("http://localhost:8080/api/v1/category/all", {
+                const response = await fetch(`${BASE_API_URL}/category/all`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",

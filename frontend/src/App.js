@@ -3,12 +3,11 @@ import {BrowserRouter as Router, Link, Navigate, Route, Routes, useLocation} fro
 
 import MainPage from "./pages/main-page/main_page";
 import Profile from "./pages/all-profile-pages/ProfilePage/ProfilePage";
-import Favorites from "./pages/favorites/favorites";
 import Authorization from "./pages/Authorization/Authorization";
 import Register from "./pages/Register/Register";
 import Preferences from "./pages/Preferences/Preferences";
 import RoutesOnMap from "./pages/mapRoutes/routesOnMap";
-import Statistics from "./pages/all-profile-pages/StatisticsPage/StatisticsPage";
+import StatisticsPage from "./pages/all-profile-pages/StatisticsPage/StatisticsPage";
 import Achievements from "./pages/all-profile-pages/AchievementsPage/AchievementsPage";
 import RouteHistory from "./pages/all-profile-pages/RouteHistoryPage/RouteHistoryPage";
 import EditProfile from "./pages/all-profile-pages/EditProfilePage/EditProfilePage";
@@ -18,7 +17,6 @@ import PopularRouts from "./pages/PopularRouts/PopularRouts";
 import UserHistory from "./pages/UserHistory/UserHistory";
 import UserLikeRouts from "./pages/UserLikeRouts/UserLikeRouts";
 import SearchRouts from "./pages/SearchRouts/SearchRouts";
-import StatisticsPage from "./pages/all-profile-pages/StatisticsPage/StatisticsPage";
 
 function App() {
     return (
@@ -46,10 +44,9 @@ function AppComponent() {
                 <Route path="/map/:routeId" element={<RoutesOnMap/>}/>
 
                 <Route path="/main_page/recomendation" element={<Recommendation/>}/>
-                <Route path="/favourites" element={<Favorites/>}/>
+                <Route path="/favourites" element={<UserLikeRouts/>}/>
                 <Route path="/main_page/popular" element={<PopularRouts/>}/>
                 <Route path="/history" element={<UserHistory/>}/>
-                <Route path="/user_like" element={<UserLikeRouts/>}/>
                 <Route path="/search_page" element={<SearchRouts />}/>
 
                 <Route path="/profile_page" element={<Profile />}/>

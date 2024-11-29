@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Register.css';
 import { Link, useNavigate } from "react-router-dom";
+import {BASE_API_URL} from "../../constants/globals";
 
 const Register = () => {
     const [username, setUsername] = useState('');
@@ -74,7 +75,7 @@ const Register = () => {
                 role: "USER",
             };
 
-            const response = await fetch('/api/v1/auth/register', {
+            const response = await fetch(`${BASE_API_URL}/auth/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),

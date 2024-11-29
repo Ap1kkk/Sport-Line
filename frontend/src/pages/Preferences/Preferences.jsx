@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Preferences.css';
 import { useNavigate } from "react-router-dom";
+import {BASE_API_URL} from "../../constants/globals";
 
 const Preferences = () => {
     const [options, setOptions] = useState([]); // Доступные категории из БД
@@ -16,7 +17,7 @@ const Preferences = () => {
                     throw new Error("Пользователь не авторизован");
                 }
 
-                const response = await fetch("/api/v1/category/all", {
+                const response = await fetch(`${BASE_API_URL}/category/all`, {
                     method: "GET",
                     headers: {
                         "Authorization": `Bearer ${user.token}`,
@@ -64,7 +65,7 @@ const Preferences = () => {
             console.log("Отправляемые предпочтения:", preferences);
             console.log("Токен:", user.token);
 
-            const response = await fetch("/api/v1/user/choose-preferences", {
+            const response = await fetch("${BASE_API_URL}/user/choose-preferences", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

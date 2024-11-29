@@ -5,6 +5,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { Icon32SearchOutline, Icon56ClockCircleDashedOutline } from "@vkontakte/icons";
 import { Card, CardScroll, Group } from "@vkontakte/vkui";
 import "@vkontakte/vkui/dist/vkui.css";
+import {BASE_API_URL} from "../../constants/globals";
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -16,7 +17,7 @@ const MainPage = () => {
             if (!user || !user.token) {
                 throw new Error("Authorization token is missing.");
             }
-            const response = await fetch("/api/v1/route/daily", {
+            const response = await fetch(`${BASE_API_URL}/route/daily`, {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${user.token}`,
@@ -47,199 +48,145 @@ const MainPage = () => {
 
     return (
         <div style={styles.container}>
-            {/* Header */}
             <header style={styles.header}>
                 <Icon56ClockCircleDashedOutline
                     onClick={handleButtonClickHistory}
                     width={32}
                     height={32}
                     color="#2975CC"
+                    style={styles.iconfromvk}
                 />
                 <h1 style={styles.title}>SportLine</h1>
-                <Icon32SearchOutline onClick={handleButtonClickSearch} width={32} height={32} color="#2975CC" />
+                <Icon32SearchOutline
+                    onClick={handleButtonClickSearch}
+                    width={32}
+                    height={32}
+                    color="#2975CC"
+                    style={styles.iconfromvk}
+                />
             </header>
-
-            {/* Map Section */}
-            <div style={styles.mapSection}>
-                <div style={styles.mapOverlay}>
-                    <h2 style={styles.mapTitle}>Маршрут дня</h2>
-                    <button style={styles.mapButton} onClick={handleButtonClickRouteOfTheDay}>
-                        Поехали
-                    </button>
-                </div>
-            </div>
-
-            {/* Recommended Routes */}
-            <div style={styles.recommendedSection}>
-                <h3 style={styles.sectionTitle}>Рекомендуемые</h3>
-                <Group>
-                    <CardScroll>
-                        {Array.from({ length: 4 }).map((_, index) => (
-                            <Card key={index} size="l" style={styles.recommendedCard}>
-                                <div>
-                                    <img
-                                        src={`https://via.placeholder.com/150?text=Route+${index + 1}`}
-                                        alt={`Route ${index + 1}`}
-                                        style={styles.cardImage}
-                                    />
-                                    <p style={styles.cardText}>Название маршрута</p>
-                                </div>
-                            </Card>
-                        ))}
-                    </CardScroll>
-                </Group>
-            </div>
-
-            {/* Popular Section */}
-            <div style={styles.popularSection}>
-                <h3 style={styles.sectionTitle}>Популярные</h3>
-                {Array.from({ length: 2 }).map((_, index) => (
-                    <div key={index} style={styles.popularCard}>
-                        <img
-                            src={`https://via.placeholder.com/150?text=Popular+Route+${index + 1}`}
-                            alt={`Popular Route ${index + 1}`}
-                            style={styles.popularImage}
-                        />
-                        <div style={styles.popularContent}>
-                            <p style={styles.popularTitle}>Название маршрута</p>
-                            <p style={styles.popularInfo}>Расстояние - 5 480</p>
-                            <p style={styles.popularInfo}>Сложность - Средняя</p>
-                            <div style={styles.tagContainer}>
-                                <span style={styles.tag}>Бег</span>
-                                <span style={styles.tag}>Туризм</span>
-                                <span style={styles.tag}>С питомцем</span>
-                            </div>
-                        </div>
+            <content styles = {styles.content}>
+                <div style={styles.mapSection}>
+                    <div style={styles.mapOverlay}>
+                        <h2 style={styles.mapTitle}>Маршрут дня</h2>
+                        <button style={styles.mapButton} onClick={handleButtonClickRouteOfTheDay}>
+                            Поехали
+                        </button>
                     </div>
-                ))}
-            </div>
+                </div>
+
+                {/* Recommended Routes */}
+                <div style={styles.recommendedSection}>
+                    <h3 style={styles.sectionTitle}>Рекомендуемые</h3>
+                    <Group>
+                        <CardScroll>
+                            {Array.from({length: 4}).map((_, index) => (
+                                <Card key={index} size="l" style={styles.recommendedCard}>
+                                    <div>
+                                        <img
+                                            src={`https://via.placeholder.com/150?text=Route+${index + 1}`}
+                                            alt={`Route ${index + 1}`}
+                                            style={styles.cardImage}
+                                        />
+                                        <p style={styles.cardText}>Название маршрута</p>
+                                    </div>
+                                </Card>
+                            ))}
+                        </CardScroll>
+                    </Group>
+                </div>
+
+                {/* Recommended Routes */}
+                <div style={styles.recommendedSection}>
+                    <h3 style={styles.sectionTitle}>Рекомендуемые</h3>
+                    <Group>
+                        <CardScroll>
+                            {Array.from({length: 4}).map((_, index) => (
+                                <Card key={index} size="l" style={styles.recommendedCard}>
+                                    <div>
+                                        <img
+                                            src={`https://via.placeholder.com/150?text=Route+${index + 1}`}
+                                            alt={`Route ${index + 1}`}
+                                            style={styles.cardImage}
+                                        />
+                                        <p style={styles.cardText}>Название маршрута</p>
+                                    </div>
+                                </Card>
+                            ))}
+                        </CardScroll>
+                    </Group>
+                </div>
+
+            </content>
         </div>
     );
 };
 
 const styles = {
     container: {
-        display: "flex",
-        flexDirection: "column",
-        backgroundColor: "#ffffff",
-        height: "100vh",
-        overflowY: "auto",
-    },
-    header: {
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "10px 20px",
-        backgroundColor: "#ffffff",
-        borderBottom: "1px solid #ddd",
-    },
-    title: {
-        fontSize: "20px",
-        fontWeight: "bold",
-        color: "#333",
-    },
-    mapSection: {
         position: "relative",
         width: "100%",
-        height: "300px",
-        backgroundImage: "url('./iconsVk/галвный_экран_осн_02.jpg')",
+        backgroundImage: "url('/iconsVk/галвный_экран_осн_04.jpg')",
         backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
     },
-    mapOverlay: {
+    header: {
         position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        textAlign: "center",
-        color: "#fff",
-    },
-    mapTitle: {
-        fontSize: "24px",
-        fontWeight: "bold",
-        marginBottom: "10px",
-    },
-    mapButton: {
+        justifyContent: "space-between",
+        backgroundColor: "rgba(255, 255, 255)",
+        top: 0,
+        width: "100%",
         padding: "10px 20px",
-        fontSize: "16px",
-        backgroundColor: "#007BFF",
-        color: "#ffffff",
-        border: "none",
-        borderRadius: "8px",
+        display: "flex",
+        alignItems: "center",
+        zIndex: 1,
+    },
+    iconfromvk: {
         cursor: "pointer",
     },
-    recommendedSection: {
-        padding: "10px 20px",
-        marginTop: "10px",
-    },
-    sectionTitle: {
-        fontSize: "18px",
+    title: {
+        fontSize: "30px",
         fontWeight: "bold",
-        marginBottom: "10px",
+        color: "#333",
+        letterSpacing: "1px",
     },
-    recommendedCard: {
-        height: "120px",
+    content: {
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#f3f3f3",
-        borderRadius: "8px",
-        overflow: "hidden",
-        marginRight: "10px",
+        paddingTop: "200px",
+        paddingBottom: "200px",
     },
-    cardImage: {
+    mapSection: {
+        display: "flex",
         width: "100%",
-        height: "80px",
-        objectFit: "cover",
+        justifyContent: "center",
     },
-    cardText: {
-        fontSize: "14px",
-        fontWeight: "bold",
-        marginTop: "5px",
-    },
-    popularSection: {
-        padding: "10px 20px",
-    },
-    popularCard: {
+    mapOverlay: {
         display: "flex",
-        marginBottom: "15px",
-        backgroundColor: "#f3f3f3",
-        borderRadius: "8px",
-        overflow: "hidden",
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    },
-    popularImage: {
-        width: "120px",
-        height: "120px",
-        objectFit: "cover",
-    },
-    popularContent: {
-        padding: "10px",
-        flex: 1,
-    },
-    popularTitle: {
-        fontSize: "16px",
-        fontWeight: "bold",
-    },
-    popularInfo: {
-        fontSize: "14px",
-        color: "#555",
-        marginTop: "5px",
-    },
-    tagContainer: {
-        marginTop: "10px",
-        display: "flex",
-        flexWrap: "wrap",
-        gap: "5px",
-    },
-    tag: {
-        padding: "5px 10px",
-        backgroundColor: "#007BFF",
         color: "#fff",
-        borderRadius: "15px",
-        fontSize: "12px",
+        flexDirection: "column",
+        position: "absolute",
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        paddingBottom: "200px",
+},
+    mapTitle: {
+        fontSize: "24px",
+        fontWeight: "regular",
+        marginBottom: "15px",
     },
+    mapButton: {
+        padding: "15px 30px",
+        fontSize: "18px",
+        backgroundColor: "#2975CC",
+        color: "#ffffff",
+        border: "none",
+        borderRadius: "10px",
+        cursor: "pointer",
+        transition: "background-color 0.3s ease",
+    },
+
 };
 
 export default MainPage;
