@@ -1,87 +1,84 @@
 import React, { useState, useEffect } from "react";
+import UserLikeRoutsPanel from "./UserLikeRoutsPanel/UserLikeRoutsPanel";
+import UserLikeRoutsFiltered from "./UserLikeRoutsFiltered/UserLikeRoutsFiltered";
 import "./UserLikeRouts.css";
 
-const UserLikeRoutes = () => {
-    const [likedRoutes, setLikedRoutes] = useState([]); // Любимые маршруты
-    const [loading, setLoading] = useState(true); // Состояние загрузки
-    const [error, setError] = useState(null); // Ошибка загрузки
+const UserLikeRouts = () => {
+    const [categories, setCategories] = useState([]);
+    const [filteredRoutes, setFilteredRoutes] = useState([]);
+    const [filterParams, setFilterParams] = useState({
+        order: "ASC",
+        difficulties: [],
+        categoryIds: [],
+        durationFrom: 0,
+        durationTo: 0,
+        distanceFrom: 0,
+        distanceTo: 0,
+    });
 
     useEffect(() => {
-        const fetchLikedRoutes = async () => {
+        const fetchCategories = async () => {
             try {
-                setLoading(true);
                 const user = JSON.parse(localStorage.getItem("user"));
-                if (!user || !user.token) {
-                    throw new Error("Отсутствует токен авторизации");
-                }
-
-                const response = await fetch("http://localhost:8080/api/v1/user/routes/history", {
+                const response = await fetch("http://localhost:8080/api/v1/category/all", {
                     method: "GET",
                     headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${user.token}`,
+                        Authorization: `Bearer ${user.token}`,
                     },
                 });
-
-                if (!response.ok) {
-                    throw new Error("Ошибка загрузки любимых маршрутов пользователя");
-                }
-
+                if (!response.ok) throw new Error("Не удалось загрузить категории маршрутов");
                 const data = await response.json();
-                setLikedRoutes(data);
+                setCategories(data);
             } catch (error) {
-                console.error("Ошибка:", error);
-                setError("Не удалось загрузить любимые маршруты");
-            } finally {
-                setLoading(false);
+                console.error("Ошибка при загрузке категорий:", error);
             }
         };
 
-        fetchLikedRoutes();
+        fetchCategories();
     }, []);
 
-    const truncateText = (text, maxLength) => {
-        if (!text) return "";
-        return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
+    const handleFilterChange = (newFilters) => {
+        setFilterParams(newFilters);
     };
 
+    const fetchFilteredRoutes = async () => {
+        try {
+            const user = JSON.parse(localStorage.getItem("user"));
+            const response = await fetch(
+                "http://localhost:8080/api/v1/user/routes/favourite",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                    body: JSON.stringify(filterParams),
+                }
+            );
+
+            if (!response.ok) throw new Error("Ошибка фильтрации маршрутов");
+            const data = await response.json();
+            setFilteredRoutes(data);
+        } catch (error) {
+            console.error("Ошибка при загрузке маршрутов:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchFilteredRoutes();
+    }, [filterParams]);
+
     return (
-        <div className="_app">
-            <h1 className="_routes-title">Любимые маршруты</h1>
-
-            {loading && <p>Загрузка маршрутов...</p>}
-            {error && <p style={{ color: "red" }}>{error}</p>}
-
-            <div className="_routes-list">
-                {!loading && !error && likedRoutes.length === 0 && (
-                    <p>Нет любимых маршрутов для отображения.</p>
-                )}
-
-                {!loading &&
-                    !error &&
-                    likedRoutes.map((route) => (
-                        <div key={route.id} className="_route-card">
-                            {/* Название маршрута */}
-                            <h2 className="_route-name">{truncateText(route.name, 20)}</h2>
-
-                            {/* Описание маршрута */}
-                            <p className="_route-description">{truncateText(route.description, 50)}</p>
-
-                            {/* Сложность маршрута */}
-                            <p className="_route-difficulty">Сложность: {route.difficulty}</p>
-
-                            {/* Категории маршрута */}
-                            <p className="_route-categories">
-                                Категории:{" "}
-                                {route.categories && route.categories.length > 0
-                                    ? route.categories.map((category) => category.name).join(", ")
-                                    : "Нет категорий"}
-                            </p>
-                        </div>
-                    ))}
-            </div>
+        <div className="user-like-routs-container">
+            <h1>Избранные маршруты</h1>
+            <UserLikeRoutsPanel
+                categories={categories}
+                onFilterChange={handleFilterChange}
+                currentFilters={filterParams}
+            />
+            <UserLikeRoutsFiltered routes={filteredRoutes} />
         </div>
     );
 };
 
-export default UserLikeRoutes;
+export default UserLikeRouts;

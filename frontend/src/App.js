@@ -14,13 +14,19 @@ import RouteHistory from "./pages/all-profile-pages/RouteHistoryPage/RouteHistor
 import EditProfile from "./pages/all-profile-pages/EditProfilePage/EditProfilePage";
 import Admin_workbench from "./pages/admin-page/admin_workbench";
 import Recommendation from "./pages/Filters/Recommendation";
+import PopularRouts from "./pages/PopularRouts/PopularRouts";
+import UserHistory from "./pages/UserHistory/UserHistory";
+import UserLikeRouts from "./pages/UserLikeRouts/UserLikeRouts";
 
 function App() {
     return (
         <Router>
                     <Routes>
                         <Route path="/" element={<Navigate to="/main_page" replace/>}/>
-
+                        <Route path="/popular" element={<PopularRouts/>}/>
+                        <Route path="/recommendation" element={<Recommendation/>}/>
+                        <Route path="/history" element={<UserHistory/>}/>
+                        <Route path="/userLike" element={<UserLikeRouts/>}/>
                         <Route path="/admin" element={<Admin_workbench/>}/>
                         <Route path="/favourites" element={<Favorites/>}/>
                         <Route path="/main_page" element={<MainPage/>}/>
