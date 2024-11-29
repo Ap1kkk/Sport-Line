@@ -27,6 +27,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'recommendations',  # Только ваше приложение
+    'statistic'
 ]
 class DisableMigrations:
     def __contains__(self, item):

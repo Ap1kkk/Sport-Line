@@ -17,8 +17,10 @@ Including another URLconf
 from django.urls import path, include
 from hello import views
 from recommendations import urls
+from statistic import urls
 urlpatterns = [
     path('hello/', views.hello, name='hello'),
     path('analytics/', include('recommendations.urls')),  # urls из приложения recommendations
+    path('analytics/', include('statistic.urls')),
 
 ]

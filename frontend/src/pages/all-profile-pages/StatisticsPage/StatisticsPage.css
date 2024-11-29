@@ -48,7 +48,4 @@
     text-align: center;
     height: 40px;
 }
-.bottom-spacer {
-    height: 50px; /* Указываем высоту пустого пространства внизу страницы */
-    background: transparent; /* Прозрачный фон */
-}
+
