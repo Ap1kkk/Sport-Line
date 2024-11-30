@@ -1,0 +1,112 @@
+
+.button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.startButton {
+    padding: 10px 10px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.error {
+    color: red;
+}
+
+.errorText {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.routeName {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.errorMessageOverlay {
+    position: fixed;
+    bottom: 250px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 0, 0, 0.8);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+.infoPanel {
+    position: fixed;
+    bottom: 100px;
+    width: 80%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+.progressBarContainer {
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 30px;
+    background-color: #f3f3f3;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.progressBar {
+    height: 100%;
+    background-color: #4caf50;
+    transition: width 0.5s ease;
+}
+
+.progressText {
+    text-align: center;
+    margin-top: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Стили для Progress Bar */
+.containerProgress {
+    height: 20px;
+    width: 100%;
+    background-color: #e0e0df;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.filler {
+    height: 100%;
+    background-color: #007bff;
+    border-radius: inherit;
+    text-align: center;
+    transition: width 0.2s ease-in-out;
+}
+
+.label {
+    padding: 5px;
+    color: white;
+    font-weight: bold;
+}
