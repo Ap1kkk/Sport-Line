@@ -25,11 +25,10 @@ function App() {
     );
 }
 
-const showNavigation = !["/login", "/register"].includes(location.pathname);
-
 function AppComponent() {
     const location = useLocation();
     const isActive = (path) => location.pathname === path;
+    const showNavigation = !["/login", "/register", "/map"].includes(location.pathname);
     return (
         <>
             <Routes>
