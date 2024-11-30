@@ -141,10 +141,13 @@ const MainPage = () => {
                             <CardScroll>
                                 {recommendedRoutes.map((route) => (
                                     <Card key={route.id} size="l" className="recommendedCard">
-                                        <div className="cardRec">
-                                            <img src={BASE_STATIC_URL + route.imagePath} alt={route.name} className="cardImage" />
-                                            <p className="cardText">{route.name}</p>
-                                        </div>
+                                        <a href={`/map/${route.id}`}>
+                                            <div className="cardRec">
+                                                <img src={BASE_STATIC_URL + route.imagePath} alt={route.name}
+                                                     className="cardImage"/>
+                                                <p className="cardText">{route.name}</p>
+                                            </div>
+                                        </a>
                                     </Card>
                                 ))}
                             </CardScroll>
@@ -160,17 +163,19 @@ const MainPage = () => {
 
                 {popularRoutes.map((route) => (
                     <div key={route.id} className="popularCard">
-                        <img src={BASE_STATIC_URL + route.imagePath} alt={route.name} className="popularImage" />
-                        <div className="popularContent">
-                            <p className="popularTitle">{route.name}</p>
-                            <p className="popularInfo">Расстояние - {route.distance} м</p>
-                            <p className="popularInfo">Сложность - {route.difficulty}</p>
-                            <div className="tagContainer">
-                                {renderTags(route.categories)}
+                        <a href={`/map/${route.id}`}>
+                            <img src={BASE_STATIC_URL + route.imagePath} alt={route.name} className="popularImage"/>
+                            <div className="popularContent">
+                                <p className="popularTitle">{route.name}</p>
+                                <p className="popularInfo">Расстояние - {route.distance} м</p>
+                                <p className="popularInfo">Сложность - {route.difficulty}</p>
+                                <div className="tagContainer">
+                                    {renderTags(route.categories)}
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
-                ))}
+                    ))}
             </div>
         </div>
     );
