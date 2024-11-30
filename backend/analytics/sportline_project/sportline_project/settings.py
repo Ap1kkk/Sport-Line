@@ -27,6 +27,7 @@ ALLOWED_HOSTS = ["localhost",
                      "127.0.0.1",
                      "backend-analytics",
                      "backend-analytics:8000",
+                     "https://0237-89-109-14-130.ngrok-free.app"
                      ]
 
 INSTALLED_APPS = [
