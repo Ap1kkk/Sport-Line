@@ -187,8 +187,7 @@ a {
 
 .map-NiNo{
     margin-top: -20px;
-    background: url('../../../public/iconsVk/галвный_экран_осн_02.jpg') no-repeat center center fixed; 
-    background-size: cover;
+    background: url('../../../public/iconsVk/галвный_экран_осн_02.jpg');
 }
 
 .main_title{
