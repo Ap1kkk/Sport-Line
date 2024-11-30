@@ -37,7 +37,7 @@ const ProfilePage = () => {
 
     return (
         <div className="profile-container">
-            <div className="header">
+            <div className="header_menu">
                 <div></div>
                 <h1>Профиль</h1>
                 <div>

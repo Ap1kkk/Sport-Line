@@ -13,16 +13,16 @@
     z-index: 999;
     width: 100%;
     display: flex;
-    justify-content: center;
     align-items: center;
     padding: 10px 20px;
     background-color: #ffffff;
     border-bottom: 1px solid #ddd;
+    justify-content: space-between;
 }
 
 .title {
-    font-size: 20px;
     font-weight: bold;
+    margin-top: 20px;
     color: #333;
 }
 

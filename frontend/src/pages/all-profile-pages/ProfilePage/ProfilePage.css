@@ -16,13 +16,13 @@
 }
 
 /* Заголовок профиля */
-.header {
+.header_menu {
     display: grid;
     grid-template-columns: 25% 50% 25%;
     margin-bottom: 20px;
 }
 
-.header h1 {
+.header_menu h1 {
     font-size: 24px;
     color: #333;
     margin: 0;
