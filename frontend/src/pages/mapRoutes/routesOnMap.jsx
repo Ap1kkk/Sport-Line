@@ -173,37 +173,58 @@ const RoutesOnMap = () => {
     }, [mapInstance]);
 
     // Функция для вычисления оставшегося расстояния до всех непройденных чекпоинтов
-    const calculateRemainingDistance = () => {
+    const findNextCheckpoint = () => {
         if (routeData) {
-            let remainingDistance = 0;
             const remainingCheckpoints = routeData.checkpoints.filter(
                 (checkpoint, index) => !completedCheckpoints.includes(index)
             );
+            return remainingCheckpoints[0]; // Возвращаем первый непройденный чекпоинт
+        }
+        return null;
+    };
 
-            // Добавляем расстояние от текущей позиции до каждого непройденного чекпоинта
-            remainingCheckpoints.forEach((checkpoint) => {
+    const updateProgress = () => {
+        if (routeData && routeDistance > 0 && coords.length === 2) {
+            let totalDistanceCovered = 0;
+            let completedCheckpointsCount = 0;
+
+            // Пройденное расстояние между точками
+            routeData.checkpoints.forEach((checkpoint, index) => {
                 const { latitude, longitude } = checkpoint;
-                remainingDistance += calculateDistance(coords[0], coords[1], latitude, longitude);
+                const distanceToCheckpoint = calculateDistance(coords[0], coords[1], latitude, longitude);
+
+                // Если пользователь близок к чекпоинту, считаем его пройденным
+                if (distanceToCheckpoint < 60 && !completedCheckpoints.includes(index)) {
+                    setCompletedCheckpoints((prev) => [...prev, index]);
+                    completedCheckpointsCount++;
+                }
+
+                // Добавляем расстояние до текущего чекпоинта
+                if (completedCheckpointsCount <= index) {
+                    totalDistanceCovered += distanceToCheckpoint;
+                }
             });
 
-            return remainingDistance;
+            // Расстояние, которое осталось пройти
+            const remainingDistance = routeDistance - totalDistanceCovered;
+
+            // Прогресс
+            const newProgress = Math.max(0, Math.min(100, (totalDistanceCovered / routeDistance) * 100));
+            setProgress(newProgress);
         }
-        return 0;
     };
+
+    useEffect(() => {
+        if (isStarted) {
+            updateProgress();
+        }
+    }, [coords, isStarted, completedCheckpoints, routeData]);
 
     useEffect(() => {
         if (routeData && coords.length === 2 && routeDistance > 0) {
             try {
                 const startLat = routeData.checkpoints[0]?.latitude;
                 const startLon = routeData.checkpoints[0]?.longitude;
-                const lastCheckpoint = routeData.checkpoints[routeData.checkpoints.length - 1];
-                const lastLat = lastCheckpoint.latitude;
-                const lastLon = lastCheckpoint.longitude;
-
-                const distanceToEnd = calculateRemainingDistance(coords[0], coords[1], lastLat, lastLon);
-
-                const progress = Math.max(0, Math.min(100, (1 - distanceToEnd / routeDistance) * 100));
-                setProgress(progress);
 
                 if (startLat && startLon) {
                     const distanceToStart = calculateDistance(coords[0], coords[1], startLat, startLon);
@@ -223,18 +244,6 @@ const RoutesOnMap = () => {
             }
         }
     }, [routeDistance, coords, routeData]);
-
-    const updateProgress = () => {
-        if (routeData && routeDistance > 0) {
-            const remainingDistance = calculateRemainingDistance();
-
-            // Рассчитываем прогресс, используя инверсную логику (оставшееся расстояние от общего расстояния)
-            const remainingProgress = (remainingDistance / routeDistance) * 100;
-
-            // Прогресс будет уменьшаться, когда оставшееся расстояние уменьшается
-            setProgress(remainingProgress); // Инверсный прогресс
-        }
-    };
 
     const sendStartRoute = async (progressData) => {
         try {
@@ -320,12 +329,10 @@ const RoutesOnMap = () => {
         console.log("Handle start. Coords: " + coords)
         if (!isTooFar) {
             setIsStarted(true);
-            setErrorMessage("");
             sendStartRoute()
 
             setProgress(0);
             setCompletedCheckpoints([]);
-            updateProgress();
         }
     };
 

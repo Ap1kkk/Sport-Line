@@ -65,7 +65,7 @@ const Preferences = () => {
             console.log("Отправляемые предпочтения:", preferences);
             console.log("Токен:", user.token);
 
-            const response = await fetch("${BASE_API_URL}/user/choose-preferences", {
+            const response = await fetch(`${BASE_API_URL}/user/choose-preferences`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

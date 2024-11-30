@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./EditProfilePage.css";
-import {BASE_API_URL} from "../../../constants/globals";
+import { BASE_API_URL } from "../../../constants/globals";
 
 const USER_PROFILE_URL = `${BASE_API_URL}/user/profile`;
 const UPDATE_PROFILE_URL = `${BASE_API_URL}/user/edit`;
@@ -34,7 +34,7 @@ const EditProfilePage = () => {
                 });
                 const data = await response.json();
                 setCurrentAvatar(data.user.avatar.path);
-                setPreferences(data.user.preferences.map(pref => pref.id));
+                setPreferences(data.user.preferences.map((pref) => pref.id));
 
                 // Fetch available avatars
                 setAvatars([
@@ -75,7 +75,9 @@ const EditProfilePage = () => {
 
     const handlePreferenceToggle = (id) => {
         setPreferences((prev) =>
-            prev.includes(id) ? prev.filter((prefId) => prefId !== id) : [...prev, id]
+            prev.includes(id)
+                ? prev.filter((prefId) => prefId !== id)
+                : [...prev, id]
         );
     };
 
@@ -94,7 +96,7 @@ const EditProfilePage = () => {
                     Authorization: `Bearer ${user.token}`,
                 },
                 body: JSON.stringify({
-                    avatarId: avatars.indexOf(newAvatar)+1,
+                    avatarId: avatars.indexOf(newAvatar) + 1,
                     preferencesIds: preferences,
                 }),
             });
@@ -103,6 +105,15 @@ const EditProfilePage = () => {
                 const errorData = await response.json();
                 throw new Error(errorData.message || "Ошибка обновления профиля");
             }
+
+            const updatedUser = await response.json();
+
+            // Обновление данных в localStorage
+            const updatedUserData = {
+                ...user,
+                preferences: updatedUser.preferences, // Обновляем предпочтения
+            };
+            localStorage.setItem("user", JSON.stringify(updatedUserData));
 
             setMessage("Профиль успешно обновлён!");
             navigate("/ProfilePage");

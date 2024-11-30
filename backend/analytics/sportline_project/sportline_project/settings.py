@@ -23,7 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security settings
 SECRET_KEY = 'django-insecure-nlj3e%8l^uzbo-(#si!y3f05d0xjk446=03uzyjx**qri$ho(!'
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost",
+                     "127.0.0.1",
+                     "backend-analytics",
+                     "backend-analytics:8000",
+                     ]
 
 INSTALLED_APPS = [
     'recommendations',  # Только ваше приложение

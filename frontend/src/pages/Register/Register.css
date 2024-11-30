@@ -8,7 +8,7 @@
     min-height: 100vh;
     width: 100%; /* Занимает всю ширину экрана */
     padding: 20px;
-    box-sizing: border-box; /* Учитывает padding при расчете ширины */
+    box-sizing: border-box;
 }
 
 .title {
@@ -21,7 +21,7 @@
 }
 
 .form {
-    width: 100%; /* Форма растягивается на всю ширину родителя */
+    width: 100%;
     max-width: 360px; /* Ограничение для больших экранов */
     display: flex;
     flex-direction: column;
@@ -76,9 +76,9 @@ label {
     width: 100%;
     padding: 12px;
     font-size: 16px;
-    color: #007bff; /* Синяя надпись */
-    background-color: #ffffff; /* Белый фон */
-    border: 2px solid #007bff; /* Тонкие голубые границы */
+    color: #007bff;
+    background-color: #ffffff;
+    border: 2px solid #007bff;
     border-radius: 10px;
     cursor: pointer;
     text-align: center;
@@ -86,22 +86,22 @@ label {
 }
 
 .button:hover {
-    background-color: #007bff; /* Синий фон при наведении */
-    color: #ffffff; /* Белый текст при наведении */
-    border-color: #0056b3; /* Более насыщенный синий для границы */
+    background-color: #007bff;
+    color: #ffffff;
+    border-color: #0056b3;
 }
 
 .button:active {
-    background-color: #0056b3; /* Темно-синий при клике */
+    background-color: #0056b3;
     color: #ffffff;
     border-color: #003f7f;
 }
 
 .button:disabled {
-    background-color: #f8f9fa; /* Серый фон для неактивной кнопки */
-    color: #ced4da; /* Серый текст */
-    border-color: #ced4da; /* Серые границы */
-    cursor: not-allowed; /* Курсор для неактивного состояния */
+    background-color: #f8f9fa;
+    color: #ced4da;
+    border-color: #ced4da;
+    cursor: not-allowed;
 }
 
 

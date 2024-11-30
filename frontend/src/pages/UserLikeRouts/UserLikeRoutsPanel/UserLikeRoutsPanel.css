@@ -1,24 +1,88 @@
 .filter-panel {
-    margin-bottom: 20px;
     padding: 20px;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .filter-section {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
+.filter-section label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Кнопки сложности */
+.difficulty-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.difficulty-button {
+    padding: 8px 16px;
+    border: 1px solid #2688EB;
+    border-radius: 5px;
+    background-color: white;
+    color: #2688EB;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.difficulty-button.selected {
+    background-color: #2688EB;
+    color: white;
+}
+
+.difficulty-button:hover {
+    background-color: #e0f7fa;
+    color: #2688EB;
+}
+
+/* Кнопки категорий */
+.category-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-start;
+}
+
+.category-button {
+    padding: 8px 12px;
+    border: 1px solid #2688EB;
+    border-radius: 5px;
+    background-color: white;
+    color: #2688EB;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.category-button.selected {
+    background-color: #2688EB;
+    color: white;
+}
+
+.category-button:hover {
+    background-color: #e0f7fa;
+    color: #2688EB;
+}
+
+/* Слайдеры */
 .slider {
     margin: 10px 0;
     height: 8px;
-    border-radius: 4px;
     background: #ddd;
+    border-radius: 4px;
     position: relative;
 }
 
 .track {
-    background: #007bff;
+    background: #2688EB;
     height: 100%;
     border-radius: 4px;
 }
@@ -27,22 +91,31 @@
     height: 20px;
     width: 20px;
     border-radius: 50%;
-    background: #007bff;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: #2688EB;
     color: white;
     font-size: 12px;
     font-weight: bold;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* Кнопка Применить */
 .apply-button {
-    padding: 10px 20px;
-    background-color: blue;
+    display: block;
+    width: 100%;
+    padding: 12px 0;
+    background-color: #2688EB;
     color: white;
     border: none;
     border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.apply-button:hover {
+    background-color: #186aa9;
 }

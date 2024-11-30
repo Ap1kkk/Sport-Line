@@ -1,9 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactSlider from "react-slider";
 import "./UserLikeRoutsPanel.css";
 
 const UserLikeRoutsPanel = ({ categories, onFilterChange, currentFilters }) => {
-    const [filters, setFilters] = useState(currentFilters);
+    const [filters, setFilters] = useState({
+        ...currentFilters,
+        durationFrom: 0,
+        durationTo: 300,
+        distanceFrom: 0,
+        distanceTo: 100,
+    });
+
+    useEffect(() => {
+        // Устанавливаем начальные значения ползунков
+        setFilters((prev) => ({
+            ...prev,
+            durationFrom: 0,
+            durationTo: 300,
+            distanceFrom: 0,
+            distanceTo: 100,
+        }));
+    }, []);
 
     const handleCheckboxChange = (categoryId) => {
         setFilters((prev) => ({
@@ -44,7 +61,7 @@ const UserLikeRoutsPanel = ({ categories, onFilterChange, currentFilters }) => {
                     name="order"
                     value={filters.order}
                     onChange={(e) =>
-                        setFilters((prev) => ({ ...prev, order: e.target.value }))
+                        setFilters((prev) => ({...prev, order: e.target.value}))
                     }
                 >
                     <option value="ASC">По возрастанию</option>
@@ -54,30 +71,19 @@ const UserLikeRoutsPanel = ({ categories, onFilterChange, currentFilters }) => {
 
             <div className="filter-section">
                 <label>Сложность:</label>
-                {["EASY", "MEDIUM", "HARD"].map((difficulty) => (
-                    <label key={difficulty}>
-                        <input
-                            type="checkbox"
-                            checked={filters.difficulties.includes(difficulty)}
-                            onChange={() => handleDifficultiesChange(difficulty)}
-                        />
-                        {difficulty}
-                    </label>
-                ))}
-            </div>
-
-            <div className="filter-section">
-                <label>Категории:</label>
-                {categories.map((category) => (
-                    <label key={category.id}>
-                        <input
-                            type="checkbox"
-                            checked={filters.categoryIds.includes(category.id)}
-                            onChange={() => handleCheckboxChange(category.id)}
-                        />
-                        {category.name}
-                    </label>
-                ))}
+                <div className="difficulty-buttons">
+                    {["EASY", "MEDIUM", "HARD"].map((difficulty) => (
+                        <button
+                            key={difficulty}
+                            className={`difficulty-button ${
+                                filters.difficulties.includes(difficulty) ? "selected" : ""
+                            }`}
+                            onClick={() => handleDifficultiesChange(difficulty)}
+                        >
+                            {difficulty}
+                        </button>
+                    ))}
+                </div>
             </div>
 
             <div className="filter-section">
@@ -114,6 +120,22 @@ const UserLikeRoutsPanel = ({ categories, onFilterChange, currentFilters }) => {
                 />
             </div>
 
+            <div className="filter-section">
+                <label>Категории:</label>
+                <div className="category-buttons">
+                    {categories.map((category) => (
+                        <button
+                            key={category.id}
+                            className={`category-button ${
+                                filters.categoryIds.includes(category.id) ? "selected" : ""
+                            }`}
+                            onClick={() => handleCheckboxChange(category.id)}
+                        >
+                            {category.name}
+                        </button>
+                    ))}
+                </div>
+            </div>
             <button onClick={applyFilters} className="apply-button">
                 Применить
             </button>
