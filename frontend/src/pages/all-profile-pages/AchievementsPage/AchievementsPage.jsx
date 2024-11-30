@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./AchievementsPage.css";
-import {BASE_API_URL} from "../../../constants/globals";
+import {BASE_API_URL, BASE_STATIC_URL} from "../../../constants/globals";
 
 const USER_ACHIEVEMENTS_URL = `${BASE_API_URL}/user/achievements`;
 
@@ -37,7 +37,7 @@ const AchievementsPage = () => {
 
     return (
         <div className="achievements-container">
-            <div className="header">
+            <div className="header_h">
                 <h1>Достижения</h1>
             </div>
             <div className="achievements-grid">
@@ -45,7 +45,7 @@ const AchievementsPage = () => {
                     <div key={achievement.id} className="achievement-card">
                         <div className="circle large-circle">
                             <img
-                                src={`/AchievementsPicture/achievements${achievement.id}.png`}
+                                src={`${BASE_STATIC_URL}/achievements${achievement.id}.png`}
                                 alt={achievement.name}
                                 className="achievement-img"
                             />
