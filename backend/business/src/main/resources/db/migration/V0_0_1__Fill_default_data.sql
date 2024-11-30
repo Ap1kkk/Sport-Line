@@ -5,6 +5,13 @@ INSERT INTO regions(name) VALUES ('Московский район');
 INSERT INTO regions(name) VALUES ('Канавинский район');
 INSERT INTO regions(name) VALUES ('Сормовский район');
 
+INSERT INTO achievements(id, name, description, goal) VALUES (1, 'Первопроходец', 'Завершить 1 маршрут', 0);
+INSERT INTO achievements(id, name, description, goal) VALUES (2, 'Город под подошвой', 'Завершить 20 маршрутов', 0);
+INSERT INTO achievements(id, name, description, goal) VALUES (3, 'Машина', 'Пройти 15 км за день', 0);
+INSERT INTO achievements(id, name, description, goal) VALUES (4, 'Марафонец', 'Пройти 42 км за все время', 0);
+INSERT INTO achievements(id, name, description, goal) VALUES (5, 'Я - скорость', 'Побить личный рекорд маршрута', 0);
+INSERT INTO achievements(id, name, description, goal) VALUES (6, 'Спидранер', 'Пройти 3 маршрута за день', 0);
+
 INSERT INTO user_activity(name) VALUES ('Школьник');
 INSERT INTO user_activity(name) VALUES ('В полном расцвете сил');
 INSERT INTO user_activity(name) VALUES ('Пенсионер');
@@ -85,81 +92,39 @@ INSERT INTO categories(name) VALUES ('По стрит-арту');
 INSERT INTO categories(name) VALUES ('По достопримечательностям');
 
 INSERT INTO routes(name, difficulty, distance, duration, likes, created_at, description)
-    VALUES ('Маршрут #1', 'EASY', 1600, 40, 50, CURRENT_TIMESTAMP, 'Duis eget risus mi. Sed tincidunt lobortis dolor sit amet suscipit. Donec accumsan quis turpis at placerat. Maecenas id magna vel mi viverra eleifend vitae eu arcu. Nunc pulvinar odio a velit facilisis posuere. Quisque sodales sapien sed tortor efficitur, a mattis metus mattis. Aliquam eleifend lectus ut nibh hendrerit, vitae vulputate magna pellentesque. Praesent risus nisl, iaculis ut convallis non, vestibulum nec arcu. Praesent mattis ullamcorper odio, sed aliquam sapien porta vitae. Nulla molestie aliquam arcu at laoreet. Ut vitae velit eget lorem auctor dictum. Vestibulum turpis orci, dignissim et neque sit amet, feugiat facilisis diam. Aliquam est risus, rhoncus non pharetra at, lobortis quis odio. Morbi in ornare mauris.');
+    VALUES ('Изумрудное прямой', 'EASY', 352, 5, 10, CURRENT_TIMESTAMP, 'test1');
 INSERT INTO routes(name, difficulty, distance, duration, likes, created_at, description)
-    VALUES ('Маршрут #2', 'MEDIUM', 2600, 60, 100, CURRENT_TIMESTAMP, 'Duis eget risus mi. Sed tincidunt lobortis dolor sit amet suscipit. Donec accumsan quis turpis at placerat. Maecenas id magna vel mi viverra eleifend vitae eu arcu. Nunc pulvinar odio a velit facilisis posuere. Quisque sodales sapien sed tortor efficitur, a mattis metus mattis. Aliquam eleifend lectus ut nibh hendrerit, vitae vulputate magna pellentesque. Praesent risus nisl, iaculis ut convallis non, vestibulum nec arcu. Praesent mattis ullamcorper odio, sed aliquam sapien porta vitae. Nulla molestie aliquam arcu at laoreet. Ut vitae velit eget lorem auctor dictum. Vestibulum turpis orci, dignissim et neque sit amet, feugiat facilisis diam. Aliquam est risus, rhoncus non pharetra at, lobortis quis odio. Morbi in ornare mauris.');
+    VALUES ('Иземрудное короткий', 'EASY', 277, 5, 10, CURRENT_TIMESTAMP, 'test2');
 INSERT INTO routes(name, difficulty, distance, duration, likes, created_at, description)
-    VALUES ('Маршрут #3', 'HARD', 3600, 80, 150, CURRENT_TIMESTAMP, 'Duis eget risus mi. Sed tincidunt lobortis dolor sit amet suscipit. Donec accumsan quis turpis at placerat. Maecenas id magna vel mi viverra eleifend vitae eu arcu. Nunc pulvinar odio a velit facilisis posuere. Quisque sodales sapien sed tortor efficitur, a mattis metus mattis. Aliquam eleifend lectus ut nibh hendrerit, vitae vulputate magna pellentesque. Praesent risus nisl, iaculis ut convallis non, vestibulum nec arcu. Praesent mattis ullamcorper odio, sed aliquam sapien porta vitae. Nulla molestie aliquam arcu at laoreet. Ut vitae velit eget lorem auctor dictum. Vestibulum turpis orci, dignissim et neque sit amet, feugiat facilisis diam. Aliquam est risus, rhoncus non pharetra at, lobortis quis odio. Morbi in ornare mauris.');
-INSERT INTO routes(name, difficulty, distance, duration, likes, created_at, description)
-    VALUES ('Маршрут #4', 'EASY', 1200, 30, 30, CURRENT_TIMESTAMP, 'Duis eget risus mi. Sed tincidunt lobortis dolor sit amet suscipit. Donec accumsan quis turpis at placerat. Maecenas id magna vel mi viverra eleifend vitae eu arcu. Nunc pulvinar odio a velit facilisis posuere. Quisque sodales sapien sed tortor efficitur, a mattis metus mattis. Aliquam eleifend lectus ut nibh hendrerit, vitae vulputate magna pellentesque. Praesent risus nisl, iaculis ut convallis non, vestibulum nec arcu. Praesent mattis ullamcorper odio, sed aliquam sapien porta vitae. Nulla molestie aliquam arcu at laoreet. Ut vitae velit eget lorem auctor dictum. Vestibulum turpis orci, dignissim et neque sit amet, feugiat facilisis diam. Aliquam est risus, rhoncus non pharetra at, lobortis quis odio. Morbi in ornare mauris.');
-INSERT INTO routes(name, difficulty, distance, duration, likes, created_at, description)
-    VALUES ('Маршрут #5', 'MEDIUM', 2200, 50, 60, CURRENT_TIMESTAMP, 'Duis eget risus mi. Sed tincidunt lobortis dolor sit amet suscipit. Donec accumsan quis turpis at placerat. Maecenas id magna vel mi viverra eleifend vitae eu arcu. Nunc pulvinar odio a velit facilisis posuere. Quisque sodales sapien sed tortor efficitur, a mattis metus mattis. Aliquam eleifend lectus ut nibh hendrerit, vitae vulputate magna pellentesque. Praesent risus nisl, iaculis ut convallis non, vestibulum nec arcu. Praesent mattis ullamcorper odio, sed aliquam sapien porta vitae. Nulla molestie aliquam arcu at laoreet. Ut vitae velit eget lorem auctor dictum. Vestibulum turpis orci, dignissim et neque sit amet, feugiat facilisis diam. Aliquam est risus, rhoncus non pharetra at, lobortis quis odio. Morbi in ornare mauris.');
-INSERT INTO routes(name, difficulty, distance, duration, likes, created_at, description)
-    VALUES ('Маршрут #6', 'HARD', 3200, 70, 90, CURRENT_TIMESTAMP, 'Duis eget risus mi. Sed tincidunt lobortis dolor sit amet suscipit. Donec accumsan quis turpis at placerat. Maecenas id magna vel mi viverra eleifend vitae eu arcu. Nunc pulvinar odio a velit facilisis posuere. Quisque sodales sapien sed tortor efficitur, a mattis metus mattis. Aliquam eleifend lectus ut nibh hendrerit, vitae vulputate magna pellentesque. Praesent risus nisl, iaculis ut convallis non, vestibulum nec arcu. Praesent mattis ullamcorper odio, sed aliquam sapien porta vitae. Nulla molestie aliquam arcu at laoreet. Ut vitae velit eget lorem auctor dictum. Vestibulum turpis orci, dignissim et neque sit amet, feugiat facilisis diam. Aliquam est risus, rhoncus non pharetra at, lobortis quis odio. Morbi in ornare mauris.');
+    VALUES ('Изумрудное с поворотами', 'EASY', 371, 5, 10, CURRENT_TIMESTAMP, 'test3');
 
 INSERT INTO route_categories (route_id, category_id) VALUES (1, 1);
 INSERT INTO route_categories (route_id, category_id) VALUES (1, 2);
-INSERT INTO route_categories (route_id, category_id) VALUES (2, 3);
+INSERT INTO route_categories (route_id, category_id) VALUES (1, 3);
 INSERT INTO route_categories (route_id, category_id) VALUES (2, 4);
-INSERT INTO route_categories (route_id, category_id) VALUES (3, 5);
-INSERT INTO route_categories (route_id, category_id) VALUES (3, 6);
-INSERT INTO route_categories (route_id, category_id) VALUES (4, 7);
-INSERT INTO route_categories (route_id, category_id) VALUES (4, 8);
-INSERT INTO route_categories (route_id, category_id) VALUES (5, 9);
-INSERT INTO route_categories (route_id, category_id) VALUES (5, 10);
-INSERT INTO route_categories (route_id, category_id) VALUES (6, 11);
-INSERT INTO route_categories (route_id, category_id) VALUES (6, 12);
+INSERT INTO route_categories (route_id, category_id) VALUES (2, 5);
+INSERT INTO route_categories (route_id, category_id) VALUES (2, 6);
+INSERT INTO route_categories (route_id, category_id) VALUES (3, 7);
+INSERT INTO route_categories (route_id, category_id) VALUES (3, 8);
+INSERT INTO route_categories (route_id, category_id) VALUES (3, 9);
 
 INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (1, 0, 56.321010361401854, 44.017490434393295);
+    VALUES (1, 0, 56.804317474365234, 43.34415817260742);
 INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (1, 1, 56.321535004258266, 44.02564434979856);
-INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (1, 2, 56.32243952731985, 44.03452934787452);
-INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (1, 3, 56.3247440056495, 44.03564849478144);
+    VALUES (1, 1, 56.80705261230469, 43.34344482421875);
 
 INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (2, 0, 56.321010361401854, 44.017490434393295);
+    VALUES (2, 0, 56.8043327331543, 43.3441162109375);
 INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (2, 1, 56.321535004258266, 44.02564434979856);
+    VALUES (2, 1, 56.804691314697266, 43.34492874145508);
 INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (2, 2, 56.32243952731985, 44.03452934787452);
-INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (2, 3, 56.3247440056495, 44.03564849478144);
+    VALUES (2, 2, 56.804691314697266, 43.34492874145508);
 
 INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (3, 0, 56.321010361401854, 44.017490434393295);
+    VALUES (3, 0, 56.804691314697266, 43.34489059448242);
 INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (3, 1, 56.321535004258266, 44.02564434979856);
+    VALUES (3, 1, 56.803646087646484, 43.34492874145508);
 INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (3, 2, 56.32243952731985, 44.03452934787452);
+    VALUES (3, 2, 56.80421447753906, 43.347389221191406);
 INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (3, 3, 56.3247440056495, 44.03564849478144);
-
-INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (4, 0, 56.321010361401854, 44.017490434393295);
-INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (4, 1, 56.321535004258266, 44.02564434979856);
-INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (4, 2, 56.32243952731985, 44.03452934787452);
-INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (4, 3, 56.3247440056495, 44.03564849478144);
-
-INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (5, 0, 56.321010361401854, 44.017490434393295);
-INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (5, 1, 56.321535004258266, 44.02564434979856);
-INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (5, 2, 56.32243952731985, 44.03452934787452);
-INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (5, 3, 56.3247440056495, 44.03564849478144);
-
-INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (6, 0, 56.321010361401854, 44.017490434393295);
-INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (6, 1, 56.321535004258266, 44.02564434979856);
-INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (6, 2, 56.32243952731985, 44.03452934787452);
-INSERT INTO checkpoints(route_id, index, latitude, longitude)
-    VALUES (6, 3, 56.3247440056495, 44.03564849478144);
+    VALUES (3, 2, 56.80527877807617, 43.34663391113281);

@@ -17,8 +17,12 @@ import ru.gorkycode.ngtu.sportline.business.routes.model.history.HistoryRouteSta
 import ru.gorkycode.ngtu.sportline.business.system.exceptions.classes.data.EntityNotFoundException;
 import ru.gorkycode.ngtu.sportline.business.system.exceptions.classes.validation.ValidationException;
 import ru.gorkycode.ngtu.sportline.business.user.UserRepository;
+import ru.gorkycode.ngtu.sportline.business.user.achievements.UserAchievement;
+import ru.gorkycode.ngtu.sportline.business.user.achievements.UserAchievementService;
 import ru.gorkycode.ngtu.sportline.business.user.model.User;
 
+import java.time.Duration;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +37,7 @@ public class UserRouteService {
     private final AuthService authService;
 
     private final UserRepository userRepository;
+    private final UserAchievementService userAchievementService;
 
     private final RouteService routeService;
     private final HistoryRouteRepository historyRouteRepository;
@@ -88,11 +93,22 @@ public class UserRouteService {
     }
 
     public HistoryRoute leave(Long historyId) {
-        return updateStatus(historyId, HistoryRouteStatus.LEAVED);
+        return historyRouteRepository.save(updateStatus(historyId, HistoryRouteStatus.LEAVED));
     }
 
+    @Transactional
     public HistoryRoute finish(Long historyId) {
-        return updateStatus(historyId, HistoryRouteStatus.FINISHED);
+        HistoryRoute historyRoute = updateStatus(historyId, HistoryRouteStatus.FINISHED);
+
+        ZonedDateTime now = ZonedDateTime.now();
+        historyRoute.setFinishedAt(now);
+        historyRoute.setDelta(Duration.between(historyRoute.getStartedAt(), now));
+
+        historyRouteRepository.saveAndFlush(historyRoute);
+
+        userAchievementService.handleAchievements(historyRoute);
+
+        return historyRoute;
     }
 
     private HistoryRoute updateStatus(Long historyId, HistoryRouteStatus status) {
@@ -105,7 +121,7 @@ public class UserRouteService {
 
         historyRoute.setStatus(status);
 
-        return historyRouteRepository.save(historyRoute);
+        return historyRoute;
     }
 
     public List<Route> getHistory(RouteFilter filter) {

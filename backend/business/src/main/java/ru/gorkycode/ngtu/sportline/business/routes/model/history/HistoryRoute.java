@@ -7,8 +7,10 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.proxy.HibernateProxy;
 import ru.gorkycode.ngtu.sportline.business.common.BaseEntity;
 import ru.gorkycode.ngtu.sportline.business.routes.model.Route;
+import ru.gorkycode.ngtu.sportline.business.system.converters.DurationConverter;
 import ru.gorkycode.ngtu.sportline.business.user.model.User;
 
+import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
@@ -32,6 +34,12 @@ public class HistoryRoute extends BaseEntity {
     @Column(name = "started_at")
     @Builder.Default
     private ZonedDateTime startedAt = ZonedDateTime.now();
+
+    @Column(name = "finished_at")
+    private ZonedDateTime finishedAt;
+
+    @Convert(converter = DurationConverter.class)
+    private Duration delta;
 
     // Relationships
 

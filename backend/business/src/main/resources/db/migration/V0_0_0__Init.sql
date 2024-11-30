@@ -110,13 +110,14 @@ CREATE TABLE user_preferences (
     FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
-CREATE TABLE user_achievements (
+
+CREATE TABLE user_achieved_achievements (
     user_id         BIGSERIAL,
     achievement_id  BIGSERIAL,
-    progress        BIGINT,
+    achieved_at     TIMESTAMP WITH TIME ZONE,
     PRIMARY KEY (user_id, achievement_id),
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (achievement_id) REFERENCES achievements(id)
+    FOREIGN KEY (user_id) references users(id),
+    FOREIGN KEY (achievement_id) references achievements(id)
 );
 
 CREATE TABLE user_favourite_routes (
@@ -133,6 +134,8 @@ CREATE TABLE user_routes_history (
     route_id    BIGSERIAL,
     status      VARCHAR,
     started_at  TIMESTAMP WITH TIME ZONE,
+    finished_at TIMESTAMP WITH TIME ZONE,
+    delta       VARCHAR,
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (route_id) REFERENCES routes(id)
