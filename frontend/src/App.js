@@ -28,7 +28,11 @@ function App() {
 function AppComponent() {
     const location = useLocation();
     const isActive = (path) => location.pathname === path;
-    const showNavigation = !["/login", "/register", "/map", "/map/:routeId"].includes(location.pathname);
+    const showNavigation = !(
+        ["/login", "/register", "/register/preferences","/map"].includes(location.pathname) ||
+        /^\/map\/[^/]+$/.test(location.pathname) // Регулярное выражение для проверки пути вида "/map/:routeId"
+    );
+    
     return (
         <>
             <Routes>
