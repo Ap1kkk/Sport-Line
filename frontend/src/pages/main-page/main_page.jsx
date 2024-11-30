@@ -1,15 +1,64 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Icon32SearchOutline, Icon56ClockCircleDashedOutline } from "@vkontakte/icons";
 import { Card, CardScroll, Group } from "@vkontakte/vkui";
 import "@vkontakte/vkui/dist/vkui.css";
-import './MainPage.css'; // Подключаем файл стилей
+import './MainPage.css';
+import {BASE_API_URL, BASE_STATIC_URL} from "../../constants/globals"; // Подключаем файл стилей
+
+const LIMIT = 5;
 
 const MainPage = () => {
     const navigate = useNavigate();
     const [routeData, setRouteData] = useState(null);
+    const [popularRoutes, setPopularRoutes] = useState([]);
+    const [recommendedRoutes, setRecommendedRoutes] = useState([]);
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const user = JSON.parse(localStorage.getItem("user"));
+                if (!user || !user.token) {
+                    throw new Error("Отсутствует токен авторизации");
+                }
+
+                const recommendedRoutesResponse = await fetch(`${BASE_API_URL}/route/recommended?limit=${LIMIT}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                });
+                const popularRoutesResponse = await fetch(`${BASE_API_URL}/route/popular?limit=${LIMIT}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                });
+
+                if (recommendedRoutesResponse.ok) {
+                    const data = await recommendedRoutesResponse.json();
+                    setRecommendedRoutes(data);
+                } else {
+                    console.error("Error fetching routes");
+                }
+
+                if (popularRoutesResponse.ok) {
+                    const data = await popularRoutesResponse.json();
+                    setPopularRoutes(data);
+                } else {
+                    console.error("Error fetching routes");
+                }
+            } catch (error) {
+                console.error("Error fetching routes:", error);
+            }
+        };
+        fetchData();
+    }, []);
 
     const handleButtonClickRouteOfTheDay = async () => {
         try {
@@ -17,7 +66,7 @@ const MainPage = () => {
             if (!user || !user.token) {
                 throw new Error("Authorization token is missing.");
             }
-            const response = await fetch("/api/v1/route/daily", {
+            const response = await fetch(`${BASE_API_URL}/route/daily`, {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${user.token}`,
@@ -54,6 +103,8 @@ const MainPage = () => {
         navigate("/main_page/popular");
     }
 
+    const renderTags = (categories) => categories.map((cat) => <span key={cat.id} className="tag">{cat.name}</span>);
+
     return (
         <div className="container">
             
@@ -79,8 +130,7 @@ const MainPage = () => {
                     </div>
                 </div>
                 </div>
-                
-                {/* Recommended Routes */}
+
                 <div className="recommendedSection">
                     <div className="main_title">
                         <h3 className="sectionTitle">Рекомендуемые</h3>
@@ -89,15 +139,11 @@ const MainPage = () => {
                     <div style={{ marginLeft: "-40px" }}>
                         <Group>
                             <CardScroll>
-                                {Array.from({ length: 4 }).map((_, index) => (
-                                    <Card key={index} size="l" className="recommendedCard">
+                                {recommendedRoutes.map((route) => (
+                                    <Card key={route.id} size="l" className="recommendedCard">
                                         <div className="cardRec">
-                                            <img
-                                                src={`https://via.placeholder.com/150?text=Route+${index + 1}`}
-                                                alt={`Route ${index + 1}`}
-                                                className="cardImage"
-                                            />
-                                            <p className="cardText">Название маршрута</p>
+                                            <img src={BASE_STATIC_URL + route.imagePath} alt={route.name} className="cardImage" />
+                                            <p className="cardText">{route.name}</p>
                                         </div>
                                     </Card>
                                 ))}
@@ -105,29 +151,22 @@ const MainPage = () => {
                         </Group>
                     </div>
                 </div>
-            
-            {/* Popular Section */}
+
             <div className="popularSection">
                 <div className="main_title">
                         <h3 className="sectionTitle">Популярные</h3>
                         <img onClick={handleButtonClickPopular} className="arrow" src="/icons/стрелка.svg" alt="стрелка" />
                     </div>
-                
-                {Array.from({ length: 2 }).map((_, index) => (
-                    <div key={index} className="popularCard">
-                        <img
-                            src={`https://via.placeholder.com/150?text=Popular+Route+${index + 1}`}
-                            alt={`Popular Route ${index + 1}`}
-                            className="popularImage"
-                        />
+
+                {popularRoutes.map((route) => (
+                    <div key={route.id} className="popularCard">
+                        <img src={BASE_STATIC_URL + route.imagePath} alt={route.name} className="popularImage" />
                         <div className="popularContent">
-                            <p className="popularTitle">Название маршрута</p>
-                            <p className="popularInfo">Расстояние - 5 480</p>
-                            <p className="popularInfo">Сложность - Средняя</p>
+                            <p className="popularTitle">{route.name}</p>
+                            <p className="popularInfo">Расстояние - {route.distance} м</p>
+                            <p className="popularInfo">Сложность - {route.difficulty}</p>
                             <div className="tagContainer">
-                                <span className="tag">Бег</span>
-                                <span className="tag">Туризм</span>
-                                <span className="tag">С питомцем</span>
+                                {renderTags(route.categories)}
                             </div>
                         </div>
                     </div>

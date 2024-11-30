@@ -53,19 +53,21 @@ const PopularFilteredRoutes = ({ filters, searchQuery }) => {
                 !error &&
                 routes.map((route) => (
                     <div key={route.id} className="route-card">
-                        <img src={BASE_STATIC_URL + route.imagePath || "/default-image.jpg"} alt={route.name} />
-                        <div className="route-info">
-                            <h2>{route.name}</h2>
-                            <p>Расстояние: {route.distance} м</p>
-                            <p>Сложность: {route.difficulty}</p>
-                            <div className="categories">
-                                {route.categories && route.categories.length > 0
-                                    ? route.categories.map((cat) => (
-                                        <span key={cat.id}>{cat.name}</span>
-                                    ))
-                                    : <span>Нет категорий</span>}
+                        <a href={`/map/${route.id}`}>
+                            <img src={BASE_STATIC_URL + route.imagePath || "/default-image.jpg"} alt={route.name}/>
+                            <div className="route-info">
+                                <h2>{route.name}</h2>
+                                <p>Расстояние: {route.distance} м</p>
+                                <p>Сложность: {route.difficulty}</p>
+                                <div className="categories">
+                                    {route.categories && route.categories.length > 0
+                                        ? route.categories.map((cat) => (
+                                            <span key={cat.id}>{cat.name}</span>
+                                        ))
+                                        : <span>Нет категорий</span>}
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 ))}
         </div>
