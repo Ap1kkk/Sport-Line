@@ -47,11 +47,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
 }
 
 /* Круги для статистики */
 .circle {
+    
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -67,12 +67,13 @@
 }
 
 .large-circle {
+    margin-bottom: 30px;
     width: 120px;
     height: 120px;
 }
 
 .circle-text {
-    font-size: 20px;
+    font-size: 14px;
     font-weight: bold;
     color: #333;
     margin: 0;
