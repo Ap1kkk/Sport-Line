@@ -194,7 +194,7 @@ const RoutesOnMap = () => {
                 const distanceToCheckpoint = calculateDistance(coords[0], coords[1], latitude, longitude);
 
                 // Если пользователь близок к чекпоинту, считаем его пройденным
-                if (distanceToCheckpoint < 60 && !completedCheckpoints.includes(index)) {
+                if (distanceToCheckpoint < 20 && !completedCheckpoints.includes(index)) {
                     setCompletedCheckpoints((prev) => [...prev, index]);
                     completedCheckpointsCount++;
                 }
@@ -209,7 +209,7 @@ const RoutesOnMap = () => {
             const remainingDistance = routeDistance - totalDistanceCovered;
 
             // Прогресс
-            const newProgress = Math.max(0, Math.min(100, (totalDistanceCovered / routeDistance) * 100));
+            const newProgress = Math.max(0, Math.min(100, (remainingDistance / routeDistance) * 100));
             setProgress(newProgress);
         }
     };
