@@ -1,0 +1,120 @@
+/* Общий стиль для панели фильтров */
+.filter-panel-search {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Заголовок панели фильтров */
+.filter-panel-search h2 {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Общий стиль для разделов фильтров */
+.filter-section-search {
+    margin-bottom: 20px;
+}
+
+.filter-section-search h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+/* Кнопки фильтров */
+.buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.buttons button {
+    padding: 8px 15px;
+    font-size: 14px;
+    border-radius: 20px;
+    border: 2px solid #2688eb;
+    background-color: white;
+    color: #2688eb;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, transform 0.2s;
+}
+
+.buttons button.selected {
+    background-color: #2688eb;
+    color: white;
+}
+
+.buttons button:hover {
+    transform: scale(1.05);
+    background-color: #e0f7fa;
+}
+
+/* Слайдеры */
+.slider {
+    margin: 10px 0;
+    height: 8px;
+    border-radius: 4px;
+    background: #ddd;
+    position: relative;
+}
+
+.slider-track {
+    background: #2688eb;
+    height: 100%;
+    border-radius: 4px;
+}
+
+.slider-thumb {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: #2688eb;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Метки слайдера */
+.slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #555;
+    margin-top: 5px;
+}
+
+/* Кнопка применения фильтров */
+.apply-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 25px;
+    border: 2px solid #2688eb;
+    background-color: white;
+    color: #2688eb;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.apply-button:hover {
+    background-color: #2688eb;
+    color: white;
+}

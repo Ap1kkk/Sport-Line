@@ -1,35 +1,69 @@
+/* Контейнер для маршрутов */
 .routes-container {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
     gap: 20px;
-    justify-content: center;
     padding: 20px;
 }
 
+/* Карточка маршрута */
 .route-card {
-    width: 300px;
+    display: flex; /* Flexbox для размещения фото и текста */
+    align-items: flex-start;
+    gap: 15px; /* Отступ между фото и текстом */
+    padding: 10px 15px;
     border: 1px solid #ddd;
     border-radius: 10px;
-    padding: 15px;
-    background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    text-align: center;
+    background-color: #fff;
+    width: 100%;
+    max-width: 500px; /* Максимальная ширина карточки */
+    margin: 10px 0; /* Отступ между карточками */
 }
 
-.route-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+/* Фотография маршрута */
+.route-card img {
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+    object-fit: cover; /* Сохраняем пропорции изображения */
+    flex-shrink: 0; /* Фиксируем размеры изображения */
 }
 
-.route-card h2 {
-    font-size: 1.5rem;
-    color: #007bff;
-    margin-bottom: 10px;
+/* Информация о маршруте */
+.route-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1; /* Расширяем блок с текстом */
 }
 
-.route-card p {
-    font-size: 1rem;
+/* Заголовок маршрута */
+.route-info h2 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Описание маршрута */
+.route-info p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Категории маршрутов */
+.route-info .categories {
+    display: flex;
+    flex-wrap: wrap; /* Разрешаем перенос текста */
+    gap: 5px; /* Отступ между категориями */
+}
+
+.route-info .categories span {
+    background-color: #f1f1f1;
+    border-radius: 12px;
+    padding: 4px 8px;
+    font-size: 12px;
     color: #555;
-    margin: 5px 0;
 }

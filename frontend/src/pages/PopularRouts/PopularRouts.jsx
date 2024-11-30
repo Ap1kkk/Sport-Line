@@ -9,9 +9,9 @@ const PopularRoutes = () => {
         difficulties: [],
         categoryIds: [],
         durationFrom: 0,
-        durationTo: 0,
+        durationTo: 2000,
         distanceFrom: 0,
-        distanceTo: 0,
+        distanceTo: 4000,
     });
 
     const [searchQuery, setSearchQuery] = useState(""); // Текущая строка поиска
@@ -41,7 +41,7 @@ const PopularRoutes = () => {
             <h1 className="routes-title">Популярные маршруты</h1>
 
             {/* Поисковая строка */}
-            <div className="search-bar">
+            <div className="search-bar-popular">
                 <input
                     type="text"
                     placeholder="Введите название маршрута"

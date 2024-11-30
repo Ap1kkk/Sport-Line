@@ -30,10 +30,10 @@ h3 {
 /* Кнопки предпочтений */
 ._preferences-buttons {
     display: flex;
-    flex-wrap: wrap; /* Позволяет кнопкам переноситься */
+    flex-wrap: wrap;
     gap: 10px; /* Расстояние между кнопками */
     width: 100%; /* Контейнер кнопок занимает всю ширину */
-    justify-content: flex-start; /* Кнопки выравниваются влево */
+    justify-content: flex-start;
 
 }
 
@@ -47,14 +47,14 @@ h3 {
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     text-align: center;
-    white-space: nowrap; /* Предотвращает перенос текста */
-    display: inline-block; /* Кнопка адаптируется под текст */
+    white-space: nowrap;
+    display: inline-block;
 }
 
 /* Активное состояние кнопки */
 ._preference-button.active {
-    color: #ffffff; /* Белый текст */
-    background-color: #99A2AD; /* Синий фон */
+    color: #ffffff;
+    background-color: #99A2AD;
 }
 
 /* Ховер эффект для кнопки */

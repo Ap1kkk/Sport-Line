@@ -1,51 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@300;400;500&display=swap');
+
 .statistics-container {
+    margin-bottom: 45px;
     padding: 20px;
-    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #fff;
+    min-height: 100vh;
+    justify-content: center; /* Центрирование элементов */
+    font-family: 'Roboto Flex', sans-serif;
 }
 
 .statistics-title {
-    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
     margin-bottom: 20px;
 }
 
+.period-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Две кнопки в ряду */
+    gap: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.period-button {
+    border: 1px solid #007bff;
+    background: #fff;
+    color: #007bff;
+    padding: 10px 0;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2); /* Тень, как указано */
+    transition: all 0.3s ease; /* Плавность изменения */
+}
+
+.period-button.active {
+    background-color: #007bff;
+    color: #fff;
+    box-shadow: none; /* Убираем тень при активации */
+}
+
+.period-button:hover {
+    transform: translateY(-2px); /* Небольшое поднятие кнопки при наведении */
+}
+
+
+
 .statistics-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, auto)); /* Адаптация под содержимое */
+    gap: 20px;
+    justify-content: center; /* Центрирование элементов */
 }
 
-.stat-card {
-    background-color: #cacaca;
-    border-radius: 20px;
-    padding: 15px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    height: auto /* Задаём фиксированную высоту карточек */
-}
-
-.stat-card-title {
-    font-size: 16px;
-    margin-bottom: 10px;
-    color: #333;
-    text-align: center;
-}
-
-.stat-card-value-container {
-    background-color: #d8d6d6; /* Более светлый фон для блока значений */
+.statistic-item {
+    border: 1px solid #007bff;
     border-radius: 10px;
-    padding: 10px 15px;
-    font-size: 18px;
-    font-weight: bold;
-    color: black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 80%;
+    padding: 15px 20px; /* Удобный внутренний отступ */
+    background-color: #f8f9fa;
     text-align: center;
-    height: 40px;
+    display: flex;
+    flex-direction: column; /* Вертикальное расположение текста */
+    align-items: center; /* Горизонтальное центрирование */
+    justify-content: center; /* Вертикальное центрирование */
 }
+
+.statistic-item p {
+    font-size: 14px;
+    color: #6c757d;
+    margin-bottom: 10px;
+    word-wrap: break-word; /* Перенос длинного текста */
+    white-space: normal; /* Нормальный перенос строк */
+}
+
+.statistic-item span {
+    font-size: 16px; /* Уменьшенный размер текста */
+    font-weight: normal; /* Убираем жирность текста */
+    color: #343a40;
+    background-color: #e9ecef; /* Светло-серый фон для овала */
+    padding: 5px 15px; /* Отступы для создания овала */
+    border-radius: 20px; /* Скругленные углы для овала */
+    display: inline-block; /* Чтобы размер фона соответствовал содержимому */
+}
+
+
 

@@ -1,9 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactSlider from "react-slider";
 import "./UserHistoryPanel.css";
 
 const UserHistoryPanel = ({ categories, onFilterChange, currentFilters }) => {
-    const [filters, setFilters] = useState(currentFilters);
+    const [filters, setFilters] = useState({
+        ...currentFilters,
+        durationFrom: 0,
+        durationTo: 300,
+        distanceFrom: 0,
+        distanceTo: 100,
+    });
+
+    useEffect(() => {
+        // Устанавливаем значения ползунков при загрузке компонента
+        setFilters((prev) => ({
+            ...prev,
+            durationFrom: 0,
+            durationTo: 300,
+            distanceFrom: 0,
+            distanceTo: 100,
+        }));
+    }, []);
 
     const handleCheckboxChange = (categoryId) => {
         setFilters((prev) => ({
@@ -36,52 +53,30 @@ const UserHistoryPanel = ({ categories, onFilterChange, currentFilters }) => {
     };
 
     return (
-        <div className="filter-panel">
+        <div className="filter-panel-user">
             <h2>Фильтры</h2>
+
+            {/* Выбор сложности */}
             <div className="filter-section">
-                <label>Порядок:</label>
-                <select
-                    name="order"
-                    value={filters.order}
-                    onChange={(e) =>
-                        setFilters((prev) => ({ ...prev, order: e.target.value }))
-                    }
-                >
-                    <option value="ASC">По возрастанию</option>
-                    <option value="DESC">По убыванию</option>
-                </select>
+                <h3>Сложность:</h3>
+                <div className="difficulty-buttons">
+                    {["EASY", "MEDIUM", "HARD"].map((difficulty) => (
+                        <button
+                            key={difficulty}
+                            className={`difficulty-button ${
+                                filters.difficulties.includes(difficulty) ? "selected" : ""
+                            }`}
+                            onClick={() => handleDifficultiesChange(difficulty)}
+                        >
+                            {difficulty}
+                        </button>
+                    ))}
+                </div>
             </div>
 
+            {/* Слайдеры продолжительности */}
             <div className="filter-section">
-                <label>Сложность:</label>
-                {["EASY", "MEDIUM", "HARD"].map((difficulty) => (
-                    <label key={difficulty}>
-                        <input
-                            type="checkbox"
-                            checked={filters.difficulties.includes(difficulty)}
-                            onChange={() => handleDifficultiesChange(difficulty)}
-                        />
-                        {difficulty}
-                    </label>
-                ))}
-            </div>
-
-            <div className="filter-section">
-                <label>Категории:</label>
-                {categories.map((category) => (
-                    <label key={category.id}>
-                        <input
-                            type="checkbox"
-                            checked={filters.categoryIds.includes(category.id)}
-                            onChange={() => handleCheckboxChange(category.id)}
-                        />
-                        {category.name}
-                    </label>
-                ))}
-            </div>
-
-            <div className="filter-section">
-                <label>Продолжительность (мин):</label>
+                <h3>Продолжительность (мин):</h3>
                 <ReactSlider
                     className="slider"
                     thumbClassName="thumb"
@@ -91,19 +86,19 @@ const UserHistoryPanel = ({ categories, onFilterChange, currentFilters }) => {
                     step={10}
                     value={[filters.durationFrom, filters.durationTo]}
                     onChange={(values) => handleSliderChange("duration", values)}
-                    renderThumb={(props, state) => {
-                        const { key, ...restProps } = props; // Извлекаем key из props
-                        return (
-                            <div key={key} {...restProps}>
-                                {state.valueNow}
-                            </div>
-                        );
-                    }}
+                    renderThumb={(props, state) => (
+                        <div {...props}>{state.valueNow}</div>
+                    )}
                 />
+                <div className="slider-labels">
+                    <span>От {filters.durationFrom} мин</span>
+                    <span>До {filters.durationTo} мин</span>
+                </div>
             </div>
 
+            {/* Слайдеры расстояния */}
             <div className="filter-section">
-                <label>Расстояние (км):</label>
+                <h3>Расстояние (км):</h3>
                 <ReactSlider
                     className="slider"
                     thumbClassName="thumb"
@@ -113,17 +108,35 @@ const UserHistoryPanel = ({ categories, onFilterChange, currentFilters }) => {
                     step={1}
                     value={[filters.distanceFrom, filters.distanceTo]}
                     onChange={(values) => handleSliderChange("distance", values)}
-                    renderThumb={(props, state) => {
-                        const { key, ...restProps } = props; // Извлекаем key из props
-                        return (
-                            <div key={key} {...restProps}>
-                                {state.valueNow}
-                            </div>
-                        );
-                    }}
+                    renderThumb={(props, state) => (
+                        <div {...props}>{state.valueNow}</div>
+                    )}
                 />
+                <div className="slider-labels">
+                    <span>От {filters.distanceFrom} км</span>
+                    <span>До {filters.distanceTo} км</span>
+                </div>
             </div>
 
+            {/* Выбор категорий */}
+            <div className="filter-section">
+                <h3>Категории:</h3>
+                <div className="category-buttons">
+                    {categories.map((category) => (
+                        <button
+                            key={category.id}
+                            className={`category-button ${
+                                filters.categoryIds.includes(category.id) ? "selected" : ""
+                            }`}
+                            onClick={() => handleCheckboxChange(category.id)}
+                        >
+                            {category.name}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {/* Кнопка Применить */}
             <button onClick={applyFilters} className="apply-button">
                 Применить
             </button>

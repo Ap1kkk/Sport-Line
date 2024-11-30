@@ -39,12 +39,20 @@ const MainPage = () => {
     };
 
     const handleButtonClickSearch = () => {
-        navigate("/");
+        navigate("/main_page/search_page");
     };
 
     const handleButtonClickHistory = () => {
-        navigate("/history");
+        navigate("/main_page/history");
     };
+
+    const handleButtonClickRecommendation = () => {
+        navigate("/main_page/recomendation");
+    }
+
+    const handleButtonClickPopular = () => {
+        navigate("/main_page/popular");
+    }
 
     return (
         <div className="container">
@@ -76,7 +84,7 @@ const MainPage = () => {
                 <div className="recommendedSection">
                     <div className="main_title">
                         <h3 className="sectionTitle">Рекомендуемые</h3>
-                        <img className="arrow" src="/icons/стрелка.svg" alt="стрелка" />
+                        <img onClick={handleButtonClickRecommendation} className="arrow" src="/icons/стрелка.svg" alt="стрелка" />
                     </div>
                     <div style={{ marginLeft: "-40px" }}>
                         <Group>
@@ -102,7 +110,7 @@ const MainPage = () => {
             <div className="popularSection">
                 <div className="main_title">
                         <h3 className="sectionTitle">Популярные</h3>
-                        <img className="arrow" src="/icons/стрелка.svg" alt="стрелка" />
+                        <img onClick={handleButtonClickPopular} className="arrow" src="/icons/стрелка.svg" alt="стрелка" />
                     </div>
                 
                 {Array.from({ length: 2 }).map((_, index) => (

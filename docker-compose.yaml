@@ -59,6 +59,8 @@ services:
 
       SECURITY_CORS_ALLOWED_ORIGIN: "*"
 
+      CLIENTS_ANALYTICS_URL: http://backend-analytics:8000/analytics
+
       MVC_RESOURCE_PATH_PATTERN: "/static/image/**"
 
     volumes:

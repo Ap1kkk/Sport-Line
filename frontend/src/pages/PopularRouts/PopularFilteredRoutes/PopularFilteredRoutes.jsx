@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import "./PopularFilteredRoutes.css";
-import {BASE_API_URL} from "../../../constants/globals";
+import { BASE_API_URL, BASE_STATIC_URL } from "../../../constants/globals";
 
 const PopularFilteredRoutes = ({ filters, searchQuery }) => {
     const [routes, setRoutes] = useState([]);
@@ -53,17 +53,19 @@ const PopularFilteredRoutes = ({ filters, searchQuery }) => {
                 !error &&
                 routes.map((route) => (
                     <div key={route.id} className="route-card">
-                        <h2>{route.name}</h2>
-                        <p>{route.description}</p>
-                        <p>
-                            Время: {route.duration} ч | Дистанция: {route.distance} км | Сложность: {route.difficulty}
-                        </p>
-                        <p>
-                            Категории:{" "}
-                            {route.categories && route.categories.length > 0
-                                ? route.categories.map((cat) => cat.name).join(", ")
-                                : "Нет категорий"}
-                        </p>
+                        <img src={BASE_STATIC_URL + route.image || "/default-image.jpg"} alt={route.name} />
+                        <div className="route-info">
+                            <h2>{route.name}</h2>
+                            <p>Расстояние: {route.distance} м</p>
+                            <p>Сложность: {route.difficulty}</p>
+                            <div className="categories">
+                                {route.categories && route.categories.length > 0
+                                    ? route.categories.map((cat) => (
+                                        <span key={cat.id}>{cat.name}</span>
+                                    ))
+                                    : <span>Нет категорий</span>}
+                            </div>
+                        </div>
                     </div>
                 ))}
         </div>
