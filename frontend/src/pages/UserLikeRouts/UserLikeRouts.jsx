@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import UserLikeRoutsPanel from "./UserLikeRoutsPanel/UserLikeRoutsPanel";
 import UserLikeRoutsFiltered from "./UserLikeRoutsFiltered/UserLikeRoutsFiltered";
 import "./UserLikeRouts.css";
+import {BASE_API_URL} from "../../constants/globals";
 
 const UserLikeRouts = () => {
     const [categories, setCategories] = useState([]);
@@ -34,7 +35,7 @@ const UserLikeRouts = () => {
         const fetchCategories = async () => {
             try {
                 const user = JSON.parse(localStorage.getItem("user"));
-                const response = await fetch("/api/v1/category/all", {
+                const response = await fetch(`${BASE_API_URL}/category/all`, {
                     method: "GET",
                     headers: {
                         Authorization: `Bearer ${user.token}`,
@@ -59,8 +60,8 @@ const UserLikeRouts = () => {
         try {
             const user = JSON.parse(localStorage.getItem("user"));
             const endpoint = debouncedQuery
-                ? `/api/v1/route/search?query=${encodeURIComponent(debouncedQuery)}`
-                : "/api/v1/user/routes/favourite";
+                ? `${BASE_API_URL}/route/search?query=${encodeURIComponent(debouncedQuery)}`
+                : `${BASE_API_URL}/user/routes/favourite`;
 
             const response = await fetch(endpoint, {
                 method: "POST",

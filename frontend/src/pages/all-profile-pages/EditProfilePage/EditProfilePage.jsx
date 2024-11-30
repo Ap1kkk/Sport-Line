@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./EditProfilePage.css";
+import {BASE_API_URL} from "../../../constants/globals";
 
-const USER_PROFILE_URL = "/api/v1/user/profile";
-const UPDATE_PROFILE_URL = "/api/v1/user/edit";
+const USER_PROFILE_URL = `${BASE_API_URL}/user/profile`;
+const UPDATE_PROFILE_URL = `${BASE_API_URL}/user/edit`;
 const AVATAR_PATH = "/static/avatars";
 
 const EditProfilePage = () => {
@@ -49,7 +50,7 @@ const EditProfilePage = () => {
 
                 // Fetch available preferences
                 const preferencesResponse = await fetch(
-                    "/api/v1/category/all",
+                    `${BASE_API_URL}/category/all`,
                     {
                         method: "GET",
                         headers: {

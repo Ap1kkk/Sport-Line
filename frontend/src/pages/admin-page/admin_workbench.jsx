@@ -1,8 +1,9 @@
 import { YMaps, Map, Placemark } from '@pbe/react-yandex-maps';
 import React, { useEffect, useState } from "react";
+import {BASE_API_URL} from "../../constants/globals";
 
-const API_ROUTE_URL = "/api/v1/admin/route/create";
-const API_ROUTE_URL_CATEGORIES = "/api/v1/category/all";
+const API_ROUTE_URL = `${BASE_API_URL}/admin/route/create`;
+const API_ROUTE_URL_CATEGORIES = `${BASE_API_URL}/category/all`;
 
 const Admin_workbench = () => {
     const [mapInstance, setMapInstance] = useState(null);
@@ -37,6 +38,7 @@ const Admin_workbench = () => {
                 if (response.ok) {
                     const data = await response.json();
                     setCategories(data);
+                    console.log(data);
                 } else {
                     throw new Error("Route not found or API error.");
                 }
@@ -144,8 +146,12 @@ const Admin_workbench = () => {
     };
 
     const handleCategoryChange = (e) => {
-        const value = Array.from(e.target.selectedOptions, (option) => option.value);
-        setSelectedCategories(value);
+        const value = Number(e.target.value); // Преобразование строки в число, если ID числовой
+        setSelectedCategories((prevSelected) =>
+            e.target.checked
+                ? [...prevSelected, value] // Добавить выбранную категорию
+                : prevSelected.filter((id) => id !== value) // Убрать отменённую категорию
+        );
     };
 
     const saveRoute = async () => {
@@ -153,6 +159,7 @@ const Admin_workbench = () => {
             alert("Введите название маршрута и добавьте минимум две точки.");
             return;
         }
+
         const user = JSON.parse(localStorage.getItem("user"));
         if (!user || !user.token) {
             throw new Error("Authorization token is missing.");
@@ -171,25 +178,57 @@ const Admin_workbench = () => {
             }));
 
             const formData = new FormData();
-            formData.append("name", routeName);
-            formData.append("description", description);
-            formData.append("difficulty", difficulty);
-            formData.append("distance", routeDistance);
-            formData.append("duration", 0);
-            formData.append("categories", JSON.stringify(selectedCategories));
-            formData.append("checkpoints", JSON.stringify(checkpoints));
-            if (selectedImage) {
-                formData.append("image", selectedImage); // Добавляем изображение
+
+            const appendFormData = (data, parentKey = null) => {
+                if (data && typeof data === 'object' && !(data instanceof File)) {
+                    if (Array.isArray(data)) {
+                        data.forEach((value, index) => {
+                            appendFormData(value, `${parentKey}[${index}]`);
+                        });
+                    } else {
+                        Object.keys(data).forEach((key) => {
+                            appendFormData(data[key], parentKey ? `${parentKey}.${key}` : key);
+                        });
+                    }
+                } else {
+                    formData.append(parentKey, data);
+                }
+            };
+
+            const route = {
+                name: routeName,
+                description: description,
+                difficulty: difficulty,
+                distance: routeDistance ,
+                duration: 0,
+                checkpoints: checkpoints,
             }
+            selectedCategories.forEach((category, index) => {
+                formData.append(`categoryIds[${index}]`, category);
+            });
+
+            appendFormData(route)
+
+            console.log("Selected categories:", selectedCategories);
+            console.log("Checkpoints:", checkpoints);
+
+            if (selectedImage) {
+                formData.append("image", selectedImage);
+            }
+
+            console.log("image:", selectedImage);
 
             const response = await fetch(API_ROUTE_URL, {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${user.token}`,
-                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${user.token}`
                 },
                 body: formData,
             });
+
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ": " + pair[1]);  // Для отладки
+            }
 
             if (response.ok) {
                 alert("Маршрут успешно сохранен!");
@@ -213,6 +252,7 @@ const Admin_workbench = () => {
             alert("Не удалось сохранить маршрут. Проверьте соединение с сервером.");
         }
     };
+
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -281,14 +321,7 @@ const Admin_workbench = () => {
                                     type="checkbox"
                                     value={category.id}
                                     checked={selectedCategories.includes(category.id)}
-                                    onChange={(e) => {
-                                        const value = Number(e.target.value); // Преобразование строки в число, если ID числовой
-                                        setSelectedCategories((prevSelected) =>
-                                            e.target.checked
-                                                ? [...prevSelected, value] // Добавить выбранную категорию
-                                                : prevSelected.filter((id) => id !== value) // Убрать отменённую категорию
-                                        );
-                                    }}
+                                    onChange={(e) => handleCategoryChange(e)} // Проверяем на изменение
                                     style={styles.checkbox}
                                 />
                                 {category.name}

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import "./PopularFilteredRoutes.css";
+import {BASE_API_URL} from "../../../constants/globals";
 
 const PopularFilteredRoutes = ({ filters, searchQuery }) => {
     const [routes, setRoutes] = useState([]);
@@ -15,8 +16,8 @@ const PopularFilteredRoutes = ({ filters, searchQuery }) => {
                 }
 
                 const endpoint = searchQuery
-                    ? `/api/v1/route/search?query=${encodeURIComponent(searchQuery)}`
-                    : "/api/v1/route/popular-filtered?limit=10";
+                    ? `${BASE_API_URL}/route/search?query=${encodeURIComponent(searchQuery)}`
+                    : `${BASE_API_URL}/route/popular-filtered?limit=10`;
 
                 const response = await fetch(endpoint, {
                     method: "POST",

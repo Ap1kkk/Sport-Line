@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
 import { useParams } from "react-router-dom";
+import {BASE_API_URL} from "../../constants/globals";
 
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371000; // Радиус Земли в метрах
@@ -16,12 +17,12 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
     return R * c; // Расстояние в метрах
 };
 
-const API_ROUTE_NAME = "/api/v1/route";
-const API_START_URL = "/api/v1/user/routes/start";
-const API_LEAVE_URL = "/api/v1/user/routes/leave";
-const API_FINISH_URL = "/api/v1/user/routes/finish";
-const API_LIKE_URL = "/api/v1/user/routes/like";
-const API_UNLIKE_URL = "/api/v1/user/routes/unlike";
+const API_ROUTE_NAME = `${BASE_API_URL}/route`;
+const API_START_URL = `${BASE_API_URL}/user/routes/start`;
+const API_LEAVE_URL = `${BASE_API_URL}/user/routes/leave`;
+const API_FINISH_URL = `${BASE_API_URL}/user/routes/finish`;
+const API_LIKE_URL = `${BASE_API_URL}/user/routes/like`;
+const API_UNLIKE_URL = `${BASE_API_URL}/user/routes/unlike`;
 
 const RoutesOnMap = () => {
     const { routeId } = useParams();
@@ -70,7 +71,6 @@ const RoutesOnMap = () => {
                 setIsLoading(false);
             }
         };
-
         fetchRouteData();
     }, [routeId]);
 
@@ -174,9 +174,18 @@ const RoutesOnMap = () => {
             try {
                 const startLat = routeData.checkpoints[0]?.latitude;
                 const startLon = routeData.checkpoints[0]?.longitude;
+                const lastCheckpoint = routeData.checkpoints[routeData.checkpoints.length - 1];
+                const lastLat = lastCheckpoint.latitude;
+                const lastLon = lastCheckpoint.longitude;
+
+                const distanceToEnd = calculateDistance(coords[0], coords[1], lastLat, lastLon);
+
+                const progress = Math.max(0, Math.min(100, (1 - distanceToEnd / routeDistance) * 100));
+                setProgress(progress);
+
                 if (startLat && startLon) {
                     const distanceToStart = calculateDistance(coords[0], coords[1], startLat, startLon);
-                    setIsTooFar(distanceToStart > 100);
+                    setIsTooFar(distanceToStart > 60);
 
                     const averageSpeed = 1.39; // Средняя скорость в м/с
                     const timeInSeconds = routeDistance / averageSpeed;
@@ -282,12 +291,6 @@ const RoutesOnMap = () => {
         }
     };
 
-    const notError  = () => {
-        if (setIsStarted(true)) {
-
-        }
-    }
-
     const toggleLike = async () => {
         try {
             const user = JSON.parse(localStorage.getItem("user"));
@@ -338,7 +341,7 @@ const RoutesOnMap = () => {
 
                 if (lastLat && lastLon) {
                     const distanceToEnd = calculateDistance(coords[0], coords[1], lastLat, lastLon);
-                    if (distanceToEnd > 100) {
+                    if (distanceToEnd > 60) {
                         sendLeaveRequest();
                     }
                     else {
@@ -399,15 +402,18 @@ const RoutesOnMap = () => {
                                 {realTimeInfo ? (
                                     <>
                                         <p>Расстояние маршрута: {realTimeInfo.routeDistance} км</p>
-                                        <div style={progressBarStyles.container}>
-                                            <div
-                                                style={{
-                                                    ...progressBarStyles.filler,
-                                                    width: `${progress}%`,
-                                                }}
-                                            >
-                                                <span style={progressBarStyles.label}>{progress}%</span>
+                                        <div>
+                                            <div style={progressBarStyles.container}>
+                                                <div
+                                                    style={{
+                                                        ...progressBarStyles.filler,
+                                                        width: `${progress}%`,
+                                                    }}
+                                                >
+                                                    <span style={progressBarStyles.label}>{progress.toFixed(2)}%</span>
+                                                </div>
                                             </div>
+                                            <p>Пройдено: {progress.toFixed(2)}%</p>
                                         </div>
                                         <p>Время: {realTimeInfo.time} мин</p>
                                     </>

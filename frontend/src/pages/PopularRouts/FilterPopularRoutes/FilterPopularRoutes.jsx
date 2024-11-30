@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReactSlider from "react-slider";
 import "./FilterPopularRoutes.css";
+import {BASE_API_URL} from "../../../constants/globals";
 
 const FilterPopularRoutes = ({ filters, onApply }) => {
     const [tempFilters, setTempFilters] = useState(filters);
@@ -19,7 +20,7 @@ const FilterPopularRoutes = ({ filters, onApply }) => {
 
                 console.log("Токен авторизации:", user.token);
 
-                const response = await fetch("/api/v1/category/all", {
+                const response = await fetch(`${BASE_API_URL}/category/all`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",

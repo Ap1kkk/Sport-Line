@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./StatisticsPage.css";
+import {BASE_API_URL} from "../../../constants/globals";
 
 const StatisticsPage = () => {
     const [statistics, setStatistics] = useState(null); // Данные статистики
@@ -25,7 +26,7 @@ const StatisticsPage = () => {
             }
 
             // Формируем URL с параметром запроса
-            const url = `/api/v1/user/statistics?period=${period}`;
+            const url = `${BASE_API_URL}/user/statistics?period=${period}`;
 
             console.log("Отправляем запрос с URL:", url);
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import UserHistoryPanel from "./UserHistoryPanel/UserHistoryPanel";
 import UserHistoryRouts from "./UserHistoryRouts/UserHistoryRouts";
 import "./UserHistory.css";
+import {BASE_API_URL} from "../../constants/globals";
 
 const UserHistory = () => {
     const [categories, setCategories] = useState([]);
@@ -34,7 +35,7 @@ const UserHistory = () => {
         const fetchCategories = async () => {
             try {
                 const user = JSON.parse(localStorage.getItem("user"));
-                const response = await fetch("/api/v1/category/all", {
+                const response = await fetch(`${BASE_API_URL}/category/all`, {
                     method: "GET",
                     headers: {
                         Authorization: `Bearer ${user.token}`,
@@ -59,8 +60,8 @@ const UserHistory = () => {
         try {
             const user = JSON.parse(localStorage.getItem("user"));
             const endpoint = debouncedQuery
-                ? `/api/v1/route/search?query=${encodeURIComponent(debouncedQuery)}`
-                : "/api/v1/user/routes/history";
+                ? `${BASE_API_URL}/route/search?query=${encodeURIComponent(debouncedQuery)}`
+                : `${BASE_API_URL}/user/routes/history`;
 
             const response = await fetch(endpoint, {
                 method: "POST",
