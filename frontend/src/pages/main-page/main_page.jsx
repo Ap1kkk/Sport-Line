@@ -5,7 +5,6 @@ import "slick-carousel/slick/slick-theme.css";
 import { Icon32SearchOutline, Icon56ClockCircleDashedOutline } from "@vkontakte/icons";
 import { Card, CardScroll, Group } from "@vkontakte/vkui";
 import "@vkontakte/vkui/dist/vkui.css";
-import { BASE_API_URL } from "../../constants/globals";
 import './MainPage.css'; // Подключаем файл стилей
 
 const MainPage = () => {
@@ -18,7 +17,7 @@ const MainPage = () => {
             if (!user || !user.token) {
                 throw new Error("Authorization token is missing.");
             }
-            const response = await fetch(`${BASE_API_URL}/route/daily`, {
+            const response = await fetch("/api/v1/route/daily", {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${user.token}`,
@@ -49,24 +48,20 @@ const MainPage = () => {
 
     return (
         <div className="container">
+            
+            {/* Header */}
             <header className="header">
                 <Icon56ClockCircleDashedOutline
                     onClick={handleButtonClickHistory}
                     width={32}
                     height={32}
                     color="#2975CC"
-                    className="iconfromvk"
                 />
                 <h1 className="title">SportLine</h1>
-                <Icon32SearchOutline
-                    onClick={handleButtonClickSearch}
-                    width={32}
-                    height={32}
-                    color="#2975CC"
-                    className="iconfromvk"
-                />
+                <Icon32SearchOutline onClick={handleButtonClickSearch} width={32} height={32} color="#2975CC" />
             </header>
-            <main className="content">
+            <div class="map-NiNo">
+                {/* Map Section */}
                 <div className="mapSection">
                     <div className="mapOverlay">
                         <h2 className="mapTitle">Маршрут дня</h2>
@@ -75,27 +70,53 @@ const MainPage = () => {
                         </button>
                     </div>
                 </div>
-
+                </div>
+                {/* Recommended Routes */}
                 <div className="recommendedSection">
                     <h3 className="sectionTitle">Рекомендуемые</h3>
-                    <Group>
-                        <CardScroll>
-                            {Array.from({ length: 4 }).map((_, index) => (
-                                <Card key={index} size="l" className="recommendedCard">
-                                    <div>
-                                        <img
-                                            src={`https://via.placeholder.com/150?text=Route+${index + 1}`}
-                                            alt={`Route ${index + 1}`}
-                                            className="cardImage"
-                                        />
-                                        <p className="cardText">Название маршрута</p>
-                                    </div>
-                                </Card>
-                            ))}
-                        </CardScroll>
-                    </Group>
+                    <div style={{ marginLeft: "-40px" }}>
+                        <Group>
+                            <CardScroll>
+                                {Array.from({ length: 4 }).map((_, index) => (
+                                    <Card key={index} size="l" className="recommendedCard">
+                                        <div class="cardRec">
+                                            <img
+                                                src={`https://via.placeholder.com/150?text=Route+${index + 1}`}
+                                                alt={`Route ${index + 1}`}
+                                                className="cardImage"
+                                            />
+                                            <p className="cardText">Название маршрута</p>
+                                        </div>
+                                    </Card>
+                                ))}
+                            </CardScroll>
+                        </Group>
+                    </div>
                 </div>
-            </main>
+            
+            {/* Popular Section */}
+            <div className="popularSection">
+                <h3 className="sectionTitle">Популярные</h3>
+                {Array.from({ length: 2 }).map((_, index) => (
+                    <div key={index} className="popularCard">
+                        <img
+                            src={`https://via.placeholder.com/150?text=Popular+Route+${index + 1}`}
+                            alt={`Popular Route ${index + 1}`}
+                            className="popularImage"
+                        />
+                        <div className="popularContent">
+                            <p className="popularTitle">Название маршрута</p>
+                            <p className="popularInfo">Расстояние - 5 480</p>
+                            <p className="popularInfo">Сложность - Средняя</p>
+                            <div className="tagContainer">
+                                <span className="tag">Бег</span>
+                                <span className="tag">Туризм</span>
+                                <span className="tag">С питомцем</span>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };
