@@ -171,22 +171,40 @@ const RoutesOnMap = () => {
     }, [mapInstance]);
 
     // Функция для вычисления оставшегося расстояния до всех непройденных чекпоинтов
-    const calculateRemainingDistance = () => {
+    const findNextCheckpoint = () => {
         if (routeData) {
-            let remainingDistance = 0;
             const remainingCheckpoints = routeData.checkpoints.filter(
                 (checkpoint, index) => !completedCheckpoints.includes(index)
             );
-
-            // Добавляем расстояние от текущей позиции до каждого непройденного чекпоинта
-            remainingCheckpoints.forEach((checkpoint) => {
-                const { latitude, longitude } = checkpoint;
-                remainingDistance += calculateDistance(coords[0], coords[1], latitude, longitude);
-            });
-
-            return remainingDistance;
+            return remainingCheckpoints[0];
         }
-        return 0;
+        return null;
+    };
+
+    const updateProgress = () => {
+        const nextCheckpoint = findNextCheckpoint();
+        if (nextCheckpoint) {
+            const { latitude, longitude } = nextCheckpoint;
+            const distanceToNextCheckpoint = calculateDistance(coords[0], coords[1], latitude, longitude);
+
+            // Если пользователь близок к следующему чекпоинту, помечаем его как пройденный
+            if (distanceToNextCheckpoint < 60) {
+                setCompletedCheckpoints((prev) => [
+                    ...prev,
+                    routeData.checkpoints.indexOf(nextCheckpoint),
+                ]);
+            }
+
+            const remainingDistance = routeData.checkpoints
+                .slice(completedCheckpoints.length)
+                .reduce((acc, checkpoint) => {
+                    const { latitude, longitude } = checkpoint;
+                    return acc + calculateDistance(coords[0], coords[1], latitude, longitude);
+                }, 0);
+
+            const newProgress = Math.max(0, Math.min(100, (1 - remainingDistance / routeDistance) * 100));
+            setProgress(newProgress);
+        }
     };
 
     useEffect(() => {
@@ -194,14 +212,6 @@ const RoutesOnMap = () => {
             try {
                 const startLat = routeData.checkpoints[0]?.latitude;
                 const startLon = routeData.checkpoints[0]?.longitude;
-                const lastCheckpoint = routeData.checkpoints[routeData.checkpoints.length - 1];
-                const lastLat = lastCheckpoint.latitude;
-                const lastLon = lastCheckpoint.longitude;
-
-                const distanceToEnd = calculateRemainingDistance(coords[0], coords[1], lastLat, lastLon);
-
-                const progress = Math.max(0, Math.min(100, (1 - distanceToEnd / routeDistance) * 100));
-                setProgress(progress);
 
                 if (startLat && startLon) {
                     const distanceToStart = calculateDistance(coords[0], coords[1], startLat, startLon);
@@ -221,18 +231,6 @@ const RoutesOnMap = () => {
             }
         }
     }, [routeDistance, coords, routeData]);
-
-    const updateProgress = () => {
-        if (routeData && routeDistance > 0) {
-            const remainingDistance = calculateRemainingDistance();
-
-            // Рассчитываем прогресс, используя инверсную логику (оставшееся расстояние от общего расстояния)
-            const remainingProgress = (remainingDistance / routeDistance) * 100;
-
-            // Прогресс будет уменьшаться, когда оставшееся расстояние уменьшается
-            setProgress(remainingProgress); // Инверсный прогресс
-        }
-    };
 
     const sendStartRoute = async (progressData) => {
         try {
