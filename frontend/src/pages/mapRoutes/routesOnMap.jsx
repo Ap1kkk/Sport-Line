@@ -39,6 +39,7 @@ const RoutesOnMap = () => {
     const [progress, setProgress] = useState(0);
     const [historyId, setHistoryId] = useState(null);
     const [isLiked, setIsLiked] = useState(false);
+    const [completedCheckpoints, setCompletedCheckpoints] = useState([]);
 
     useEffect(() => {
         const fetchRouteData = async () => {
@@ -169,6 +170,31 @@ const RoutesOnMap = () => {
         };
     }, [mapInstance]);
 
+    const findNextCheckpoint = () => {
+        if (routeData && routeData.checkpoints) {
+            const remainingCheckpoints = routeData.checkpoints.filter(
+                (checkpoint, index) => !completedCheckpoints.includes(index)
+            );
+            return remainingCheckpoints[0];
+        }
+        return null;
+    };
+
+    const updateProgress = () => {
+        const nextCheckpoint = findNextCheckpoint();
+        if (nextCheckpoint) {
+            const { latitude, longitude } = nextCheckpoint;
+            const distanceToNextCheckpoint = calculateDistance(coords[0], coords[1], latitude, longitude);
+            if (distanceToNextCheckpoint < 100) {
+                // Помечаем чекпоинт как пройденный
+                setCompletedCheckpoints((prev) => [...prev, routeData.checkpoints.indexOf(nextCheckpoint)]);
+            }
+        } else {
+            // Если все чекпоинты пройдены, обновляем прогресс на 100%
+            setProgress(100);
+        }
+    };
+
     useEffect(() => {
         if (routeData && coords.length === 2 && routeDistance > 0) {
             try {
@@ -288,6 +314,10 @@ const RoutesOnMap = () => {
             setIsStarted(true);
             setErrorMessage("");
             sendStartRoute()
+
+            setProgress(0);
+            setCompletedCheckpoints([]);
+            updateProgress();
         }
     };
 
@@ -410,7 +440,7 @@ const RoutesOnMap = () => {
                                                         width: `${progress}%`,
                                                     }}
                                                 >
-                                                    <span style={progressBarStyles.label}>{progress.toFixed(2)}%</span>
+                                                    <span style={progressBarStyles.label}>{progress.toFixed(1)}%</span>
                                                 </div>
                                             </div>
                                             <p>Пройдено: {progress.toFixed(2)}%</p>
