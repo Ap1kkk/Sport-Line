@@ -150,3 +150,7 @@ font-size: 14px;
     display: flex;
     justify-content: space-between;
 }
+.like-icon{
+    width: 30px;
+    height: 30px;
+}
