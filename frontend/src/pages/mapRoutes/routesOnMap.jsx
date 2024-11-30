@@ -178,36 +178,47 @@ const RoutesOnMap = () => {
             const remainingCheckpoints = routeData.checkpoints.filter(
                 (checkpoint, index) => !completedCheckpoints.includes(index)
             );
-            return remainingCheckpoints[0];
+            return remainingCheckpoints[0]; // Возвращаем первый непройденный чекпоинт
         }
         return null;
     };
 
     const updateProgress = () => {
-        const nextCheckpoint = findNextCheckpoint();
-        if (nextCheckpoint) {
-            const { latitude, longitude } = nextCheckpoint;
-            const distanceToNextCheckpoint = calculateDistance(coords[0], coords[1], latitude, longitude);
+        if (routeData && routeDistance > 0 && coords.length === 2) {
+            let totalDistanceCovered = 0;
+            let completedCheckpointsCount = 0;
 
-            // Если пользователь близок к следующему чекпоинту, помечаем его как пройденный
-            if (distanceToNextCheckpoint < 60) {
-                setCompletedCheckpoints((prev) => [
-                    ...prev,
-                    routeData.checkpoints.indexOf(nextCheckpoint),
-                ]);
-            }
+            // Пройденное расстояние между точками
+            routeData.checkpoints.forEach((checkpoint, index) => {
+                const { latitude, longitude } = checkpoint;
+                const distanceToCheckpoint = calculateDistance(coords[0], coords[1], latitude, longitude);
 
-            const remainingDistance = routeData.checkpoints
-                .slice(completedCheckpoints.length)
-                .reduce((acc, checkpoint) => {
-                    const { latitude, longitude } = checkpoint;
-                    return acc + calculateDistance(coords[0], coords[1], latitude, longitude);
-                }, 0);
+                // Если пользователь близок к чекпоинту, считаем его пройденным
+                if (distanceToCheckpoint < 60 && !completedCheckpoints.includes(index)) {
+                    setCompletedCheckpoints((prev) => [...prev, index]);
+                    completedCheckpointsCount++;
+                }
 
-            const newProgress = Math.max(0, Math.min(100, (1 - remainingDistance / routeDistance) * 100));
+                // Добавляем расстояние до текущего чекпоинта
+                if (completedCheckpointsCount <= index) {
+                    totalDistanceCovered += distanceToCheckpoint;
+                }
+            });
+
+            // Расстояние, которое осталось пройти
+            const remainingDistance = routeDistance - totalDistanceCovered;
+
+            // Прогресс
+            const newProgress = Math.max(0, Math.min(100, (totalDistanceCovered / routeDistance) * 100));
             setProgress(newProgress);
         }
     };
+
+    useEffect(() => {
+        if (isStarted) {
+            updateProgress();
+        }
+    }, [coords, isStarted, completedCheckpoints, routeData]);
 
     useEffect(() => {
         if (routeData && coords.length === 2 && routeDistance > 0) {
@@ -318,12 +329,10 @@ const RoutesOnMap = () => {
         console.log("Handle start. Coords: " + coords)
         if (!isTooFar) {
             setIsStarted(true);
-            setErrorMessage("");
             sendStartRoute()
 
             setProgress(0);
             setCompletedCheckpoints([]);
-            updateProgress();
         }
     };
 
