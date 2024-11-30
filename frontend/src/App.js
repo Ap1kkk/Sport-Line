@@ -28,11 +28,11 @@ function App() {
 function AppComponent() {
     const location = useLocation();
     const isActive = (path) => location.pathname === path;
-    const showNavigation = !["/login", "/register", "/map"].includes(location.pathname);
+    const showNavigation = !["/login", "/register", "/map", "/map/:routeId"].includes(location.pathname);
     return (
         <>
             <Routes>
-                <Route path="/" element={<Navigate to="/main_page" replace/>}/>
+                <Route path="/" element={<Navigate to="/login" replace/>}/>
 
                 <Route path="/login" element={<Authorization/>}/>
                 <Route path="/register" element={<Register/>}/>
