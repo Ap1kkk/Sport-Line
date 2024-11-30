@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import "./AchievementsPage.css";
 import {BASE_API_URL} from "../../../constants/globals";
 
