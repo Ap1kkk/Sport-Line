@@ -7,6 +7,13 @@ const PopularFilteredRoutes = ({ filters, searchQuery }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // Объект для перевода сложности на русский
+    const difficultyTranslation = {
+        EASY: "Легкий",
+        MEDIUM: "Средний",
+        HARD: "Трудный",
+    };
+
     useEffect(() => {
         const fetchRoutes = async () => {
             try {
@@ -54,11 +61,12 @@ const PopularFilteredRoutes = ({ filters, searchQuery }) => {
                 routes.map((route) => (
                     <div key={route.id} className="route-card">
                         <a href={`/map/${route.id}`}>
-                            <img src={BASE_STATIC_URL + route.imagePath || "/default-image.jpg"} alt={route.name}/>
+                            <img src={BASE_STATIC_URL + route.imagePath || "/default-image.jpg"} alt={route.name} />
                             <div className="route-info">
                                 <h2>{route.name}</h2>
                                 <p>Расстояние: {route.distance} м</p>
-                                <p>Сложность: {route.difficulty}</p>
+                                {/* Перевод сложности */}
+                                <p>Сложность: {difficultyTranslation[route.difficulty] || route.difficulty}</p>
                                 <div className="categories">
                                     {route.categories && route.categories.length > 0
                                         ? route.categories.map((cat) => (
