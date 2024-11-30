@@ -188,9 +188,6 @@ a {
 .map-NiNo{
     margin-top: -20px;
     background: url('../../../public/iconsVk/галвный_экран_осн_02.jpg') no-repeat center center fixed; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
     background-size: cover;
 }
 
