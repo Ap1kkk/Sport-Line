@@ -31,12 +31,18 @@ const ProfilePage = () => {
         fetchProfileData();
     }, []);
 
+    const exitProfile = () => {
+        localStorage.clear();
+    } 
 
     return (
         <div className="profile-container">
-            <div className="header">
+            <div className="header_menu">
+                <div></div>
                 <h1>Профиль</h1>
-                <Link to="/EditProfilePage" className="edit-button">Ред</Link>
+                <div>
+                    <Link to="/EditProfilePage" className="edit-button">Ред</Link>
+                </div>
             </div>
             <div className="profile-info">
 
@@ -57,12 +63,18 @@ const ProfilePage = () => {
                 </div>
             </div>
             <h2>{profile.user.username}</h2>
-            <p className="email">{profile.user.email}</p>
-            <div className="menu">
-                <Link to="/StatisticsPage" className="menu-button">статистика</Link>
-                <Link to="/AchievementsPage" className="menu-button">достижения</Link>
-                <Link to="/RouteHistoryPage" className="menu-button">история</Link>
+            <div className="block-email">
+                <div></div>
+                <p className="email">{profile.user.email}</p>
             </div>
+            
+            <div className="menu">
+                <Link to="/StatisticsPage" className="menu-button">Статистика</Link>
+                <Link to="/AchievementsPage" className="menu-button">Достижения</Link>
+                <Link to="/RouteHistoryPage" className="menu-button">История</Link>
+            </div>
+            <div></div>
+            <Link onClick={exitProfile} to="/login" className="menu-button end-button">Выход</Link>
         </div>
     );
 };
