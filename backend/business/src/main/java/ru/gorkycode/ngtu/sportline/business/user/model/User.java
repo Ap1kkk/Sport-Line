@@ -79,7 +79,7 @@ public class User extends BaseEntity {
 
     @OneToMany
     @JoinTable(
-            name = "user_achievements",
+            name = "user_achieved_achievements",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "achievement_id", referencedColumnName = "id")
     )

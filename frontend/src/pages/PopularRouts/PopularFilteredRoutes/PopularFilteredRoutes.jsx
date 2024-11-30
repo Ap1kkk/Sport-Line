@@ -53,7 +53,7 @@ const PopularFilteredRoutes = ({ filters, searchQuery }) => {
                 !error &&
                 routes.map((route) => (
                     <div key={route.id} className="route-card">
-                        <img src={BASE_STATIC_URL + route.image || "/default-image.jpg"} alt={route.name} />
+                        <img src={BASE_STATIC_URL + route.imagePath || "/default-image.jpg"} alt={route.name} />
                         <div className="route-info">
                             <h2>{route.name}</h2>
                             <p>Расстояние: {route.distance} м</p>
