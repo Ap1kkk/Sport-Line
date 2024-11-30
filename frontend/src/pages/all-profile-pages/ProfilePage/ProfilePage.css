@@ -1,5 +1,7 @@
 /* Основной контейнер профиля */
 .profile-container {
+    display: flex;
+    height: 100vh;
     max-width: 400px;
     margin: 0 auto;
     padding: 20px;
@@ -9,13 +11,14 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
     position: relative;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
 
 /* Заголовок профиля */
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
     margin-bottom: 20px;
 }
 
@@ -99,11 +102,14 @@ h2 {
 
 /* Email пользователя */
 .email {
-    font-size: 14px;
-    color: #666;
+    font-size: 18px;
+    color: #000000;
     margin-bottom: 20px;
 }
-
+.block-email{
+    display: flex;
+    justify-content: center;
+}
 /* Меню */
 .menu {
     display: flex;
@@ -112,12 +118,14 @@ h2 {
 }
 
 .menu-button {
+    font-family: "Roboto Flex",Arial, sans-serif;
     display: block;
     padding: 10px 20px;
     font-size: 16px;
-    color: #333;
-    background-color: #e0e0e0;
-    border-radius: 25px;
+    color: #2688EB;
+    border: 1px solid #2688EB;
+    background-color: #ffffff;
+    border-radius: 6px;
     text-decoration: none;
     text-align: center;
     transition: background-color 0.2s, transform 0.2s;
@@ -126,4 +134,11 @@ h2 {
 .menu-button:hover {
     background-color: #d6d6d6;
     transform: scale(1.05);
+}
+
+.end-button {
+    margin-top: auto;
+    margin-bottom: 60px;
+    color: #ffffff;
+    background-color: #2688EB;
 }

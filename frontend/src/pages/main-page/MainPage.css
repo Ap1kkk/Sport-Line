@@ -1,0 +1,188 @@
+/* Общий стиль контейнера */
+.container {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+/* Заголовок */
+.header {
+    position: fixed;
+    z-index: 999;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Секция с картой */
+.mapSection {
+    position: relative;
+    width: 100%;
+    height: 90vh;
+    
+}
+
+.mapOverlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+}
+
+.mapTitle {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.mapButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007BFF;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* Секция с рекомендациями */
+.recommendedSection {
+    padding: 10px 20px;
+    margin-top: 10px;
+}
+
+.sectionTitle {
+    position: relative;
+    z-index: 1;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.recommendedSection {
+    padding: 20px;
+    background-color: #f9f9f9; /* Лёгкий фон */
+}
+
+.sectionTitle {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.cardRec{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100px;
+}
+
+.recommendedCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.cardImage {
+    width: 100px;
+    height: 100px; /* Фиксированная высота изображения */
+    object-fit: cover; /* Подгонка изображения под размер */
+    border-radius: 4px; /* Закругление углов */
+}
+
+
+.recommendedCard {
+    height: 170px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(243, 243, 243, 0.7);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-right: 10px;
+    z-index: 2;
+}
+
+
+.cardText {
+    font-size: 14px;
+    margin-top: 5px;
+    font-weight: 400;
+    text-align: left;
+}
+
+/* Секция популярных маршрутов */
+.popularSection {
+    padding: 0px 10px 20px 20px ;
+}
+
+.popularCard {
+    display: flex;
+    margin-bottom: 15px;
+    background-color: #f3f3f3;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.popularImage {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+}
+
+.popularContent {
+    padding: 10px;
+    flex: 1;
+}
+
+.popularTitle {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.popularInfo {
+    font-size: 14px;
+    color: #555;
+    margin-top: 5px;
+}
+
+.tagContainer {
+    margin-top: 10px;
+    margin-bottom: 60px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.tag {
+    padding: 5px 10px;
+    background-color: #007BFF;
+    color: #fff;
+    border-radius: 15px;
+    font-size: 12px;
+}
+
+.map-NiNo{
+    margin-top: -20px;
+    background: url('../../../public/iconsVk/галвный_экран_осн_02.jpg') no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
