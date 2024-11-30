@@ -173,38 +173,41 @@ const RoutesOnMap = () => {
     }, [mapInstance]);
 
     // Функция для вычисления оставшегося расстояния до всех непройденных чекпоинтов
-    const calculateDistanceCovered = (coords, routeData) => {
-        let distanceCovered = 0;
-
-        // Для каждого чекпоинта считаем расстояние от текущих координат пользователя до этого чекпоинта
-        for (let i = 0; i < routeData.checkpoints.length; i++) {
-            const checkpoint = routeData.checkpoints[i];
-            const { latitude, longitude } = checkpoint;
-
-            // Расстояние от текущего положения до чекпоинта
-            const distanceToCheckpoint = calculateDistance(coords[0], coords[1], latitude, longitude);
-
-            // Если пользователь еще не прошел этот чекпоинт, добавляем расстояние
-            if (distanceToCheckpoint < 20) {
-                distanceCovered += distanceToCheckpoint; // Добавляем расстояние до чекпоинта
-            }
+    const findNextCheckpoint = () => {
+        if (routeData) {
+            const remainingCheckpoints = routeData.checkpoints.filter(
+                (checkpoint, index) => !completedCheckpoints.includes(index)
+            );
+            return remainingCheckpoints[0]; // Возвращаем первый непройденный чекпоинт
         }
-
-        return distanceCovered;
+        return null;
     };
 
     const updateProgress = () => {
-        if (routeData && coords.length === 2) {
-            // Получаем полное расстояние маршрута
-            const totalRouteDistance = routeData.distance;
+        if (routeData && routeDistance > 0 && coords.length === 2) {
+            let totalDistanceCovered = 0;
+            let completedCheckpointsCount = 0;
 
-            // Вычисляем пройденное расстояние
-            const distanceCovered = calculateDistanceCovered(coords, routeData);
+            // Пройденное расстояние между точками
+            routeData.checkpoints.forEach((checkpoint, index) => {
+                const { latitude, longitude } = checkpoint;
+                const distanceToCheckpoint = calculateDistance(coords[0], coords[1], latitude, longitude);
 
-            // Прогресс: (пройденное расстояние / полное расстояние) * 100
-            const newProgress = Math.max(0, Math.min(100, (distanceCovered / totalRouteDistance) * 100));
+                // Если пользователь близок к чекпоинту, считаем его пройденным
+                if (distanceToCheckpoint < 20 && !completedCheckpoints.includes(index)) {
+                    setCompletedCheckpoints((prev) => [...prev, index]);
+                    completedCheckpointsCount++;
+                }
 
-            setProgress(newProgress); // Обновляем прогресс
+                if (completedCheckpointsCount <= index) {
+                    totalDistanceCovered += distanceToCheckpoint;
+                }
+            });
+
+            const remainingDistance = routeDistance - totalDistanceCovered;
+
+            const newProgress = Math.max(0, Math.min(100, (1 - (remainingDistance / routeDistance) * 100)))
+            setProgress(newProgress);
         }
     };
 
