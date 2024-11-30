@@ -420,9 +420,9 @@ const RoutesOnMap = () => {
                                                     <span className="progressLabel">{progress.toFixed(0)}%</span>
                                                 </div>
                                             </div>
-                                            <p>Пройдено: {progress.toFixed(2)}%</p>
+
                                         </div>
-                                        <p>Время: {realTimeInfo.time} мин</p>
+                                        <p>Время: {realTimeInfo.time} мин</p> <br></br><br></br>
                                     </>
                                 ) : (
                                     <p>Загрузка данных маршрута...</p>
@@ -430,9 +430,11 @@ const RoutesOnMap = () => {
                                 <button onClick={handleFinish} className="startButton">
                                     Закончить
                                 </button>
-                                <button onClick={toggleLike} className="button">
-                                    {isLiked ? "Убрать лайк" : "Поставить лайк"}
-                                </button>
+                                <img onClick={toggleLike}
+                                     src={"/icons/like.svg"}
+                                     alt={"Лайк"}
+                                     className="like-icon"
+                                />
                             </div>
                         ) : (
                             <div className="infoPanel">
