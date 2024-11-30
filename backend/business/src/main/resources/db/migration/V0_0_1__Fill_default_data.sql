@@ -91,12 +91,12 @@ INSERT INTO categories(name) VALUES ('По набережной');
 INSERT INTO categories(name) VALUES ('По стрит-арту');
 INSERT INTO categories(name) VALUES ('По достопримечательностям');
 
-INSERT INTO routes(name, difficulty, distance, duration, likes, created_at, description)
-    VALUES ('Изумрудное прямой', 'EASY', 352, 5, 10, CURRENT_TIMESTAMP, 'test1');
-INSERT INTO routes(name, difficulty, distance, duration, likes, created_at, description)
-    VALUES ('Иземрудное короткий', 'EASY', 277, 5, 10, CURRENT_TIMESTAMP, 'test2');
-INSERT INTO routes(name, difficulty, distance, duration, likes, created_at, description)
-    VALUES ('Изумрудное с поворотами', 'EASY', 371, 5, 10, CURRENT_TIMESTAMP, 'test3');
+INSERT INTO routes(name, difficulty, distance, duration, likes, created_at, description, image_path)
+    VALUES ('Изумрудное прямой', 'EASY', 352, 5, 10, CURRENT_TIMESTAMP, 'test1', '/routes/default.jpg');
+INSERT INTO routes(name, difficulty, distance, duration, likes, created_at, description, image_path)
+    VALUES ('Иземрудное короткий', 'EASY', 277, 5, 10, CURRENT_TIMESTAMP, 'test2', '/routes/default.jpg');
+INSERT INTO routes(name, difficulty, distance, duration, likes, created_at, description, image_path)
+    VALUES ('Изумрудное с поворотами', 'EASY', 371, 5, 10, CURRENT_TIMESTAMP, 'test3', '/routes/default.jpg');
 
 INSERT INTO route_categories (route_id, category_id) VALUES (1, 1);
 INSERT INTO route_categories (route_id, category_id) VALUES (1, 2);
