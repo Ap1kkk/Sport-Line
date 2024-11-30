@@ -17,6 +17,13 @@ const MainPage = () => {
     const [recommendedRoutes, setRecommendedRoutes] = useState([]);
     const [likedRoutes, setLikedRoutes] = useState({}); // Состояние для лайков
 
+    // Перевод сложности
+    const difficultyTranslation = {
+        EASY: "Легкий",
+        MEDIUM: "Средний",
+        HARD: "Тяжелый",
+    };
+
     // Загружаем данные маршрутов
     useEffect(() => {
         const fetchData = async () => {
@@ -170,11 +177,7 @@ const MainPage = () => {
                                                         e.preventDefault(); // Чтобы предотвратить переход
                                                         toggleLike(route.id);
                                                     }}
-                                                    src={
-                                                        likedRoutes[route.id]
-                                                            ? "/icons/liked.svg"
-                                                            : "/icons/like.svg"
-                                                    }
+                                                    src={likedRoutes[route.id] ? "/icons/liked.svg" : "/icons/like.svg"}
                                                     alt={likedRoutes[route.id] ? "Дизлайк" : "Лайк"}
                                                     className="like-icon"
                                                 />
@@ -210,7 +213,8 @@ const MainPage = () => {
                             <div className="popularContent">
                                 <p className="popularTitle">{route.name}</p>
                                 <p className="popularInfo">Расстояние - {route.distance} м</p>
-                                <p className="popularInfo">Сложность - {route.difficulty}</p>
+                                {/* Перевод сложности */}
+                                <p className="popularInfo">Сложность - {difficultyTranslation[route.difficulty] || route.difficulty}</p>
                                 <div className="tagContainer">{renderTags(route.categories)}</div>
                                 <div className="like-container">
                                     <img
@@ -218,11 +222,7 @@ const MainPage = () => {
                                             e.preventDefault(); // Чтобы предотвратить переход
                                             toggleLike(route.id);
                                         }}
-                                        src={
-                                            likedRoutes[route.id]
-                                                ? "/icons/liked.svg"
-                                                : "/icons/like.svg"
-                                        }
+                                        src={likedRoutes[route.id] ? "/icons/liked.svg" : "/icons/like.svg"}
                                         alt={likedRoutes[route.id] ? "Дизлайк" : "Лайк"}
                                         className="like-icon"
                                     />
