@@ -96,7 +96,7 @@ public class UserService {
 
         return ProfileDto
                 .builder()
-                .totalDistance(totalDistance == null ? 0L : totalDistance)
+                .totalDistance(totalDistance == null ? 0L : (long) (totalDistance / 0.75)) // Шаги
                 .totalAchievements(totalAchievements == null ? 0L : totalAchievements)
                 .user(projectionMapper.toDto(currentUser))
                 .build();
