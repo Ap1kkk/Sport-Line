@@ -6,7 +6,7 @@
     align-items: center;
     padding: 20px;
     width: 100%;
-    min-height: 90vh; /* Контейнер занимает всю высоту экрана */
+    min-height: 80vh; /* Контейнер занимает всю высоту экрана */
     background-color: #f8f9fa;
     box-sizing: border-box;
 }
