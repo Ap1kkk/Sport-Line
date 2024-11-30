@@ -196,7 +196,7 @@ const RoutesOnMap = () => {
     const updateProgress = () => {
         if (routeData && coords.length === 2) {
             // Получаем полное расстояние маршрута
-            const totalRouteDistance = calculateTotalRouteDistance(routeData.checkpoints);
+            const totalRouteDistance = routeData.distance;
 
             // Вычисляем пройденное расстояние
             const distanceCovered = calculateDistanceCovered(coords, routeData);
