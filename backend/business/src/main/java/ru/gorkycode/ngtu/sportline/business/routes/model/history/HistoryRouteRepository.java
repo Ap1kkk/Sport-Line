@@ -12,17 +12,17 @@ import java.time.ZonedDateTime;
 public interface HistoryRouteRepository extends JpaRepository<HistoryRoute, Long>, JpaSpecificationExecutor<HistoryRoute> {
 
     @Query("select count(r) from HistoryRoute r where r.status = :status and r.user.id = :userId")
-    long countFinishedRoutes(long userId, HistoryRouteStatus status);
+    Long countFinishedRoutes(long userId, HistoryRouteStatus status);
 
     @Query("select sum(r.route.distance) from HistoryRoute r where r.user.id = :userId")
-    long getTotalDistance(Long userId);
+    Long getTotalDistance(Long userId);
 
     @Query("select sum(r.route.distance) from HistoryRoute r where r.user.id = :userId and r.finishedAt > :startOfDay")
-    long getTotalDayDistance(Long userId, ZonedDateTime startOfDay);
+    Long getTotalDayDistance(Long userId, ZonedDateTime startOfDay);
 
     @Query("select count(r) from HistoryRoute r where r.delta > :delta")
-    long countWhereGreaterDeltaExists(Duration delta);
+    Long countWhereGreaterDeltaExists(Duration delta);
 
     @Query("select count(r) from HistoryRoute r where r.user.id = :userId and r.finishedAt > :startOfDay")
-    long countDailyRoutes(Long userId, ZonedDateTime startOfDay);
+    Long countDailyRoutes(Long userId, ZonedDateTime startOfDay);
 }

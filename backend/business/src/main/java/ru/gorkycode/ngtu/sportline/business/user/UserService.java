@@ -9,7 +9,9 @@ import ru.gorkycode.ngtu.sportline.business.auth.AuthService;
 import ru.gorkycode.ngtu.sportline.business.category.Category;
 import ru.gorkycode.ngtu.sportline.business.category.CategoryService;
 import ru.gorkycode.ngtu.sportline.business.region.RegionRepository;
+import ru.gorkycode.ngtu.sportline.business.routes.model.history.HistoryRouteRepository;
 import ru.gorkycode.ngtu.sportline.business.system.exceptions.classes.data.EntityNotFoundException;
+import ru.gorkycode.ngtu.sportline.business.user.achievements.UserAchievementRepository;
 import ru.gorkycode.ngtu.sportline.business.user.avatar.UserAvatar;
 import ru.gorkycode.ngtu.sportline.business.user.avatar.UserAvatarRepository;
 import ru.gorkycode.ngtu.sportline.business.user.dto.*;
@@ -38,6 +40,8 @@ public class UserService {
     private final Faker faker = new Faker();
     private final UserAvatarRepository userAvatarRepository;
     private final RegionRepository regionRepository;
+    private final HistoryRouteRepository historyRouteRepository;
+    private final UserAchievementRepository userAchievementRepository;
 
     public User getById(Long id) {
         return validator.throwIfNotExists(id);
@@ -87,11 +91,13 @@ public class UserService {
     @Transactional
     public ProfileDto getProfile() {
         User currentUser = authService.getCurrentUser();
+        Long totalDistance = historyRouteRepository.getTotalDistance(currentUser.getId());
+        Long totalAchievements = userAchievementRepository.countByUserId(currentUser.getId());
 
         return ProfileDto
                 .builder()
-                .totalDistance(faker.random().nextLong(1_000_000L))
-                .totalAchievements(faker.random().nextLong(1000L))
+                .totalDistance(totalDistance == null ? 0L : totalDistance)
+                .totalAchievements(totalAchievements == null ? 0L : totalAchievements)
                 .user(projectionMapper.toDto(currentUser))
                 .build();
     }

@@ -8,9 +8,12 @@ import java.util.List;
 
 @RepositoryRestResource(exported = false)
 public interface UserAchievementRepository extends JpaRepository<UserAchievement, UserAchievementId> {
-    Long countByUserId(Long userId);
+
     List<UserAchievement> findAllByUser_Id(Long id);
 
+    @Query("select count(ua) from UserAchievement ua where ua.user.id = :userId")
+    Long countByUserId(Long userId);
+
     @Query("select count(ua) from UserAchievement ua where ua.achievement.id = :achievementId and ua.user.id = :userId")
-    long countAchieved(Long achievementId, Long userId);
+    Long countAchieved(Long achievementId, Long userId);
 }
