@@ -60,9 +60,8 @@
     border-radius: 5px;
     z-index: 1000;
 }
-nav {
-    left: 200% !important;
-    z-index: -10000 !important;
+.progressLabel{
+    margin-left: 105px;
 }
 
 .progressBarContainer {

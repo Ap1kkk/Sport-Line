@@ -427,6 +427,7 @@ const RoutesOnMap = () => {
                                 ) : (
                                     <p>Загрузка данных маршрута...</p>
                                 )}
+                                <div className="buttons_map">
                                 <button onClick={handleFinish} className="startButton">
                                     Закончить
                                 </button>
@@ -434,7 +435,7 @@ const RoutesOnMap = () => {
                                      src={"/icons/like.svg"}
                                      alt={"Лайк"}
                                      className="like-icon"
-                                />
+                                /></div>
                             </div>
                         ) : (
                             <div className="infoPanel">
