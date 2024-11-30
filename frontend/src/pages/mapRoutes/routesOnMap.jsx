@@ -425,8 +425,7 @@ const RoutesOnMap = () => {
                                                         top: '50%',
                                                         left: '50%',
                                                         transform: 'translate(-50%, -50%)',
-                                                        color: 'blue',
-                                                        paddingBottom: '10px',
+                                                        color: '#007bff',
                                                     }}>
                                                       {progress.toFixed(0)}%
                                                     </span>
