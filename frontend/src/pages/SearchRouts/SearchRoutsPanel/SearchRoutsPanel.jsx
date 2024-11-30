@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
 import ReactSlider from "react-slider";
 import "./SearchRoutsPanel.css";
-import {BASE_API_URL} from "../../../constants/globals";
+import { BASE_API_URL } from "../../../constants/globals";
 
 const SearchRoutsPanel = ({ filters, onApply }) => {
-    const [tempFilters, setTempFilters] = useState(filters);
+    const [tempFilters, setTempFilters] = useState({
+        ...filters,
+        durationFrom: 0,
+        durationTo: 2000, // Максимальное значение времени
+        distanceFrom: 0,
+        distanceTo: 4000, // Максимальное значение дистанции
+    });
     const [categories, setCategories] = useState([]);
     const [loadingCategories, setLoadingCategories] = useState(true);
     const [error, setError] = useState(null);
@@ -61,12 +67,12 @@ const SearchRoutsPanel = ({ filters, onApply }) => {
     };
 
     return (
-        <div className="filter-panel">
+        <div className="filter-panel-search">
             <h2>Фильтры</h2>
 
             {error && <p style={{ color: "red" }}>{error}</p>}
 
-            <div className="filter-section">
+            <div className="filter-section-search">
                 <h3>Сложность</h3>
                 <div className="buttons">
                     {["EASY", "MEDIUM", "HARD"].map((level) => (
@@ -81,26 +87,7 @@ const SearchRoutsPanel = ({ filters, onApply }) => {
                 </div>
             </div>
 
-            <div className="filter-section">
-                <h3>Категории</h3>
-                {loadingCategories ? (
-                    <p>Загрузка категорий...</p>
-                ) : (
-                    <div className="buttons">
-                        {categories.map((category) => (
-                            <button
-                                key={category.id}
-                                className={tempFilters.categoryIds.includes(category.id) ? "selected" : ""}
-                                onClick={() => handleCategoryChange(category.id)}
-                            >
-                                {category.name}
-                            </button>
-                        ))}
-                    </div>
-                )}
-            </div>
-
-            <div className="filter-section">
+            <div className="filter-section-search">
                 <h3>Время прохождения</h3>
                 <ReactSlider
                     className="slider"
@@ -119,7 +106,7 @@ const SearchRoutsPanel = ({ filters, onApply }) => {
                 </div>
             </div>
 
-            <div className="filter-section">
+            <div className="filter-section-search">
                 <h3>Дистанция</h3>
                 <ReactSlider
                     className="slider"
@@ -136,6 +123,25 @@ const SearchRoutsPanel = ({ filters, onApply }) => {
                     <span>от {tempFilters.distanceFrom} м</span>
                     <span>до {tempFilters.distanceTo} м</span>
                 </div>
+            </div>
+
+            <div className="filter-section-search">
+                <h3>Категории</h3>
+                {loadingCategories ? (
+                    <p>Загрузка категорий...</p>
+                ) : (
+                    <div className="buttons">
+                        {categories.map((category) => (
+                            <button
+                                key={category.id}
+                                className={tempFilters.categoryIds.includes(category.id) ? "selected" : ""}
+                                onClick={() => handleCategoryChange(category.id)}
+                            >
+                                {category.name}
+                            </button>
+                        ))}
+                    </div>
+                )}
             </div>
 
             <button onClick={applyFilters} className="apply-button">

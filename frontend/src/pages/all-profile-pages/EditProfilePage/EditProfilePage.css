@@ -51,29 +51,49 @@
 
 .preferences-list {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
+    flex-wrap: wrap; /* Кнопки будут переноситься на новую строку, если не влезают */
+    gap: 10px; /* Расстояние между кнопками */
+    justify-content: flex-start; /* Кнопки выравниваются по началу строки */
 }
 
 .preference-button {
-    padding: 10px 20px;
-    border-radius: 20px;
-    background-color: gray;
-    color: white;
+    padding: 10px 20px; /* Внутренние отступы */
+    border-radius: 20px; /* Скругленные углы */
+    background-color: white; /* Белый фон */
+    color: #2688EB; /* Голубой текст */
+    border: 2px solid #2688EB; /* Голубая обводка */
     cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .preference-button.active {
-    background-color: blue;
+    background-color: #2688EB; /* Голубой фон при активном состоянии */
+    color: white; /* Белый текст */
+}
+
+.preference-button:hover {
+    background-color: #e0f7fa; /* Светло-голубой фон при наведении */
+    color: #2688EB; /* Голубой текст при наведении */
 }
 
 .save-button {
-    margin-top: 20px;
-    padding: 10px 30px;
-    background-color: green;
-    color: white;
-    border: none;
-    border-radius: 5px;
+    display: block; /* Делает кнопку блочной, чтобы занимала всю ширину */
+    width: 100%; /* Занимает всю ширину доступного контейнера */
+    margin-top: 20px; /* Отступ сверху */
+    padding: 15px; /* Увеличиваем высоту кнопки */
+    background-color: white; /* Белый фон */
+    color: #2688EB; /* Голубой текст */
+    border: 2px solid #2688EB; /* Голубая обводка */
+    border-radius: 5px; /* Скругленные углы */
+    font-size: 16px; /* Увеличиваем размер шрифта */
+    font-weight: bold; /* Жирный текст */
     cursor: pointer;
+    text-align: center; /* Центрируем текст */
+    transition: background-color 0.3s, color 0.3s;
 }
+
+.save-button:hover {
+    background-color: #e0f7fa; /* Светло-голубой фон при наведении */
+    color: #2688EB; /* Голубой текст */
+}
+

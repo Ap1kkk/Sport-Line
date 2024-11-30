@@ -1,20 +1,32 @@
-.filter-panel {
-    margin-bottom: 20px;
-    padding: 20px;
+.filter-panel-user {
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px;
 }
 
 .filter-section {
-    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .filter-section label {
-    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    gap: 10px;
+    color: #555;
 }
 
 .slider {
-    margin: 10px 0;
     height: 8px;
     border-radius: 4px;
     background: #ddd;
@@ -22,7 +34,7 @@
 }
 
 .track {
-    background: #007bff;
+    background: #2688eb;
     height: 100%;
     border-radius: 4px;
 }
@@ -31,7 +43,7 @@
     height: 20px;
     width: 20px;
     border-radius: 50%;
-    background: #007bff;
+    background: #2688eb;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -44,9 +56,78 @@
 
 .apply-button {
     padding: 10px 20px;
-    background-color: blue;
-    color: white;
-    border: none;
+    background-color: white;
+    border: 2px solid #2688eb;
+    color: #2688eb;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.apply-button:hover {
+    background-color: #2688eb;
+    color: white;
+}
+
+.category-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-start; /* Выравнивание кнопок по левому краю */
+}
+
+.category-button {
+    padding: 8px 12px;
+    border: 2px solid #2688eb;
+    border-radius: 20px;
+    background-color: white;
+    color: #2688eb;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, transform 0.2s;
+}
+
+.category-button.selected {
+    background-color: #2688eb;
+    color: white;
+}
+
+.category-button:hover {
+    background-color: #e0f7fa;
+    color: #2688eb;
+    transform: scale(1.05);
+}
+
+.difficulty-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap; /* Позволяем кнопкам переноситься на следующую строку */
+    justify-content: center; /* Центрируем кнопки по горизонтали */
+    align-items: center; /* Центрируем кнопки по вертикали */
+}
+
+.difficulty-button {
+    padding: 8px 12px;
+    border: 2px solid #2688eb;
+    border-radius: 20px;
+    background-color: white;
+    color: #2688eb;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, transform 0.2s;
+}
+
+.difficulty-button.selected {
+    background-color: #2688eb;
+    color: white;
+}
+
+.difficulty-button:hover {
+    background-color: #e0f7fa;
+    color: #2688eb;
+    transform: scale(1.05);
 }

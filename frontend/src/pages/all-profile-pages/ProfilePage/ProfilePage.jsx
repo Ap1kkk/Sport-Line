@@ -33,7 +33,7 @@ const ProfilePage = () => {
 
     const exitProfile = () => {
         localStorage.clear();
-    } 
+    }
 
     return (
         <div className="profile-container">
@@ -41,7 +41,7 @@ const ProfilePage = () => {
                 <div></div>
                 <h1>Профиль</h1>
                 <div>
-                    <Link to="/EditProfilePage" className="edit-button">Ред</Link>
+                    <Link to="/profile_page/edit_profile_page" className="edit-button">Ред</Link>
                 </div>
             </div>
             <div className="profile-info">
@@ -67,11 +67,11 @@ const ProfilePage = () => {
                 <div></div>
                 <p className="email">{profile.user.email}</p>
             </div>
-            
+
             <div className="menu">
-                <Link to="/StatisticsPage" className="menu-button">Статистика</Link>
-                <Link to="/AchievementsPage" className="menu-button">Достижения</Link>
-                <Link to="/RouteHistoryPage" className="menu-button">История</Link>
+                <Link to="/profile_page/statistics_page" className="menu-button">статистика</Link>
+                <Link to="/profile_page/achievements_page" className="menu-button">достижения</Link>
+                <Link to="/profile_page/route_history_page" className="menu-button">история</Link>
             </div>
             <div></div>
             <Link onClick={exitProfile} to="/login" className="menu-button end-button">Выход</Link>

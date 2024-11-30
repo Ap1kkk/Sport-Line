@@ -8,15 +8,16 @@
     text-align: center;
 }
 
-.search-bar {
+.search-bar-popular {
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 20px 0;
 }
 
-.search-bar input {
-    width: 60%;
+.search-bar-popular input {
+    position: relative;
+    width: 100%;
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
