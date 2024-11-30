@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {BASE_API_URL} from "../../constants/globals";
 
 import './routesOnMap.css'; // Импорт CSS-файла
@@ -42,6 +42,7 @@ const RoutesOnMap = () => {
     const [historyId, setHistoryId] = useState(null);
     const [isLiked, setIsLiked] = useState(false);
     const [completedCheckpoints, setCompletedCheckpoints] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchRouteData = async () => {
@@ -346,10 +347,12 @@ const RoutesOnMap = () => {
                     const distanceToEnd = calculateDistance(coords[0], coords[1], lastLat, lastLon);
                     if (distanceToEnd > 60) {
                         sendLeaveRequest();
+
                     }
                     else {
                         sendFinishRequest();
                     }
+                    navigate('/main_page');
                 }
             } catch (error) {
                 console.error("Error sending progress update:", error);
@@ -414,7 +417,7 @@ const RoutesOnMap = () => {
                                                         width: `${progress}%`,
                                                     }}
                                                 >
-                                                    <span className="progressLabel">{progress.toFixed(2)}%</span>
+                                                    <span className="progressLabel">{progress.toFixed(0)}%</span>
                                                 </div>
                                             </div>
                                             <p>Пройдено: {progress.toFixed(2)}%</p>

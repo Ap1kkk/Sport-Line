@@ -9,7 +9,6 @@ import Preferences from "./pages/Preferences/Preferences";
 import RoutesOnMap from "./pages/mapRoutes/routesOnMap";
 import StatisticsPage from "./pages/all-profile-pages/StatisticsPage/StatisticsPage";
 import Achievements from "./pages/all-profile-pages/AchievementsPage/AchievementsPage";
-import RouteHistory from "./pages/all-profile-pages/RouteHistoryPage/RouteHistoryPage";
 import EditProfile from "./pages/all-profile-pages/EditProfilePage/EditProfilePage";
 import Admin_workbench from "./pages/admin-page/admin_workbench";
 import Recommendation from "./pages/Filters/Recommendation";
@@ -25,6 +24,8 @@ function App() {
         </Router>
     );
 }
+
+const showNavigation = !["/login", "/register"].includes(location.pathname);
 
 function AppComponent() {
     const location = useLocation();
@@ -56,6 +57,7 @@ function AppComponent() {
                 <Route path="/profile_page/edit_profile_page" element={<EditProfile />} />
                 <Route path="/main_page/history" element={<UserHistory />}/>
             </Routes>
+            {showNavigation && (
             <nav style={styles.bottomNav}>
             <Link to="/favourites" style={styles.navLink}>
                 <svg width="57" height="49" viewBox="0 0 57 49" fill={isActive("/favourites") ? "#2975CC" : "#99A2AD"} xmlns="http://www.w3.org/2000/svg">
@@ -92,6 +94,7 @@ function AppComponent() {
                     </svg>
                 </Link>
             </nav>
+            )},
         </>
     );
 }
