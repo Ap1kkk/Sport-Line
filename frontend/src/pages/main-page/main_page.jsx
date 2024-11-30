@@ -68,7 +68,7 @@ const MainPage = () => {
                 <h1 className="title">SportLine</h1>
                 <Icon32SearchOutline onClick={handleButtonClickSearch} width={32} height={32} color="#2975CC" />
             </header>
-            <div class="map-NiNo">
+            <div className="map-NiNo">
                 {/* Map Section */}
                 <div className="mapSection">
                     <div className="mapOverlay">
@@ -91,7 +91,7 @@ const MainPage = () => {
                             <CardScroll>
                                 {Array.from({ length: 4 }).map((_, index) => (
                                     <Card key={index} size="l" className="recommendedCard">
-                                        <div class="cardRec">
+                                        <div className="cardRec">
                                             <img
                                                 src={`https://via.placeholder.com/150?text=Route+${index + 1}`}
                                                 alt={`Route ${index + 1}`}
