@@ -63,7 +63,7 @@ const ProfilePage = () => {
                 </div>
             </div>
             <h2>{profile.user.username}</h2>
-            <div class="block-email">
+            <div className="block-email">
                 <div></div>
                 <p className="email">{profile.user.email}</p>
             </div>
