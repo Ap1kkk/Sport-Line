@@ -48,10 +48,9 @@
     border-radius: 5px;
     z-index: 1000;
 }
-
 .infoPanel {
     position: fixed;
-    bottom: 100px;
+    bottom: 40px;
     width: 80%;
     left: 50%;
     transform: translateX(-50%);
@@ -60,6 +59,10 @@
     padding: 10px 20px;
     border-radius: 5px;
     z-index: 1000;
+}
+nav {
+    left: 200% !important;
+    z-index: -10000 !important;
 }
 
 .progressBarContainer {
