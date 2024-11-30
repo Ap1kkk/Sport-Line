@@ -202,36 +202,26 @@ const Admin_workbench = () => {
                 distance: routeDistance ,
                 duration: 0,
                 checkpoints: checkpoints,
-                categoryIds: categories
             }
-
-            // formData.append("name", routeName);
-            // formData.append("description", description);
-            // formData.append("difficulty", difficulty);
-            // formData.append("distance", routeDistance);
-            // formData.append("duration", 0);
+            selectedCategories.forEach((category, index) => {
+                formData.append(`categoryIds[${index}]`, category);
+            });
 
             appendFormData(route)
-
-            // // Добавляем категории
-            // selectedCategories.forEach((category, index) => {
-            //     formData.append(`categoryIds[${index}]`, category);
-            // });
-            // // Добавляем точки маршрута
-            // checkpoints.forEach((checkpoint, index) => {
-            //     formData.append(`checkpoints[${index}].index`, checkpoint.index); // индекс
-            //     formData.append(`checkpoints[${index}].latitude`, checkpoint.latitude); // широта
-            //     formData.append(`checkpoints[${index}].longitude`, checkpoint.longitude); // долгота
-            // });
 
             console.log("Selected categories:", selectedCategories);
             console.log("Checkpoints:", checkpoints);
 
+            if (selectedImage) {
+                formData.append("image", selectedImage);
+            }
+
+            console.log("image:", selectedImage);
+
             const response = await fetch(API_ROUTE_URL, {
                 method: "POST",
                 headers: {
-                    Authorization: `Bearer ${user.token}`,
-                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${user.token}`
                 },
                 body: formData,
             });

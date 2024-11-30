@@ -71,7 +71,6 @@ const RoutesOnMap = () => {
                 setIsLoading(false);
             }
         };
-
         fetchRouteData();
     }, [routeId]);
 
@@ -170,47 +169,23 @@ const RoutesOnMap = () => {
         };
     }, [mapInstance]);
 
-    const updateProgress = (activeRoute, totalDistance) => {
-        if (coords.length === 2) {
-            const [currentLat, currentLon] = coords;
-            let totalRouteDistance = totalDistance || 0;
-
-            let distanceCovered = 0;
-            let prevCheckpoint = activeRoute.getReferencePoints()[0];
-
-            for (let i = 1; i < activeRoute.getReferencePoints().length; i++) {
-                const nextCheckpoint = activeRoute.getReferencePoints()[i];
-                distanceCovered += calculateDistance(
-                    prevCheckpoint[0],
-                    prevCheckpoint[1],
-                    nextCheckpoint[0],
-                    nextCheckpoint[1]
-                );
-                prevCheckpoint = nextCheckpoint;
-            }
-
-            const distanceToCurrentLocation = calculateDistance(
-                coords[0],
-                coords[1],
-                prevCheckpoint[0],
-                prevCheckpoint[1]
-            );
-
-            distanceCovered += distanceToCurrentLocation;
-
-            const progress = (distanceCovered / totalRouteDistance) * 100;
-            setProgress(Math.min(progress, 100));
-        }
-    };
-
     useEffect(() => {
         if (routeData && coords.length === 2 && routeDistance > 0) {
             try {
                 const startLat = routeData.checkpoints[0]?.latitude;
                 const startLon = routeData.checkpoints[0]?.longitude;
+                const lastCheckpoint = routeData.checkpoints[routeData.checkpoints.length - 1];
+                const lastLat = lastCheckpoint.latitude;
+                const lastLon = lastCheckpoint.longitude;
+
+                const distanceToEnd = calculateDistance(coords[0], coords[1], lastLat, lastLon);
+
+                const progress = Math.max(0, Math.min(100, (1 - distanceToEnd / routeDistance) * 100));
+                setProgress(progress);
+
                 if (startLat && startLon) {
                     const distanceToStart = calculateDistance(coords[0], coords[1], startLat, startLon);
-                    setIsTooFar(distanceToStart > 100);
+                    setIsTooFar(distanceToStart > 60);
 
                     const averageSpeed = 1.39; // Средняя скорость в м/с
                     const timeInSeconds = routeDistance / averageSpeed;
@@ -316,12 +291,6 @@ const RoutesOnMap = () => {
         }
     };
 
-    const notError  = () => {
-        if (setIsStarted(true)) {
-
-        }
-    }
-
     const toggleLike = async () => {
         try {
             const user = JSON.parse(localStorage.getItem("user"));
@@ -372,7 +341,7 @@ const RoutesOnMap = () => {
 
                 if (lastLat && lastLon) {
                     const distanceToEnd = calculateDistance(coords[0], coords[1], lastLat, lastLon);
-                    if (distanceToEnd > 100) {
+                    if (distanceToEnd > 60) {
                         sendLeaveRequest();
                     }
                     else {
