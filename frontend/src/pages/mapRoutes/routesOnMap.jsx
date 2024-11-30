@@ -415,13 +415,24 @@ const RoutesOnMap = () => {
                                                     className="progressBarFiller"
                                                     style={{
                                                         width: `${progress}%`,
+                                                        backgroundColor: "white",
+                                                        height: '100%',
+                                                        transition: 'width 0.1s ease-in-out',
                                                     }}
                                                 >
-                                                    <span className="progressLabel">{progress.toFixed(0)}%</span>
+                                                    <span className="progressLabel" style={{
+                                                        position: 'absolute',
+                                                        top: '50%',
+                                                        left: '50%',
+                                                        transform: 'translate(-50%, -50%)',
+                                                        color: 'blue'
+                                                    }}>
+                                                      {progress.toFixed(0)}%
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <p>Время: {realTimeInfo.time} мин</p> <br /><br />
+                                        <p>Время: {realTimeInfo.time} мин</p> <br/><br/>
                                     </>
                                 ) : (
                                     <p>Загрузка данных маршрута...</p>
