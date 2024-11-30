@@ -3,6 +3,8 @@ import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
 import { useParams } from "react-router-dom";
 import {BASE_API_URL} from "../../constants/globals";
 
+import './routesOnMap.css'; // Импорт CSS-файла
+
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371000; // Радиус Земли в метрах
     const φ1 = (lat1 * Math.PI) / 180;
@@ -389,12 +391,12 @@ const RoutesOnMap = () => {
     };
 
     return (
-        <div style={styles.container}>
+        <div className="container">
             {isLoading ? (
                 <p>Загрузка маршрута...</p>
             ) : routeData ? (
                 <>
-                    <h2 style={styles.routeName}>{routeData.nameRoute}</h2>
+                    <h2 className="routeName">{routeData.nameRoute}</h2>
                     <YMaps
                         query={{
                             apikey: "71b4ede5-7042-4bba-9243-a2cb4b638bd5",
@@ -405,7 +407,7 @@ const RoutesOnMap = () => {
                         <Map
                             instanceRef={(ref) => setMapInstance(ref)}
                             defaultState={{
-                                center: [56.315309, 43.993506],
+                                center: coords,
                                 zoom: 12,
                                 controls: [],
                             }}
@@ -422,29 +424,30 @@ const RoutesOnMap = () => {
                             />
                         </Map>
                     </YMaps>
+
                     <div>
                         {!isStarted && isTooFar && (
-                            <div style={styles.errorMessageOverlay}>
-                                <p style={styles.errorText}>
+                            <div className="errorMessageOverlay">
+                                <p className="errorText">
                                     Вы слишком далеко от начала маршрута.
                                 </p>
                             </div>
                         )}
 
                         {isStarted ? (
-                            <div style={styles.infoPanel}>
+                            <div className="infoPanel">
                                 {realTimeInfo ? (
                                     <>
                                         <p>Расстояние маршрута: {realTimeInfo.routeDistance} км</p>
                                         <div>
-                                            <div style={progressBarStyles.container}>
+                                            <div className="progressBarContainer">
                                                 <div
+                                                    className="progressBarFiller"
                                                     style={{
-                                                        ...progressBarStyles.filler,
                                                         width: `${progress}%`,
                                                     }}
                                                 >
-                                                    <span style={progressBarStyles.label}>{progress.toFixed(1)}%</span>
+                                                    <span className="progressLabel">{progress.toFixed(2)}%</span>
                                                 </div>
                                             </div>
                                             <p>Пройдено: {progress.toFixed(2)}%</p>
@@ -454,15 +457,15 @@ const RoutesOnMap = () => {
                                 ) : (
                                     <p>Загрузка данных маршрута...</p>
                                 )}
-                                <button onClick={handleFinish} style={styles.startButton}>
+                                <button onClick={handleFinish} className="startButton">
                                     Закончить
                                 </button>
-                                <button onClick={toggleLike} style={styles.button}>
+                                <button onClick={toggleLike} className="button">
                                     {isLiked ? "Убрать лайк" : "Поставить лайк"}
                                 </button>
                             </div>
                         ) : (
-                            <div style={styles.infoPanel}>
+                            <div className="infoPanel">
                                 {realTimeInfo ? (
                                     <>
                                         <p>Расстояние маршрута: {realTimeInfo.routeDistance} км</p>
@@ -478,10 +481,10 @@ const RoutesOnMap = () => {
                                 ) : (
                                     <p>Загрузка данных маршрута...</p>
                                 )}
-                                <button onClick={handleStart} style={styles.startButton}>
+                                <button onClick={handleStart} className="startButton">
                                     Начать
                                 </button>
-                                <button onClick={toggleLike} style={styles.button}>
+                                <button onClick={toggleLike} className="button">
                                     {isLiked ? "Убрать лайк" : "Поставить лайк"}
                                 </button>
                             </div>
@@ -493,117 +496,6 @@ const RoutesOnMap = () => {
             )}
         </div>
     );
-};
-
-const progressBarStyles = {
-    container: {
-        height: "20px",
-        width: "100%",
-        backgroundColor: "#e0e0df",
-        borderRadius: "5px",
-        margin: "10px 0",
-    },
-    filler: {
-        height: "100%",
-        backgroundColor: "#007BFF",
-        borderRadius: "inherit",
-        textAlign: "center",
-        transition: "width 0.2s ease-in-out",
-    },
-    label: {
-        padding: "5px",
-        color: "white",
-        fontWeight: "bold",
-    },
-};
-
-const styles = {
-    container: {
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100%",
-    },
-    button: {
-        padding: "10px 20px",
-        backgroundColor: "#007BFF",
-        color: "#fff",
-        border: "none",
-        borderRadius: "4px",
-        cursor: "pointer",
-    },
-    startButton: {
-        padding: "10px 10px",
-        backgroundColor: "#28a745",
-        color: "#fff",
-        border: "none",
-        borderRadius: "4px",
-        cursor: "pointer",
-        marginTop: "10px",
-        position: "relative",
-        left: "50%",
-        transform: "translateX(-50%)",
-    },
-    error: {
-        color: "red",
-    },
-    errorText: {
-        fontSize: "16px",
-        fontWeight: "bold",
-    },
-    routeName: {
-        fontSize: "20px",
-        fontWeight: "bold",
-        marginBottom: "10px",
-        marginTop: "10px",
-    },
-    errorMessageOverlay: {
-        position: "fixed",
-        bottom: "250px",
-        left: "50%",
-        transform: "translateX(-50%)",
-        backgroundColor: "rgba(255, 0, 0, 0.8)",
-        color: "#fff",
-        padding: "10px 20px",
-        borderRadius: "5px",
-        zIndex: 1000,
-    },
-    infoPanel: {
-        position: "fixed",
-        bottom: "100px",
-        width: "80%",
-        left: "50%",
-        transform: "translateX(-50%)",
-        backgroundColor: "rgba(0, 0, 0, 0.7)",
-        color: "#fff",
-        padding: "10px 20px",
-        borderRadius: "5px",
-        zIndex: 1000,
-    },
-    progressBarContainer: {
-        position: "fixed",
-        bottom: "50px",
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: "80%",
-        height: "30px",
-        backgroundColor: "#f3f3f3",
-        borderRadius: "15px",
-        overflow: "hidden",
-        boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
-    },
-    progressBar: {
-        height: "100%",
-        backgroundColor: "#4caf50",
-        transition: "width 0.5s ease",
-    },
-    progressText: {
-        textAlign: "center",
-        marginTop: "5px",
-        fontSize: "14px",
-        fontWeight: "bold",
-    },
-
 };
 
 export default RoutesOnMap;

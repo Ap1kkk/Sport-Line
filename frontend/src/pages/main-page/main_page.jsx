@@ -71,9 +71,13 @@ const MainPage = () => {
                     </div>
                 </div>
                 </div>
+                
                 {/* Recommended Routes */}
                 <div className="recommendedSection">
-                    <h3 className="sectionTitle">Рекомендуемые</h3>
+                    <div className="main_title">
+                        <h3 className="sectionTitle">Рекомендуемые</h3>
+                        <img className="arrow" src="/icons/стрелка.svg" alt="стрелка" />
+                    </div>
                     <div style={{ marginLeft: "-40px" }}>
                         <Group>
                             <CardScroll>
@@ -96,7 +100,11 @@ const MainPage = () => {
             
             {/* Popular Section */}
             <div className="popularSection">
-                <h3 className="sectionTitle">Популярные</h3>
+                <div className="main_title">
+                        <h3 className="sectionTitle">Популярные</h3>
+                        <img className="arrow" src="/icons/стрелка.svg" alt="стрелка" />
+                    </div>
+                
                 {Array.from({ length: 2 }).map((_, index) => (
                     <div key={index} className="popularCard">
                         <img

@@ -188,3 +188,16 @@
     -o-background-size: cover;
     background-size: cover;
 }
+
+.main_title{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+
+}
+
+.arrow{
+    padding: 2px;
+    margin-right: 25px;
+}
