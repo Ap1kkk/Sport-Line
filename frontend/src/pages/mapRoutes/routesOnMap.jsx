@@ -422,8 +422,8 @@ const RoutesOnMap = () => {
                                                 >
                                                     <span className="progressLabel" style={{
                                                         position: 'absolute',
-                                                        top: '50%',
-                                                        left: '50%',
+                                                        top: '65%',
+                                                        left: '10%',
                                                         transform: 'translate(-50%, -50%)',
                                                         color: '#007bff',
                                                     }}>
