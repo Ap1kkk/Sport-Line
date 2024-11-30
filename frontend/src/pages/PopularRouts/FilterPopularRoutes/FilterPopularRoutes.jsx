@@ -49,9 +49,13 @@ const FilterPopularRoutes = ({ filters, onApply }) => {
     }, []);
 
     const handleDifficultyChange = (level) => {
+        console.log("before:", tempFilters.difficulties); // Лог состояния перед обновлением
         const newDifficulties = tempFilters.difficulties.includes(level)
             ? tempFilters.difficulties.filter((item) => item !== level)
             : [...tempFilters.difficulties, level];
+
+        console.log("after:", newDifficulties); // Лог состояния после обновления
+
         setTempFilters({ ...tempFilters, difficulties: newDifficulties });
     };
 
@@ -109,13 +113,17 @@ const FilterPopularRoutes = ({ filters, onApply }) => {
                         <div className="filter-section">
                             <h3>Сложность</h3>
                             <div className="difficult_buttons">
-                                {["EASY", "MEDIUM", "HARD"].map((level) => (
+                                {[
+                                    { label: "Легкий", value: "EASY" },
+                                    { label: "Средний", value: "MEDIUM" },
+                                    { label: "Трудный", value: "HARD" }
+                                ].map(({ label, value }) => (
                                     <button
-                                        key={level}
-                                        className={tempFilters.difficulties.includes(level) ? "selected" : ""}
-                                        onClick={() => handleDifficultyChange(level)}
+                                        key={value}
+                                        className={tempFilters.difficulties.includes(value) ? "selected" : ""}
+                                        onClick={() => handleDifficultyChange(value)}
                                     >
-                                        {level}
+                                        {label}
                                     </button>
                                 ))}
                             </div>
