@@ -420,22 +420,23 @@ const RoutesOnMap = () => {
                                                     <span className="progressLabel">{progress.toFixed(0)}%</span>
                                                 </div>
                                             </div>
-
                                         </div>
-                                        <p>Время: {realTimeInfo.time} мин</p> <br></br><br></br>
+                                        <p>Время: {realTimeInfo.time} мин</p> <br /><br />
                                     </>
                                 ) : (
                                     <p>Загрузка данных маршрута...</p>
                                 )}
                                 <div className="buttons_map">
-                                <button onClick={handleFinish} className="startButton">
-                                    Закончить
-                                </button>
-                                <img onClick={toggleLike}
-                                     src={"/icons/like.svg"}
-                                     alt={"Лайк"}
-                                     className="like-icon"
-                                /></div>
+                                    <button onClick={handleFinish} className="startButton">
+                                        Закончить
+                                    </button>
+                                    <img
+                                        onClick={toggleLike}
+                                        src={isLiked ? "/icons/liked.svg" : "/icons/like.svg"}
+                                        alt={isLiked ? "Дизлайк" : "Лайк"}
+                                        className="like-icon"
+                                    />
+                                </div>
                             </div>
                         ) : (
                             <div className="infoPanel">
@@ -443,14 +444,16 @@ const RoutesOnMap = () => {
                                     <div>
                                         <div className="sett">
                                             <div>
-                                            <p className="h">Расстояние: </p>
-                                            <p>{realTimeInfo.routeDistance} км</p>
-                                            </div><div>
-                                            <p className="h">Время: </p>
-                                            <p>{realTimeInfo.time} мин</p>
-                                            </div><div>
-                                            <p className="h">Сложность: </p>
-                                            <p>{routeData.difficulty || "Не указана"}</p>
+                                                <p className="h">Расстояние: </p>
+                                                <p>{realTimeInfo.routeDistance} км</p>
+                                            </div>
+                                            <div>
+                                                <p className="h">Время: </p>
+                                                <p>{realTimeInfo.time} мин</p>
+                                            </div>
+                                            <div>
+                                                <p className="h">Сложность: </p>
+                                                <p>{routeData.difficulty || "Не указана"}</p>
                                             </div>
                                         </div>
                                         <div className="categories">
@@ -467,13 +470,14 @@ const RoutesOnMap = () => {
                                     <p>Загрузка данных маршрута...</p>
                                 )}
                                 <div className="buttons_map">
-                                <p onClick={handleStart} className="startButton">
-                                    Начать
-                                </p>
-                                <img    onClick={toggleLike}
-                                        src={"/icons/like.svg"}
-                                        alt={"Лайк"} 
-                                        className="like-icon" 
+                                    <p onClick={handleStart} className="startButton">
+                                        Начать
+                                    </p>
+                                    <img
+                                        onClick={toggleLike}
+                                        src={isLiked ? "/icons/liked.svg" : "/icons/like.svg"}
+                                        alt={isLiked ? "Дизлайк" : "Лайк"}
+                                        className="like-icon"
                                     />
                                 </div>
                             </div>
