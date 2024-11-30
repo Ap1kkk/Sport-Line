@@ -47,13 +47,14 @@ function AppComponent() {
                 <Route path="/favourites" element={<UserLikeRouts/>}/>
                 <Route path="/main_page/popular" element={<PopularRouts/>}/>
                 <Route path="/history" element={<UserHistory/>}/>
-                <Route path="/search_page" element={<SearchRouts />}/>
+                <Route path="/main_page/search_page" element={<SearchRouts />}/>
 
                 <Route path="/profile_page" element={<Profile />}/>
                 <Route path="/profile_page/statistics_page" element={<StatisticsPage />} />
                 <Route path="/profile_page/achievements_page" element={<Achievements />} />
-                <Route path="/profile_page/route_history_page" element={<RouteHistory />} />
+                <Route path="/profile_page/route_history_page" element={<UserHistory />} />
                 <Route path="/profile_page/edit_profile_page" element={<EditProfile />} />
+                <Route path="/main_page/history" element={<UserHistory />}/>
             </Routes>
             <nav style={styles.bottomNav}>
             <Link to="/favourites" style={styles.navLink}>

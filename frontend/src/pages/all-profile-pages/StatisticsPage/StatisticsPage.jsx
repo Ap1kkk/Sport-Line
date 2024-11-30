@@ -3,23 +3,23 @@ import "./StatisticsPage.css";
 import {BASE_API_URL} from "../../../constants/globals";
 
 const StatisticsPage = () => {
-    const [statistics, setStatistics] = useState(null); // Данные статистики
-    const [selectedPeriod, setSelectedPeriod] = useState("DAY"); // Текущий выбранный период
-    const [loading, setLoading] = useState(true); // Состояние загрузки
-    const [error, setError] = useState(null); // Ошибки
+    const [period, setPeriod] = useState("WEEK");
+    const [statistics, setStatistics] = useState({});
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const fetchStatistics = async (period) => {
+    const fetchStatistics = async () => {
+        setLoading(true);
+        setError(null);
+
         try {
-            setLoading(true);
-            setError(null);
-
-            const storedData = JSON.parse(localStorage.getItem("user"));
-            if (!storedData) {
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (!user) {
                 throw new Error("Пользователь не найден в localStorage");
             }
 
-            const userId = storedData.id; // Извлекаем id пользователя
-            const token = storedData.token; // Извлекаем токен авторизации
+            const userId = user.id; // Извлекаем id пользователя
+            const token = user.token; // Извлекаем токен авторизации
 
             if (!token) {
                 throw new Error("Токен авторизации отсутствует");
@@ -28,82 +28,101 @@ const StatisticsPage = () => {
             // Формируем URL с параметром запроса
             const url = `${BASE_API_URL}/user/statistics?period=${period}`;
 
-            console.log("Отправляем запрос с URL:", url);
-
-            const response = await fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({
-                    userId: userId, // В теле запроса оставляем только userId
-                }),
-            });
+            const response = await fetch(
+                `${BASE_API_URL}/user/statistics?period=${period}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${user.token}`,
+                    },
+                    body: JSON.stringify({
+                        userId: user.id,
+                    }),
+                }
+            );
 
             if (!response.ok) {
-                const errorData = await response.json();
-                console.error("Ответ сервера с ошибкой:", errorData);
-                throw new Error(errorData.message || `Ошибка: ${response.status}`);
+                throw new Error("Ошибка загрузки статистики");
             }
 
             const data = await response.json();
-            console.log("Полученные данные статистики:", data);
             setStatistics(data);
         } catch (err) {
-            console.error("Ошибка при загрузке статистики:", err.message);
-            setError(err.message || "Произошла ошибка");
+            setError(err.message);
         } finally {
             setLoading(false);
         }
     };
 
-    // Обновляем статистику при изменении периода
     useEffect(() => {
-        fetchStatistics(selectedPeriod);
-    }, [selectedPeriod]);
+        fetchStatistics();
+    }, [period]);
 
-    const handlePeriodChange = (period) => {
-        setSelectedPeriod(period); // Устанавливаем выбранный период
+    const handlePeriodChange = (newPeriod) => {
+        setPeriod(newPeriod);
     };
 
     return (
-        <div className="user-statistics-container">
-            <h1>Статистика пользователя</h1>
-
-            {/* Кнопки переключения периода */}
+        <div className="statistics-container">
+            <h1 className="statistics-title">Статистика</h1>
             <div className="period-buttons">
-                {["DAY", "WEEK", "MONTH", "YEAR"].map((period) => (
+                {["DAY", "WEEK", "MONTH", "YEAR"].map((p) => (
                     <button
-                        key={period}
-                        className={`period-button ${
-                            selectedPeriod === period ? "active" : ""
-                        }`}
-                        onClick={() => handlePeriodChange(period)}
+                        key={p}
+                        className={`period-button ${period === p ? "active" : ""}`}
+                        onClick={() => handlePeriodChange(p)}
                     >
-                        {period === "DAY"
-                            ? "За день"
-                            : period === "WEEK"
-                                ? "За неделю"
-                                : period === "MONTH"
-                                    ? "За месяц"
-                                    : "За год"}
+                        {p === "DAY" ? "за день" : p === "WEEK" ? "за неделю" : p === "MONTH" ? "за месяц" : "за год"}
                     </button>
                 ))}
             </div>
 
-            {/* Загрузка */}
-            {loading && <p>Загрузка статистики...</p>}
-
-            {/* Ошибка */}
-            {error && <p style={{ color: "red" }}>{error}</p>}
-
-            {/* Статистика */}
-            {statistics && (
-                <div className="statistics-data">
-                    <p>Пройдено шагов: {statistics.steps || 0}</p>
-                    <p>Дистанция: {statistics.distance || 0} км</p>
-                    <p>Калории: {statistics.calories || 0} ккал</p>
+            {loading ? (
+                <p className="loading-message">Загрузка данных...</p>
+            ) : error ? (
+                <p className="error-message">{error}</p>
+            ) : (
+                <div className="statistics-grid">
+                    <div className="statistic-item">
+                        <p>Всего пройдено метров</p>
+                        <span>{statistics.totalDistance || 0}</span>
+                    </div>
+                    <div className="statistic-item">
+                        <p>Всего пройдено шагов</p>
+                        <span>{statistics.totalSteps || 0}</span>
+                    </div>
+                    <div className="statistic-item">
+                        <p>Общее время пройденных маршрутов</p>
+                        <span>
+                            {Math.floor(statistics.totalDuration / 1440)}д{" "}
+                            {Math.floor((statistics.totalDuration % 1440) / 60)}ч{" "}
+                            {statistics.totalDuration % 60}мин
+                        </span>
+                    </div>
+                    <div className="statistic-item">
+                        <p>Пройдено точек маршрута</p>
+                        <span>{statistics.totalCheckpoints || 0}</span>
+                    </div>
+                    <div className="statistic-item">
+                        <p>Средняя длина маршрутов</p>
+                        <span>{statistics.averageRouteDistance || 0} м</span>
+                    </div>
+                    <div className="statistic-item">
+                        <p>Среднее время пройденных маршрутов</p>
+                        <span>
+                            {Math.floor(statistics.averageRouteDuration / 60)}ч{" "}
+                            {statistics.averageRouteDuration % 60}мин
+                        </span>
+                    </div>
+                    <div className="statistic-item">
+                        <p>Количество понравившихся маршрутов</p>
+                        <span>{statistics.favouriteRoutesCount || 0}</span>
+                    </div>
+                    <div className="statistic-item">
+                        <p>Пройденных маршрутов</p>
+                        <span>{statistics.travelledRoutesCount || 0}</span>
+                    </div>
                 </div>
             )}
         </div>

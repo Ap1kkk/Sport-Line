@@ -1,83 +1,304 @@
+/* Общий стиль для родителя, чтобы центрировать панель */
+.filter-panel-wrapper {
+    display: flex;
+    justify-content: center; /* Центрируем по горизонтали */
+}
+
+.filter-panel-Popular {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    width: 100%;
+    padding: 6px;
+}
+
+.filter-panel-Popular h2 {
+
+}
+
+/* Общий стиль для панели фильтров */
 .filter-panel {
-    padding: 20px;
-    border: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;  /* Уменьшаем общий отступ между разделами */
+    padding: 15px;  /* Уменьшаем внутренние отступы */
+    background-color: #f9f9f9;
     border-radius: 10px;
-    background-color: #fff;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 100%; /* Убедимся, что панель не выйдет за пределы экрана */
+    position: relative;
+    top: 20px; /* Для правильного позиционирования кнопки закрытия */
+    transition: width 0.3s ease-in-out; /* Анимация для плавного сужения */
 }
 
+/* Кнопка закрытия */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    font-size: 20px;  /* Размер крестика */
+    color: #2688EB;   /* Цвет крестика */
+    font-weight: bold;  /* Жирный шрифт для крестика */
+    transition: transform 0.2s;
+}
+
+.close-button:hover {
+    transform: scale(1.1);
+}
+
+/* Заголовок панели фильтров */
 .filter-panel h2 {
-    margin-bottom: 10px;
-    color: #007bff;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
 }
 
+/* Разделы фильтров */
 .filter-section {
-    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;  /* Уменьшаем отступы между элементами внутри раздела */
 }
 
+/* Заголовок каждого фильтра */
 .filter-section h3 {
-    margin-bottom: 10px;
-    font-size: 1.2rem;
+    font-size: 16px;
+    font-weight: 500;
     color: #555;
 }
 
-.buttons {
+/* Кнопки для выбора фильтров */
+.difficult_buttons {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    justify-content: center;  /* Центрируем по горизонтали */
+    align-items: center;      /* Центрируем по вертикали */
+    gap: 8px;  /* Уменьшаем отступы между кнопками */
+    flex-wrap: wrap;          /* Чтобы кнопки не выходили за пределы */
+    width: 100%;              /* Занимает всю доступную ширину */
 }
 
-.buttons button {
-    padding: 8px 12px;
-    font-size: 1rem;
-    color: #007bff;
-    background: #eaf4ff;
-    border: 1px solid #007bff;
-    border-radius: 5px;
+/* Кнопки для сложностей */
+.difficult_buttons button {
+    padding: 5px 12px; /* Уменьшаем отступы для кнопок */
+    height: 32px;  /* Высота кнопки */
+    width: auto;   /* Ширина зависит от содержимого текста */
+    background-color: white; /* Белый фон */
+    border: 1px solid #2688EB; /* Голубая рамка */
+    border-radius: 6px;
+    font-size: 13px;  /* Размер шрифта */
+    color: #2688EB; /* Голубой текст */
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s, color 0.3s, transform 0.2s;
+    white-space: nowrap; /* Запрещаем перенос текста */
+
+    /* Центрирование текста по горизонтали и вертикали */
+    display: flex;
+    align-items: center; /* Выравнивание по вертикали */
+    justify-content: center; /* Выравнивание по горизонтали */
 }
 
-.buttons button.selected {
-    background: #007bff;
-    color: #fff;
-    border-color: #0056b3;
+/* Кнопки, когда они выбраны */
+.difficult_buttons button.selected {
+    background-color: #2688EB; /* Голубой фон при выборе */
+    color: white; /* Белый текст */
 }
 
-.buttons button:hover {
-    background: #0056b3;
-    color: #fff;
+/* Кнопки при наведении */
+.difficult_buttons button:hover {
+    background-color: #e0f7fa; /* Светло-голубой фон при наведении */
+    transform: scale(1.05);
 }
 
-.slider {
+/* Слайдер */
+.popular-slider {
+    width: 100%;
     margin-top: 10px;
-    height: 5px;
-    background: #ddd;
-    border-radius: 5px;
     position: relative;
 }
 
-.slider-thumb {
-    height: 15px;
+/* Линия слайдера */
+.popular-slider-track {
+    background-color: #2688EB;  /* Цвет неактивной части */
+    height: 6px;
+    border-radius: 3px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Ползунок */
+.popular-slider-thumb {
+    background-color: #2688EB;  /* Голубой цвет для ползунка */
     width: 15px;
-    background: #007bff;
+    height: 15px;
     border-radius: 50%;
     cursor: pointer;
     position: absolute;
-    top: -5px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
-.slider-track {
-    background: #007bff;
-    height: 5px;
-    position: absolute;
-}
-
-.slider-labels {
+.popular-slider-labels {
     display: flex;
     justify-content: space-between;
-    margin-top: 5px;
-    font-size: 0.9rem;
-    color: #555;
+    margin-top: 8px;  /* Уменьшаем отступ между слайдером и метками */
+    font-size: 14px;
+}
+
+/* Кнопка Применить */
+.filter-panel button {
+    padding: 8px;
+    background-color: white; /* Белый фон */
+    color: #2688EB; /* Голубой текст */
+    border: 1px solid #2688EB; /* Голубая рамка */
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.filter-panel button:hover {
+    background-color: #e0f7fa; /* Светло-голубой фон при наведении */
+    color: #ffffff; /* Белый текст при наведении */
+}
+
+/* Кнопки для фильтров */
+.filter-buttons {
+    display: flex;
+    justify-content: space-between;  /* Распределяем кнопки на всю ширину */
+    gap: 10px;  /* Отступ между кнопками */
+    width: 100%;  /* Занимает всю ширину контейнера */
+}
+
+/* Общий стиль кнопок */
+.filter-buttons button {
+    padding: 8px;
+    background-color: white; /* Белый фон */
+    color: #2688EB; /* Голубой текст */
+    border: 1px solid #2688EB; /* Голубая рамка */
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    flex: 1; /* Каждая кнопка будет растягиваться, занимая одинаковое пространство */
+    display: flex;
+    align-items: center; /* Центрирование по вертикали */
+    justify-content: center; /* Центрирование по горизонтали */
+}
+
+.filter-buttons button:hover {
+    background-color: #e0f7fa; /* Светло-голубой фон при наведении */
+    color: #ffffff; /* Белый текст при наведении */
+}
+
+/* Кнопка сброса */
+.filter-buttons .reset-button {
+    background-color: white; /* Белый фон */
+    color: #2688EB; /* Голубой текст */
+    border: 1px solid #2688EB; /* Голубая рамка */
+}
+
+.filter-buttons .reset-button:hover {
+    background-color: #e0f7fa; /* Светло-голубой фон при наведении */
+    color: #ffffff; /* Белый текст при наведении */
+}
+
+/* Кнопки для категорий */
+.category_buttons {
+    display: flex;
+    gap: 8px;  /* Уменьшаем отступы между кнопками */
+    flex-wrap: wrap;
+}
+
+/* Кнопки для сложностей и категорий */
+.category_buttons button {
+    padding: 0 12px; /* Уменьшаем горизонтальные отступы, чтобы кнопки были 24px в высоту */
+    height: 24px; /* Фиксируем высоту кнопок категорий */
+    background-color: white; /* Белый фон */
+    color: #2688EB; /* Голубой текст */
+    border: 1px solid #2688EB; /* Голубая рамка */
+    font-size: 14px; /* Размер шрифта для кнопок категорий */
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    display: flex; /* Для выравнивания текста по центру */
+    align-items: center; /* По вертикали */
+    justify-content: center; /* По горизонтали */
+}
+
+.category_buttons button.selected {
+    background-color: #2688EB; /* Голубой фон при выборе */
+    color: white; /* Белый текст */
+}
+
+.category_buttons button:hover {
+    background-color: #e0f7fa; /* Светло-голубой фон при наведении */
+    color: white; /* Белый текст при наведении */
+}
+
+.input-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.input-row input {
+    width: 85%; /* Ширина инпута */
+    height: 20px; /* Высота инпута */
+    padding: 5px;
+    font-size: 16px; /* Размер шрифта */
+    border: 1px solid #2688EB; /* Голубая рамка */
+    border-radius: 5px; /* Скругление углов */
+    text-align: center;
+    background-color: white; /* Белый фон */
+}
+
+.filter-panel.closed {
+    position: fixed;
+    top: 15%;
+    width: 85%;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    border: 2px solid #2688EB; /* Голубая обводка */
+    border-radius: 5px;
+    background-color: white; /* Белый фон */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: height 0.3s, width 0.3s;
+    overflow: hidden;
+}
+
+.closed-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+    color: #2688EB;
+    background-color: white;
+    height: 35px;
+    border-radius: 6px;
+    border: 2px solid #2688EB;
+}
+
+.filter-panel-wrapper .popular-close-button {
+    position: absolute;
+    top: 1px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #2688EB;
+    font-weight: bold;
 }

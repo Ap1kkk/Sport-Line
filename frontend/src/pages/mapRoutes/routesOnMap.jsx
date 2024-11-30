@@ -194,7 +194,7 @@ const RoutesOnMap = () => {
                 const distanceToCheckpoint = calculateDistance(coords[0], coords[1], latitude, longitude);
 
                 // Если пользователь близок к чекпоинту, считаем его пройденным
-                if (distanceToCheckpoint < 60 && !completedCheckpoints.includes(index)) {
+                if (distanceToCheckpoint < 20 && !completedCheckpoints.includes(index)) {
                     setCompletedCheckpoints((prev) => [...prev, index]);
                     completedCheckpointsCount++;
                 }
@@ -209,7 +209,7 @@ const RoutesOnMap = () => {
             const remainingDistance = routeDistance - totalDistanceCovered;
 
             // Прогресс
-            const newProgress = Math.max(0, Math.min(100, (totalDistanceCovered / routeDistance) * 100));
+            const newProgress = Math.max(0, Math.min(100, (remainingDistance / routeDistance) * 100));
             setProgress(newProgress);
         }
     };
@@ -476,26 +476,42 @@ const RoutesOnMap = () => {
                         ) : (
                             <div className="infoPanel">
                                 {realTimeInfo ? (
-                                    <>
-                                        <p>Расстояние маршрута: {realTimeInfo.routeDistance} км</p>
-                                        <p>Время: {realTimeInfo.time} мин</p>
-                                        <p>Сложность: {routeData.difficulty || "Не указана"}</p>
-                                        <p>
-                                            Категории:{" "}
-                                            {routeData.categories && routeData.categories.length > 0
-                                                ? routeData.categories.map((category) => category.name).join(", ")
-                                                : "Нет категорий"}
-                                        </p>
-                                    </>
+                                    <div>
+                                        <div className="sett">
+                                            <div>
+                                            <p className="h">Расстояние: </p>
+                                            <p>{realTimeInfo.routeDistance} км</p>
+                                            </div><div>
+                                            <p className="h">Время: </p>
+                                            <p>{realTimeInfo.time} мин</p>
+                                            </div><div>
+                                            <p className="h">Сложность: </p>
+                                            <p>{routeData.difficulty || "Не указана"}</p>
+                                            </div>
+                                        </div>
+                                        <div className="categories">
+                                            {routeData.categories && routeData.categories.length > 0 ? (
+                                                routeData.categories.map((category, index) => (
+                                                    <p key={index} className="categ">{category.name}</p>
+                                                ))
+                                            ) : (
+                                                <p className="categ">Нет категорий</p>
+                                            )}
+                                        </div>
+                                    </div>
                                 ) : (
                                     <p>Загрузка данных маршрута...</p>
                                 )}
-                                <button onClick={handleStart} className="startButton">
+                                <div className="buttons_map">
+                                <p onClick={handleStart} className="startButton">
                                     Начать
-                                </button>
-                                <button onClick={toggleLike} className="button">
-                                    {isLiked ? "Убрать лайк" : "Поставить лайк"}
-                                </button>
+                                </p>
+                                <img    onClick={toggleLike}
+                                        src={"/icons/like.svg"}
+                                        alt={"Лайк"} 
+                                        className="like-icon" 
+                                    />
+                                </div>
                             </div>
                         )}
                     </div>
